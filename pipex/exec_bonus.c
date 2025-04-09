@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 02:36:30 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/08 15:04:20 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/09 20:48:07 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,42 +90,3 @@ void	execute_bonus(t_pipex *pipex, char *argv, char **envp)
 	}
 }
 
-// void	child_process(t_pipex *pipex, char *argv, char **envp)
-// {
-// 	if (pipe(pipex->fd) == -1)
-// 		free_parent(pipex, 1, "Error pipe : %s\n", strerror(errno));
-// 	pipex->pids[pipex->i] = fork();
-// 	if (pipex->pids[pipex->i] == -1)
-// 		free_parent(pipex, 1, "Error fork : %s\n", strerror(errno));
-// 	if (pipex->pids[pipex->i] == 0)
-// 	{
-// 		close(pipex->fd[0]);
-// 		if (pipex->i == 0)
-// 		{
-// 			if (dup2(pipex->infile, STDIN_FILENO) == -1)
-// 				free_parent(pipex, 1, "Error dup23 : %s\n", strerror(errno));
-// 			if (dup2(pipex->fd[1], STDOUT_FILENO) == -1)
-// 				free_parent(pipex, 1, "Error dup24 : %s\n", strerror(errno));
-// 			close(pipex->infile);
-// 			close(pipex->outfile);
-// 		}
-// 		else if (pipex->i == pipex->cmd_nbr - 1)
-// 		{
-// 			if (dup2(pipex->outfile, STDOUT_FILENO) == -1)
-// 				free_parent(pipex, 1, "Error dup25 : %s\n", strerror(errno));
-// 			close(pipex->outfile);
-// 			close(pipex->infile);
-// 		}
-// 		else
-// 		{
-// 			if (dup2(pipex->fd[1], STDOUT_FILENO) == -1)
-// 				free_parent(pipex, 1, "Error dup26 : %s\n", strerror(errno));
-// 		}
-// 		close(pipex->fd[1]);
-// 		execute_bonus(pipex, argv, envp);
-// 	}
-// 	close(pipex->fd[1]);
-// 	if (dup2(pipex->fd[0], STDIN_FILENO) == -1)
-// 		free_parent(pipex, 1, "Error dup27 : %s\n", strerror(errno));
-// 	close(pipex->fd[0]);
-// }

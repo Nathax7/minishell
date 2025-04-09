@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:01:49 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/09 15:55:03 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/09 21:24:53 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,3 +64,4 @@ int	main(int ac, char **av, char **envp)
 		return (WEXITSTATUS(pipex.status));
 	return (pipex.status);
 }
+
