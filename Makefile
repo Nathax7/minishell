@@ -6,9 +6,11 @@
 #    By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/10 12:31:08 by almeekel          #+#    #+#              #
-#    Updated: 2025/04/10 12:45:54 by almeekel         ###   ########.fr        #
+#    Updated: 2025/04/10 13:28:41 by almeekel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
+# # Makefile de test du tokenizer ;) #
 
 NAME	=	minishell
 
@@ -16,7 +18,7 @@ CC		=	cc
 CFLAGS	=	-Wall -Wextra -Werror -g
 LIBFT	=	./libft/libft.a
 
-SRC		=	src/tokenizer.c
+SRC		=	src/tokenizer.c src/tokenizer_utils.c
 OBJ		=	$(SRC:.c=.o)
 
 INC		=	-I./inc
@@ -38,13 +40,6 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re
-
-
-
-
-
-
-
 
 
 
