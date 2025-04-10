@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 17:14:42 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/10 12:41:04 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/10 13:08:29 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,35 +18,7 @@ int	is_operator(char c)
 	return (c == '|' || c == '<' || c == '>');
 }
 
-t_token_type	identify_operator(const char *s, int *i)
-{
-	if (s[*i] == '|')
-	{
-		(*i)++;
-		return (TOKEN_PIPE);
-	}
-	if (s[*i] == '<')
-	{
-		if (s[*i + 1] == '<')
-		{
-			(*i) += 2;
-			return (TOKEN_HEREDOC);
-		}
-		(*i)++;
-		return (TOKEN_REDIRECT_IN);
-	}
-	if (s[*i] == '>')
-	{
-		if (s[*i + 1] == '>')
-		{
-			(*i) += 2;
-			return (TOKEN_APPEND);
-		}
-		(*i)++;
-		return (TOKEN_REDIRECT_OUT);
-	}
-	return (-1);
-}
+
 
 char	*identify_word(const char *str, int *i)
 {
@@ -59,14 +31,14 @@ char	*identify_word(const char *str, int *i)
 		if (str[*i] == '\'' || str[*i] == '"')
 		{
 			quote = str[*i];
-			(*i)++;
+			(*i) = (*i) + 1;
 			while (str[*i] && str[*i] != quote)
-				(*i)++;
+				(*i) = (*i) + 1;
 			if (str[*i] == quote)
-				(*i)++;
+				(*i) = (*i) + 1;
 		}
 		else
-			(*i)++;
+			(*i) = (*i) + 1;
 	}
 	return (strndup(&str[start], *i - start));
 }
@@ -93,30 +65,43 @@ void	add_token(t_token **head, char *value, t_token_type type)
 	}
 }
 
-t_token	*tokenize(char *input)
+t_token	*tokenize(char *argument)
 {
 	t_token	*tokens;
 	int		i;
+	t_token_type type;
 
 	tokens = NULL;
 	i = 0;
-	while (input[i])
+	while (argument[i])
 	{
-		while (input[i] && ft_strchr(" \t", input[i]))
+		while (argument[i] && ft_strchr(" \t", argument[i]))
 			i++;
-		if (!input[i])
+		if (!argument[i])
 			break ;
-		if (is_operator(input[i]))
-			add_token(&tokens, strndup(&input[i], (identify_operator(input, &i) == TOKEN_HEREDOC || identify_operator(input, &i) == TOKEN_APPEND) ? 2 : 1), identify_operator(input, &i));
+		if (is_operator(argument[i]))
+		{
+			type = identify_operator(argument, &i);
+			if (type == T_HEREDOC)
+				add_token(&tokens, strdup("<<"), type);
+			else if (type == T_APPEND)
+				add_token(&tokens, strdup(">>"), type);
+			else if (type == T_REDIRECT_IN)
+				add_token(&tokens, strdup("<"), type);
+			else if (type == T_REDIRECT_OUT)
+				add_token(&tokens, strdup(">"), type);
+			else if (type == T_PIPE)
+				add_token(&tokens, strdup("|"), type);
+		}
 		else
-			add_token(&tokens, identify_word(input, &i), TOKEN_WORD);
+			add_token(&tokens, identify_word(argument, &i), T_WORD);
 	}
 	return (tokens);
 }
 
-// Main pour test simple
 int	main(int argc, char **argv, char **envp)
 {
+	(void)envp;
 	t_token	*tokens;
 
 	if (argc != 2)

@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:44:00 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/10 12:48:04 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/10 12:59:22 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@
 
 typedef enum e_token_type
 {
-	TOKEN_WORD,
-	TOKEN_PIPE,
-	TOKEN_REDIRECT_IN,
-	TOKEN_REDIRECT_OUT,
-	TOKEN_APPEND,
-	TOKEN_HEREDOC
+	T_WORD,
+	T_PIPE,
+	T_REDIRECT_IN,
+	T_REDIRECT_OUT,
+	T_APPEND,
+	T_HEREDOC
 } t_token_type;
 
 typedef struct s_token
