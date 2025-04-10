@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:30:41 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/03/28 01:48:31 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/10 16:22:46 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,17 +66,13 @@ char	**ft_split(char const *s, char c)
 
 	j = 0;
 	k = 0;
-	tab = (char **)malloc(sizeof(char *) * (ft_count_words(s, c) + 1));
-	if (!tab)
-		return (NULL);
+	tab = ft_malloc(sizeof(char *) * (ft_count_words(s, c) + 1), g_signal.node);
 	while (s[k] && j < ft_count_words(s, c))
 	{
 		i = 0;
 		while (s[k] && s[k] == c)
 			k++;
 		tab[j] = (char *)ft_calloc(sizeof(char), ft_splitlen(s + k, c) + 1);
-		if (!tab[j])
-			return (ft_freesplit(tab));
 		while (s[k] && s[k] != c)
 			tab[j][i++] = s[k++];
 		j++;

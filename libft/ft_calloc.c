@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 21:29:46 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/02/06 17:45:51 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/10 16:22:02 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,10 @@ void	*ft_calloc(size_t nmeb, size_t size)
 	char	*tab;
 
 	if (nmeb == 0 || size == 0)
-		return (malloc(0));
+		return (ft_malloc(0, g_signal.node));
 	if (nmeb * size > __SIZE_MAX__)
 		return (NULL);
-	tab = (char *)malloc(nmeb * size);
-	if (!tab)
-		return (NULL);
+	tab = ft_malloc(nmeb * size, g_signal.node);
 	ft_bzero(tab, nmeb * size);
 	return (tab);
 }

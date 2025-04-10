@@ -6,13 +6,14 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 17:37:52 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/03/28 04:53:49 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/10 16:18:45 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ALL_H
 # define ALL_H
 
+# include "../include/utils.h"
 # include <fcntl.h>
 # include <limits.h>
 # include <stdarg.h>
