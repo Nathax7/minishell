@@ -6,11 +6,17 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 17:14:42 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/09 18:25:28 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/10 12:41:04 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../inc/minishell.h"
+#include "../inc/parsing.h"
+
+int	is_operator(char c)
+{
+	return (c == '|' || c == '<' || c == '>');
+}
 
 t_token_type	identify_operator(const char *s, int *i)
 {
@@ -44,13 +50,23 @@ t_token_type	identify_operator(const char *s, int *i)
 
 char	*identify_word(const char *str, int *i)
 {
-	int	start;
+	int		start;
+	char	quote;
 
 	start = *i;
-	while (str[*i] != '\0' && str[*i] != ' ' && str[*i] != '\t'
-		&& str[*i] != '|' && str[*i] != '<' && str[*i] != '>')
+	while (str[*i] && !ft_strchr(" \t|<>", str[*i]))
 	{
-		(*i)++;
+		if (str[*i] == '\'' || str[*i] == '"')
+		{
+			quote = str[*i];
+			(*i)++;
+			while (str[*i] && str[*i] != quote)
+				(*i)++;
+			if (str[*i] == quote)
+				(*i)++;
+		}
+		else
+			(*i)++;
 	}
 	return (strndup(&str[start], *i - start));
 }
@@ -62,16 +78,16 @@ void	add_token(t_token **head, char *value, t_token_type type)
 
 	new = malloc(sizeof(t_token));
 	if (!new)
-		return ; // handle malloc fail later
+		return ;
 	new->value = value;
 	new->type = type;
 	new->next = NULL;
-	if (*head == NULL)
+	if (!*head)
 		*head = new;
 	else
 	{
 		tmp = *head;
-		while (tmp->next != NULL)
+		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = new;
 	}
@@ -79,42 +95,40 @@ void	add_token(t_token **head, char *value, t_token_type type)
 
 t_token	*tokenize(char *input)
 {
-	t_token			*tokens;
-	int				i;
-	t_token_type	type;
-	char			*op_value;
-	char			*word;
+	t_token	*tokens;
+	int		i;
 
 	tokens = NULL;
 	i = 0;
-	while (input[i] != '\0')
+	while (input[i])
 	{
-		while (input[i] == ' ' || input[i] == '\t')
+		while (input[i] && ft_strchr(" \t", input[i]))
 			i++;
-		if (input[i] == '\0')
+		if (!input[i])
 			break ;
-		if (input[i] == '|' || input[i] == '<' || input[i] == '>')
-		{
-			type = identify_operator(input, &i);
-			if (type == TOKEN_PIPE)
-				op_value = strdup("|");
-			else if (type == TOKEN_REDIRECT_IN)
-				op_value = strdup("<");
-			else if (type == TOKEN_REDIRECT_OUT)
-				op_value = strdup(">");
-			else if (type == TOKEN_APPEND)
-				op_value = strdup(">>");
-			else if (type == TOKEN_HEREDOC)
-				op_value = strdup("<<");
-			else
-				continue ;
-			add_token(&tokens, op_value, type);
-		}
+		if (is_operator(input[i]))
+			add_token(&tokens, strndup(&input[i], (identify_operator(input, &i) == TOKEN_HEREDOC || identify_operator(input, &i) == TOKEN_APPEND) ? 2 : 1), identify_operator(input, &i));
 		else
-		{
-			word = identify_word(input, &i);
-			add_token(&tokens, word, TOKEN_WORD);
-		}
+			add_token(&tokens, identify_word(input, &i), TOKEN_WORD);
 	}
 	return (tokens);
+}
+
+// Main pour test simple
+int	main(int argc, char **argv, char **envp)
+{
+	t_token	*tokens;
+
+	if (argc != 2)
+	{
+		printf("Usage: %s \"command_line\"\n", argv[0]);
+		return (1);
+	}
+	tokens = tokenize(argv[1]);
+	while (tokens)
+	{
+		printf("Type: %d\tValue: [%s]\n", tokens->type, tokens->value);
+		tokens = tokens->next;
+	}
+	return (0);
 }

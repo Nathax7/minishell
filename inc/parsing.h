@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:44:00 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/09 22:03:35 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/10 12:48:04 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,25 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <unistd.h>
-
+# include <stdlib.h>
 # define CHARSET "abcdefghijklmnopqrstuvwxyz"
+
+typedef enum e_token_type
+{
+	TOKEN_WORD,
+	TOKEN_PIPE,
+	TOKEN_REDIRECT_IN,
+	TOKEN_REDIRECT_OUT,
+	TOKEN_APPEND,
+	TOKEN_HEREDOC
+} t_token_type;
+
+typedef struct s_token
+{
+	char			*value;
+	t_token_type	type;
+	struct s_token	*next;
+} t_token;
 
 typedef enum
 {
@@ -59,5 +76,7 @@ void	is_here_doc(t_cmd *cmd, char **av, int ac);
 void	open_infile(t_cmd *cmd, char *infile);
 void	open_outfile(t_cmd *cmd, char *outfile, int mode);
 void	usage(void);
+int			is_operator(char c);
+t_token		*tokenize(char *input);
 
 #endif
