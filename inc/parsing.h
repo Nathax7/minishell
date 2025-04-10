@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:44:00 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/10 12:59:22 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/10 13:22:56 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,7 @@ void	open_outfile(t_cmd *cmd, char *outfile, int mode);
 void	usage(void);
 int			is_operator(char c);
 t_token		*tokenize(char *input);
+t_token_type	identify_operator(const char *s, int *i);
+t_token_type	identify_redirect(const char *s, int *i, int flag);
 
 #endif

@@ -19,45 +19,34 @@ t_token_type	identify_redirect(const char *s, int *i, int flag)
 	{
 		if (s[*i + 1] == '<')
 		{
-			type = T_HEREDOC;
 			(*i) = (*i) + 2;
+			return(T_HEREDOC);
 		}
-		else
-		{
-			type = T_REDIRECT_IN;
-			(*i) = (*i) + 1;
-		}
+		(*i) = (*i) + 1;
+		return(T_REDIRECT_IN);
 	}
 	else
 	{
 		if (s[*i + 1] == '>')
 		{
-			type = T_APPEND;
 			(*i) = (*i) + 2;
+			return(T_APPEND);
 		}
-		else
-		{
-			type = T_REDIRECT_OUT;
-			(*i) = (*i) + 1;
-		}
+		(*i) = (*i) + 1;
+		return(T_REDIRECT_OUT);
 	}
-	return (type);
 }
-
 
 t_token_type	identify_operator(const char *s, int *i)
 {
-	t_token_type type;
-
-	type = T_WORD;
 	if (s[*i] == '|')
 	{
-		type = T_PIPE;
 		(*i) = (*i) + 1;
+		return(T_PIPE);
 	}
 	else if (s[*i] == '<')
-		type = identify_redirect(s, i, 1, type);
+		return (identify_redirect(s, i, 1));
 	else if (s[*i] == '>')
-		type = identify_redirect(s, i, 0, type);
-	return (type);
+		return (identify_redirect(s, i, 0));
+	return (T_WORD);
 }
