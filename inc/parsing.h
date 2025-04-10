@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:44:00 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/10 13:22:56 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/10 16:30:40 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ typedef struct s_cmd
 }	t_cmd;
 
 void	minishell_init(t_cmd *cmd, char **envp);
-void	free_parent(t_cmd *cmd, int status, char *str, char *str2);
+void	free_parent_cmd(t_cmd *cmd, int status, char *str, char *str2);
 void	msg_cmd(char *str, char *str2);
 void	is_here_doc(t_cmd *cmd, char **av, int ac);
 void	open_infile(t_cmd *cmd, char *infile);

@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:44:04 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/10 16:15:54 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/10 16:31:10 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,23 @@
 # include <unistd.h>
 
 # define CHARSET "abcdefghijklmnopqrstuvwxyz"
+
+typedef enum e_token_type
+{
+	T_WORD,
+	T_PIPE,
+	T_REDIRECT_IN,
+	T_REDIRECT_OUT,
+	T_APPEND,
+	T_HEREDOC
+} t_token_type;
+
+typedef struct s_token
+{
+	char			*value;
+	t_token_type	type;
+	struct s_token	*next;
+} t_token;
 
 typedef enum
 {

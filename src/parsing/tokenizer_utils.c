@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/parsing.h"
+#include "../../include/parsing.h"
 
 t_token_type	identify_redirect(const char *s, int *i, int flag)
 {
