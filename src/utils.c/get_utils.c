@@ -6,11 +6,11 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:01:32 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/10 16:15:26 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/11 18:16:54 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/utils.h"
+#include "../../include/exec.h"
 
 size_t	get_size(char *str)
 {

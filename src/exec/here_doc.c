@@ -6,11 +6,11 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:43:04 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/11 16:11:07 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/11 18:16:30 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/parsing.h"
+#include "../../include/exec.h"
 
 void	random_filename(t_cmd *cmd)
 {
@@ -22,13 +22,13 @@ void	random_filename(t_cmd *cmd)
 	cmd->infile_name = ft_malloc(sizeof(char) * 9, g_signal.node);
 	urandom_fd = open("/dev/urandom", O_RDONLY);
 	if (urandom_fd < 0)
-		free_parent(cmd, 1, NULL, "Error malloc");
+		free_parent_cmd(cmd, 1, NULL, "Error malloc");
 	while (++i < 8)
 	{
 		if (read(urandom_fd, &random, 1) < 0)
 		{
 			close(urandom_fd);
-			free_parent(cmd, 1, NULL, "Error read");
+			free_parent_cmd(cmd, 1, NULL, "Error read");
 		}
 		cmd->infile_name[i] = CHARSET[random % (sizeof(CHARSET) - 1)];
 	}
@@ -88,7 +88,7 @@ void	is_here_doc(t_cmd *cmd, char **av, int ac)
 		if (ac < 6)
 		{
 			cmd->here_doc = 0;
-			free_parent(cmd, -1, NULL, NULL);
+			free_parent_cmd(cmd, -1, NULL, NULL);
 			usage();
 		}
 		random_filename(cmd);

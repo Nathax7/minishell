@@ -6,11 +6,11 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 21:10:01 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/10 16:24:01 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/11 18:37:23 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/parsing.h"
+#include "../../include/exec.h"
 
 // Fonction pour afficher str (msg personalisé) et/ou str2 (msg personalisé + msg d'erreur)
 void msg_cmd(char *str, char *str2)
@@ -31,6 +31,13 @@ void msg_cmd(char *str, char *str2)
 // Fonction pour libérer la mémoire et fermer les fichiers ouverts et afficher un msg si voulu
 void	free_parent_cmd(t_cmd *cmd, int status, char *str, char *str2)
 {
+	if (!cmd)
+	{
+		delete_list(g_signal.node);
+		if (status != -1)
+			exit(status);
+		return;
+	}
 	msg_cmd(str, str2);
 	if (cmd->paths)
 		ft_freesplit(cmd->paths);
@@ -44,11 +51,12 @@ void	free_parent_cmd(t_cmd *cmd, int status, char *str, char *str2)
 		close(cmd->fd[1]);
 	if (cmd->cmd_args)
 		ft_freesplit(cmd->cmd_args);
-	if (cmd->here_doc == HEREDOC)
+	if (cmd->here_doc == HEREDOC && cmd->infile_name)
+	{
 		if (unlink(cmd->infile_name) == -1)
 			msg_cmd(cmd->infile_name, NULL);
-	if (cmd->infile_name && cmd->here_doc == HEREDOC)
 		free(cmd->infile_name);
+	}
 	delete_list(g_signal.node);
 	if (status != -1)
 		exit(status);
