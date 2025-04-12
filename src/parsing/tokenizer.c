@@ -6,7 +6,7 @@
 /*   By: Mimoulapinou <bebefripouille@chaton.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 17:14:42 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/12 12:40:42 by Mimoulapino      ###   ########.fr       */
+/*   Updated: 2025/04/12 12:48:39 by Mimoulapino      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ int	is_operator(char c)
 {
 	return (c == '|' || c == '<' || c == '>');
 }
-
-
 
 char	*identify_word(const char *str, int *i)
 {
