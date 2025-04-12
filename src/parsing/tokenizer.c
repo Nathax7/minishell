@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: Mimoulapinou <bebefripouille@chaton.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 17:14:42 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/10 16:33:58 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/12 12:40:42 by Mimoulapino      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,21 +98,3 @@ t_token	*tokenize(char *argument)
 	return (tokens);
 }
 
-int	main(int argc, char **argv, char **envp)
-{
-	(void)envp;
-	t_token	*tokens;
-
-	if (argc != 2)
-	{
-		printf("Usage: %s \"command_line\"\n", argv[0]);
-		return (1);
-	}
-	tokens = tokenize(argv[1]);
-	while (tokens)
-	{
-		printf("Type: %d\tValue: [%s]\n", tokens->type, tokens->value);
-		tokens = tokens->next;
-	}
-	return (0);
-}
