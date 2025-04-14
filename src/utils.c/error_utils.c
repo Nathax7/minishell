@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:50:36 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/11 18:36:51 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/14 17:32:13 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	free_parent_utils(t_cmd *utils, int status, char *str, char *str2)
 {
 	if (!utils)
 	{
-		delete_list(g_signal.node);
+		delete_list(utils->alloc);
 		if (status != -1)
 			exit(status);
 		return;
@@ -57,7 +57,7 @@ void	free_parent_utils(t_cmd *utils, int status, char *str, char *str2)
 			msg_utils(utils->infile_name, NULL);
 		free(utils->infile_name);
 	}
-	delete_list(g_signal.node);
+	delete_list(utils->alloc);
 	if (status != -1)
 		exit(status);
 }

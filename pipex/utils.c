@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 19:48:57 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/08 15:01:10 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/14 17:37:41 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	ft_free_double(char **str)
 	free(str);
 }
 
-char	*find_path(char *cmd, char **envp)
+char	*find_path(t_node *alloc, char *cmd, char **envp)
 {
 	char	**paths;
 	char	*path;
@@ -34,12 +34,12 @@ char	*find_path(char *cmd, char **envp)
 		return (cmd);
 	while (envp && envp[i] && ft_strnstr(envp[i], "PATH", 4) == 0)
 		i++;
-	paths = ft_split(envp[i] + 5, ':');
+	paths = ft_split(alloc, envp[i] + 5, ':');
 	i = 0;
 	while (paths[i])
 	{
-		part_path = ft_strjoin(paths[i], "/");
-		path = ft_strjoin(part_path, cmd);
+		part_path = ft_strjoin(alloc, paths[i], "/");
+		path = ft_strjoin(alloc, part_path, cmd);
 		free(part_path);
 		if (path && access(path, F_OK) == 0)
 			return (path);
@@ -50,18 +50,18 @@ char	*find_path(char *cmd, char **envp)
 	return (0);
 }
 
-void	execute(char *argv, char **envp)
+void	execute(t_node *alloc, char *argv, char **envp)
 {
 	char	**cmd;
 	char	*path;
 
-	cmd = ft_split(argv, ' ');
+	cmd = ft_split(alloc, argv, ' ');
 	if (cmd[0] == NULL)
 	{
 		ft_free_double(cmd);
 		ft_printf_error(127, "pipex: %s: Command not found\n", argv);
 	}
-	path = find_path(cmd[0], envp);
+	path = find_path(alloc, cmd[0], envp);
 	if (!path)
 	{
 		ft_free_double(cmd);

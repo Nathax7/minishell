@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:43:04 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/11 18:16:30 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/14 17:41:54 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	random_filename(t_cmd *cmd)
 	int				i;
 
 	i = -1;
-	cmd->infile_name = ft_malloc(sizeof(char) * 9, g_signal.node);
+	cmd->infile_name = ft_malloc(sizeof(char) * 9, cmd->alloc);
 	urandom_fd = open("/dev/urandom", O_RDONLY);
 	if (urandom_fd < 0)
 		free_parent_cmd(cmd, 1, NULL, "Error malloc");
@@ -36,22 +36,22 @@ void	random_filename(t_cmd *cmd)
 	close(urandom_fd);
 }
 
-int	ft_strcmp_for_heredoc(char *s1, char *s2)
-{
-	char	*str;
-	int		k;
-	int		i;
+// int	ft_strcmp_for_heredoc(char *s1, char *s2)
+// {
+// 	char	*str;
+// 	int		k;
+// 	int		i;
 
-	i = 0;
-	if (!s1 || !s2)
-		return (0);
-	str = get_string(ft_strdup(s2), 0, 0, get_size(s2));
-	while (s1[i] == str[i] && s1[i] != '\0' && str[i] != '\0')
-		i++;
-	k = s1[i] - str[i];
-	free(str);
-	return (k);
-}
+// 	i = 0;
+// 	if (!s1 || !s2)
+// 		return (0);
+// 	str = get_string(ft_strdup(s2), 0, 0, get_size(s2));
+// 	while (s1[i] == str[i] && s1[i] != '\0' && str[i] != '\0')
+// 		i++;
+// 	k = s1[i] - str[i];
+// 	free(str);
+// 	return (k);
+// }
 
 void	here_doc(t_cmd *cmd, char *limiter)
 {

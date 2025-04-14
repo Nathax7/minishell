@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:44:04 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/11 18:24:03 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/14 17:42:16 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,17 @@ typedef enum e_token_type
 	T_HEREDOC
 } t_token_type;
 
+typedef struct s_node
+{
+	void			*addr;
+	struct s_node	*next;
+}	t_node;
+
 typedef struct s_token
 {
 	char			*value;
 	t_token_type	type;
+	t_node			alloc;
 	struct s_token	*next;
 } t_token;
 
@@ -70,24 +77,11 @@ typedef struct s_cmd
 	char	*outfile_name;
 	int		fd[2];
 	int		status;
+	t_node	alloc;
 	struct s_cmd	*next;
 }	t_cmd;
 
-typedef struct s_node
-{
-	void			*addr;
-	struct s_node	*next;
-}	t_node;
-
-typedef struct s_signal
-{
-	int		signal;
-	int		status;
-	int		pid;
-	t_node	*node;
-}	t_signal;
-
-extern t_signal	g_signal;
+extern int	g_signal;
 
 
 #endif

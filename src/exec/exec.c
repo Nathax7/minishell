@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 20:38:10 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/11 18:16:19 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/14 17:39:21 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ void	find_path(t_cmd *cmd, char *cmd_name)
 		return (check_exec_file(cmd, cmd_name));
 	while (cmd->env && cmd->paths[++i])
 	{
-		tmp = ft_strjoin(cmd->paths[i], "/");
+		tmp = ft_strjoin(cmd->alloc, cmd->paths[i], "/");
 		if (!tmp)
 			free_parent_cmd(cmd, 1, NULL, "Error strjoin");
-		cmd->cmd = ft_strjoin(tmp, cmd_name);
+		cmd->cmd = ft_strjoin(cmd->alloc, tmp, cmd_name);
 		free(tmp);
 		if (!cmd->cmd)
 			free_parent_cmd(cmd, 1, NULL, "Error strjoin");
@@ -57,7 +57,7 @@ void	find_path(t_cmd *cmd, char *cmd_name)
 
 void	execute(t_cmd *cmd, char *argv, char **envp)
 {
-	cmd->cmd_args = ft_split(argv, ' ');
+	cmd->cmd_args = ft_split(cmd->alloc, argv, ' ');
 	if (cmd->cmd_args[0] == NULL)
 		free_parent_cmd(cmd, 127, NULL, argv);
 	find_path(cmd, cmd->cmd_args[0]);

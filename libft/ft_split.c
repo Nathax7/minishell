@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:30:41 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/10 16:22:46 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/14 17:34:30 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static size_t	ft_splitlen(char const *str, char c)
 	return (i);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split(t_node *alloc, char const *s, char c)
 {
 	char	**tab;
 	size_t	i;
@@ -66,13 +66,13 @@ char	**ft_split(char const *s, char c)
 
 	j = 0;
 	k = 0;
-	tab = ft_malloc(sizeof(char *) * (ft_count_words(s, c) + 1), g_signal.node);
+	tab = ft_malloc(sizeof(char *) * (ft_count_words(s, c) + 1), alloc);
 	while (s[k] && j < ft_count_words(s, c))
 	{
 		i = 0;
 		while (s[k] && s[k] == c)
 			k++;
-		tab[j] = (char *)ft_calloc(sizeof(char), ft_splitlen(s + k, c) + 1);
+		tab[j] = (char *)ft_calloc(alloc, sizeof(char), ft_splitlen(s + k, c) + 1);
 		while (s[k] && s[k] != c)
 			tab[j][i++] = s[k++];
 		j++;

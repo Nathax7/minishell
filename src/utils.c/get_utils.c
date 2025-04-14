@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:01:32 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/11 18:16:54 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/14 17:32:28 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*get_string(char *s, size_t i, size_t k, size_t size)
 	char	*ptr;
 	char	tmp;
 
-	ptr = ft_malloc(sizeof(char) * (size + 1), g_signal.node);
+	ptr = ft_malloc(sizeof(char) * (size + 1), node);
 	while (k < size)
 	{
 		while ((s[i] == '\'' && s[i + 1] && s[i + 1] != '\'')

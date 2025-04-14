@@ -6,21 +6,21 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 21:29:46 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/10 16:22:02 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/14 17:34:48 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
 
-void	*ft_calloc(size_t nmeb, size_t size)
+void	*ft_calloc(t_node *alloc, size_t nmeb, size_t size)
 {
 	char	*tab;
 
 	if (nmeb == 0 || size == 0)
-		return (ft_malloc(0, g_signal.node));
+		return (ft_malloc(0, alloc));
 	if (nmeb * size > __SIZE_MAX__)
 		return (NULL);
-	tab = ft_malloc(nmeb * size, g_signal.node);
+	tab = ft_malloc(nmeb * size, alloc);
 	ft_bzero(tab, nmeb * size);
 	return (tab);
 }
