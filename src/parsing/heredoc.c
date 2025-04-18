@@ -26,7 +26,7 @@ void	handle_heredocs(t_token *tokens)
 			free(line);
 			close(fd);
 			// Ensuite,
-				stocker le chemin vers le fichier dans la structure de commande
+			// stocker le chemin vers le fichier dans la structure de commande
 		}
 		tokens = tokens->next;
 	}

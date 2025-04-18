@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:44:04 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/14 17:49:03 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/18 17:58:15 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ typedef struct s_token
 {
 	char			*value;
 	t_token_type	type;
-	t_node			alloc;
 	struct s_token	*next;
 } t_token;
 
@@ -65,8 +64,6 @@ typedef enum
 
 typedef struct s_cmd
 {
-	t_heredoc	here_doc;
-	t_env		env;
 	pid_t	*pids;
 	char	*cmd;
 	char	**cmd_args;
@@ -78,9 +75,17 @@ typedef struct s_cmd
 	char	*outfile_name;
 	int		fd[2];
 	int		status;
-	t_node	alloc;
 	struct s_cmd	*next;
+	t_minishell *shell;
 }	t_cmd;
+
+typedef	struct s_minishell
+{
+	t_heredoc	here_doc;
+	t_env		env;
+	t_cmd cmd;
+	t_token token;
+}	t_minishell;
 
 extern int	g_signal;
 
