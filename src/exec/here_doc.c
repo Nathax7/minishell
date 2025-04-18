@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:43:04 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/14 17:41:54 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/18 21:18:35 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	random_filename(t_cmd *cmd)
 	int				i;
 
 	i = -1;
-	cmd->infile_name = ft_malloc(sizeof(char) * 9, cmd->alloc);
+	cmd->infile_name = ft_malloc(cmd->shell, sizeof(char) * 9);
 	urandom_fd = open("/dev/urandom", O_RDONLY);
 	if (urandom_fd < 0)
 		free_parent_cmd(cmd, 1, NULL, "Error malloc");

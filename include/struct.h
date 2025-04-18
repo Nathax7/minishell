@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:44:04 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/18 17:58:15 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/18 21:12:47 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ typedef enum
 typedef struct s_cmd
 {
 	pid_t	*pids;
+	t_heredoc	here_doc;
+	t_env		env;
 	char	*cmd;
 	char	**cmd_args;
 	char	**paths;
@@ -81,8 +83,6 @@ typedef struct s_cmd
 
 typedef	struct s_minishell
 {
-	t_heredoc	here_doc;
-	t_env		env;
 	t_cmd cmd;
 	t_token token;
 }	t_minishell;

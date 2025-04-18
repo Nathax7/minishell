@@ -1,21 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_cmd.c                                        :+:      :+:    :+:   */
+/*   free_struct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/09 21:10:01 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/14 17:38:44 by nagaudey         ###   ########.fr       */
+/*   Created: 2025/04/18 21:11:14 by nagaudey          #+#    #+#             */
+/*   Updated: 2025/04/18 21:16:15 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/exec.h"
 
-// Fonction pour afficher str (msg personalisé) et/ou str2 (msg personalisé + msg d'erreur)
-void msg_cmd(char *str, char *str2)
+void ft_message(char *str, char *str2)
 {
-	ft_putstr_fd("cmd: ", 2);
+	ft_putstr_fd("minishell: ", 2);
 	if (str)
 	{
 		ft_putstr_fd(str, 2);
@@ -29,16 +28,15 @@ void msg_cmd(char *str, char *str2)
 }
 
 // Fonction pour libérer la mémoire et fermer les fichiers ouverts et afficher un msg si voulu
-void	free_parent_cmd(t_cmd *cmd, int status, char *str, char *str2)
+void	free_cmd(t_cmd *cmd, int status, char *str, char *str2)
 {
 	if (!cmd)
 	{
-		delete_list(cmd->alloc);
 		if (status != -1)
 			exit(status);
 		return;
 	}
-	msg_cmd(str, str2);
+	ft_message(str, str2);
 	if (cmd->paths)
 		ft_freesplit(cmd->paths);
 	if (cmd->infile >= 0)
@@ -54,10 +52,39 @@ void	free_parent_cmd(t_cmd *cmd, int status, char *str, char *str2)
 	if (cmd->here_doc == HEREDOC && cmd->infile_name)
 	{
 		if (unlink(cmd->infile_name) == -1)
-			msg_cmd(cmd->infile_name, NULL);
+			ft_message(cmd->infile_name, NULL);
 		free(cmd->infile_name);
 	}
-	delete_list(cmd->alloc);
+	if (status != -1)
+		exit(status);
+}
+
+void free_token(t_token *token, int status, char *str, char *str2)
+{
+	t_token *tmp;
+
+	if (!token)
+	{
+		if (status != -1)
+			exit(status);
+		return;
+	}
+	ft_message(str, str2);
+	// Free token list
+	if (status != -1)
+		exit(status);
+}
+
+void free_all(t_minishell *shell, int status, char *str, char *str2)
+{
+	if (!shell)
+	{
+		if (status != -1)
+			exit(status);
+		return;
+	}
+	free_cmd(&shell->cmd, status, str, str2);
+	free_token(&shell->token, status, str, str2);
 	if (status != -1)
 		exit(status);
 }

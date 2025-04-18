@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_malloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:06:39 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/18 17:52:04 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/18 21:18:08 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,6 @@ void	*ft_malloc(t_minishell *shell, size_t size)
 
 	block = malloc(size);
 	if (!block)
-	    free_parent_utils(shell, 1, NULL, "Error malloc");
+	    free_all(shell, 1, NULL, "Error malloc");
 	return (block);
 }
