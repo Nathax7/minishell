@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Mimoulapinou <bebefripouille@chaton.fr>    +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 17:14:42 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/12 12:48:39 by Mimoulapino      ###   ########.fr       */
+/*   Updated: 2025/04/19 19:29:10 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/parsing.h"
+#include "../../includes/parsing.h"
 
 int	is_operator(char c)
 {

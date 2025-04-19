@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   quote_handling.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Mimoulapinou <bebefripouille@chaton.fr>    +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 12:42:41 by Mimoulapino       #+#    #+#             */
-/*   Updated: 2025/04/12 12:44:44 by Mimoulapino      ###   ########.fr       */
+/*   Updated: 2025/04/19 19:28:01 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/parsing.h"
+#include "../../includes/parsing.h"
 
 // Supprime les quotes tout en respectant les règles de bash
 // - Quotes simples : tout est littéral

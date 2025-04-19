@@ -6,12 +6,12 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 16:02:41 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/18 18:01:13 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/19 19:34:07 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // parser.c
-#include "minishell.h"
+#include "../../includes/parsing.h"
 
 static t_cmd	*new_cmd_node(void)
 {

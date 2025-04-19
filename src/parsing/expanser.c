@@ -6,11 +6,11 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 16:07:25 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/18 16:07:45 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/19 19:29:19 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include "../../includes/parsing.h"
 
 char	*get_env_value(const char *name, char **env)
 {

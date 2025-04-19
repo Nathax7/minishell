@@ -65,7 +65,7 @@ all: $(OBJ_DIR) $(NAME)
 	@echo "  xXXXXXXXXXXX                   XXXXXXXXXXXx"
 	@echo " xXXXXXXXX XXX                   XXX XXXXXXXXx"
 	@echo " XXXXXXXX  XXX                   XXX  XXXXXXXX"
-	@echo "xXXXXXXX   XXX     $(GREEN)✨PIPEX✨$(BLUE)     XXX   XXXXXXXx"
+	@echo "xXXXXXXX   XXX   $(GREEN)✨MINISHELL✨$(BLUE)   XXX   XXXXXXXx"
 	@echo "XXXXXX     XXX                   XXX     XXXXXX"
 	@echo "XXXX       XXX                   XXX       XXXX"
 	@echo " XX        XXX                   XXX        XX"

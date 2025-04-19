@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   free_struct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:11:14 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/18 21:16:15 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/19 19:33:43 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/exec.h"
+#include "../../includes/exec.h"
 
-void ft_message(char *str, char *str2)
+void	ft_message(char *str, char *str2)
 {
 	ft_putstr_fd("minishell: ", 2);
 	if (str)
@@ -34,7 +34,7 @@ void	free_cmd(t_cmd *cmd, int status, char *str, char *str2)
 	{
 		if (status != -1)
 			exit(status);
-		return;
+		return ;
 	}
 	ft_message(str, str2);
 	if (cmd->paths)
@@ -44,10 +44,8 @@ void	free_cmd(t_cmd *cmd, int status, char *str, char *str2)
 	if (cmd->outfile >= 0)
 		close(cmd->outfile);
 	if (cmd->fd[0] >= 0)
-		close(cmd->fd[0]);
-	if (cmd->fd[1] >= 0)
-		close(cmd->fd[1]);
-	if (cmd->cmd_args)
+		close(cmd->fd[0]);#include "../../includes/parsing.h"
+
 		ft_freesplit(cmd->cmd_args);
 	if (cmd->here_doc == HEREDOC && cmd->infile_name)
 	{
@@ -59,29 +57,36 @@ void	free_cmd(t_cmd *cmd, int status, char *str, char *str2)
 		exit(status);
 }
 
-void free_token(t_token *token, int status, char *str, char *str2)
+void	free_token(t_token *token, int status, char *str, char *str2)
 {
-	t_token *tmp;
+	t_token	*tmp;
 
 	if (!token)
 	{
 		if (status != -1)
 			exit(status);
-		return;
+		return ;
 	}
 	ft_message(str, str2);
-	// Free token list
+	while (token)
+	{
+		tmp = token->next;
+		if (token->value)
+			free(token->value);
+		free(token);
+		token = tmp;
+	}
 	if (status != -1)
 		exit(status);
 }
 
-void free_all(t_minishell *shell, int status, char *str, char *str2)
+void	free_all(t_minishell *shell, int status, char *str, char *str2)
 {
 	if (!shell)
 	{
 		if (status != -1)
 			exit(status);
-		return;
+		return ;
 	}
 	free_cmd(&shell->cmd, status, str, str2);
 	free_token(&shell->token, status, str, str2);

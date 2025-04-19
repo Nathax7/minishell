@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_malloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:06:39 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/18 21:18:08 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/19 19:33:39 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/exec.h"
+#include "../../includes/exec.h"
 #include <stdio.h>
 #include <stdlib.h>
 
