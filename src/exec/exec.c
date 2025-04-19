@@ -6,11 +6,11 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 20:38:10 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/18 21:25:27 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/19 19:57:49 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/exec.h"
+#include "../../includes/exec.h"
 
 void	check_exec_file(t_cmd *cmd, char *cmd_name)
 {

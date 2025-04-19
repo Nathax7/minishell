@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_malloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:06:39 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/19 19:33:39 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/19 19:58:03 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/exec.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include "../../includes/utils.h"
 
 // Allocation protégée
 void	*ft_malloc(t_minishell *shell, size_t size)

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:01:32 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/19 19:33:47 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/19 19:57:31 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/exec.h"
+#include "../../includes/utils.h"
 
 size_t	get_size(char *str)
 {

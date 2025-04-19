@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:55:48 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/10 14:37:51 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/19 20:06:38 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct s_pipex
 {
 	pid_t	*pids;
 	char	*cmd;
-	char	**cmd_args;
+	char	***cmd_args;
 	char	**paths;
 	char	*path;
 	int		infile;

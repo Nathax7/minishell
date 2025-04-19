@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:44:04 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/18 21:12:47 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/19 20:15:49 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ typedef struct s_token
 	char			*value;
 	t_token_type	type;
 	struct s_token	*next;
+	t_minishell *shell;
+
 } t_token;
 
 typedef enum
@@ -62,11 +64,15 @@ typedef enum
 	ENV
 }	t_env;
 
+typedef enum
+{
+	NO_APPEND,
+	APPEND
+}	t_append;
+
 typedef struct s_cmd
 {
 	pid_t	*pids;
-	t_heredoc	here_doc;
-	t_env		env;
 	char	*cmd;
 	char	**cmd_args;
 	char	**paths;
@@ -83,6 +89,10 @@ typedef struct s_cmd
 
 typedef	struct s_minishell
 {
+	t_append	append;
+	t_heredoc	here_doc;
+	t_env		env;
+	char **parsed;
 	t_cmd cmd;
 	t_token token;
 }	t_minishell;

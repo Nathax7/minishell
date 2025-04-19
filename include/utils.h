@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:07:53 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/18 17:28:00 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/19 19:58:14 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,5 @@ void	minishell_init(t_cmd *cmd, char **envp);
 void	open_infile(t_cmd *cmd, char *infile);
 void	open_outfile(t_cmd *cmd, char *outfile, int mode);
 void	usage(void);
-void	delete_list(t_node *head);
-void	delete_list_exit(t_node *head);
-void	*ft_malloc(size_t size, t_node **head);
 
 #endif

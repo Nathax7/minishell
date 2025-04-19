@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 20:58:31 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/19 19:33:53 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/19 19:57:21 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/exec.h"
+#include "../../includes/utils.h"
 
 void	usage(void)
 {
@@ -38,7 +38,7 @@ void	minishell_init(t_cmd *cmd, char **envp)
 		cmd->env = 0;
 		return ;
 	}
-	cmd->paths = ft_split(cmd->alloc, envp[i] + 5, ':');
+	cmd->paths = ft_split(envp[i] + 5, ':');
 	if (!cmd->paths)
 		if (errno == ENOMEM)
 			msg_utils(NULL, "Error malloc");
@@ -48,16 +48,16 @@ void	open_infile(t_cmd *cmd, char *infile)
 {
 	if (access(infile, F_OK) == -1)
 	{
-		free_parent_utils(cmd, 1, NULL, infile);
+		free_cmd(cmd, 1, NULL, infile);
 	}
 	if (access(infile, R_OK) == -1)
 	{
-		free_parent_utils(cmd, 1, NULL, infile);
+		free_cmd(cmd, 1, NULL, infile);
 		return ;
 	}
 	cmd->infile = open(infile, O_RDONLY);
 	if (cmd->infile == -1)
-		free_parent_utils(cmd, 1, NULL, "Error open infile");
+		free_cmd(cmd, 1, NULL, "Error open infile");
 }
 
 void	open_outfile(t_cmd *cmd, char *outfile, int mode)
@@ -65,13 +65,13 @@ void	open_outfile(t_cmd *cmd, char *outfile, int mode)
 	if (access(outfile, F_OK) == 0)
 	{
 		if (access(outfile, W_OK) == -1)
-			free_parent_utils(cmd, 1, NULL, outfile);
+			free_cmd(cmd, 1, NULL, outfile);
 	}
 	if (mode == 0)
 		cmd->outfile = open(outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else if (mode == 1)
 		cmd->outfile = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (cmd->outfile == -1)
-		free_parent_utils(cmd, 1, NULL, "Error open outfile");
+		free_cmd(cmd, 1, NULL, "Error open outfile");
 }
 
