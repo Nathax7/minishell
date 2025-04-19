@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 17:14:42 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/19 19:29:10 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/19 22:31:58 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,15 +80,15 @@ t_token	*tokenize(char *argument)
 		{
 			type = identify_operator(argument, &i);
 			if (type == T_HEREDOC)
-				add_token(&tokens, strdup("<<"), type);
+				add_token(&tokens, ft_strdup("<<"), type);
 			else if (type == T_APPEND)
-				add_token(&tokens, strdup(">>"), type);
+				add_token(&tokens, ft_strdup(">>"), type);
 			else if (type == T_REDIRECT_IN)
-				add_token(&tokens, strdup("<"), type);
+				add_token(&tokens, ft_strdup("<"), type);
 			else if (type == T_REDIRECT_OUT)
-				add_token(&tokens, strdup(">"), type);
+				add_token(&tokens, ft_strdup(">"), type);
 			else if (type == T_PIPE)
-				add_token(&tokens, strdup("|"), type);
+				add_token(&tokens, ft_strdup("|"), type);
 		}
 		else
 			add_token(&tokens, identify_word(argument, &i), T_WORD);

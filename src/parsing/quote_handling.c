@@ -6,15 +6,15 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 12:42:41 by Mimoulapino       #+#    #+#             */
-/*   Updated: 2025/04/19 19:28:01 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/19 22:20:30 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
 
-// Supprime les quotes tout en respectant les règles de bash
-// - Quotes simples : tout est littéral
-// - Quotes doubles : $ est laissé tel quel (sera expand plus tard)
+// Deletes quotes while respecting bash rules
+// - simple quotes : litteral
+// - doubles quotes : $ is left as is (will be expanded later)
 char	*remove_quotes(const char *src)
 {
 	char	*dst;

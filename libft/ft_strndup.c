@@ -1,24 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_malloc.c                                        :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 15:06:39 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/19 19:58:03 by nagaudey         ###   ########.fr       */
+/*   Created: 2025/04/19 19:00:00 by <votre_logi       #+#    #+#             */
+/*   Updated: 2025/04/19 22:39:13 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/utils.h"
+#include "all.h"
 
-// Allocation protégée
-void	*ft_malloc(t_minishell *shell, size_t size)
+char	*ft_strndup(const char *s, size_t n)
 {
-	void	*block;
+	size_t	i;
+	char	*dup;
 
-	block = malloc(size);
-	if (!block)
-	    free_all(shell, 1, NULL, "Error malloc");
-	return (block);
+	dup = (char *)malloc(sizeof(char) * (n + 1));
+	if (!dup)
+		return (NULL);
+	i = 0;
+	while (i < n && s[i])
+	{
+		dup[i] = s[i];
+		i++;
+	}
+	dup[i] = '\0';
+	return (dup);
 }

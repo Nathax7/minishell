@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:44:04 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/19 19:28:38 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/19 22:55:18 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ typedef struct s_token
 typedef enum
 {
 	NO_HEREDOC,
-
 	HEREDOC
 }	t_heredoc;
 
@@ -73,14 +72,7 @@ typedef struct s_cmd
 	int		fd[2];
 	int		status;
 	struct s_cmd	*next;
-	t_minishell *shell;
 }	t_cmd;
-
-typedef	struct s_minishell
-{
-	t_cmd cmd;
-	t_token token;
-}	t_minishell;
 
 extern int	g_signal;
 

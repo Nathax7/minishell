@@ -3,32 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:43:04 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/19 19:57:51 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/19 23:06:34 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 
-void	random_filename(t_cmd *cmd)
+void	random_filename(t_cmd *cmd, t_token *token)
 {
 	int				urandom_fd;
 	unsigned char	random;
 	int				i;
 
 	i = -1;
-	cmd->infile_name = ft_malloc(cmd->shell, sizeof(char) * 9);
+	cmd->infile_name = malloc(sizeof(char) * 9);
+	if (!cmd->infile)
+		free_cmd(cmd, 1, NULL, "Error malloc");
 	urandom_fd = open("/dev/urandom", O_RDONLY);
 	if (urandom_fd < 0)
-		free_parent_cmd(cmd, 1, NULL, "Error malloc");
+		free_cmd(cmd, 1, NULL, "Error malloc");
 	while (++i < 8)
 	{
 		if (read(urandom_fd, &random, 1) < 0)
 		{
 			close(urandom_fd);
-			free_parent_cmd(cmd, 1, NULL, "Error read");
+			free_cmd(cmd, 1, NULL, "Error read");
 		}
 		cmd->infile_name[i] = CHARSET[random % (sizeof(CHARSET) - 1)];
 	}
@@ -75,7 +77,7 @@ void	here_doc(t_cmd *cmd, char *limiter)
 		free(temp);
 		temp = readline("> ");
 		if (!temp)
-			msg_cmd(NULL, "Error gnl");
+			msg_cmd(NULL, "Error readline");
 	}
 	close(cmd->infile);
 	cmd->infile = open(cmd->infile_name, O_RDONLY);

@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 16:02:41 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/19 19:34:07 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/19 22:34:04 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ static int	parse_redirection(t_cmd *cmd, t_token **tokens)
 {
 	t_token	*curr;
 	char	*filename;
+	t_token	*word;
 
 	curr = *tokens;
 	if (!curr->next || curr->next->type != T_WORD)
@@ -71,10 +72,14 @@ static int	parse_redirection(t_cmd *cmd, t_token **tokens)
 		cmd->outfile = filename;
 		cmd->append = 1;
 	}
-	else if (curr->type == T_HEREDOC)
+	if (tokens->type == T_HEREDOC)
 	{
-		cmd->heredoc = 1;
-		cmd->heredoc_delim = filename;
+		word = tok->next;
+		if (!word || word->type != T_WORD)
+			return (syntax_error("newline"));
+		if (create_heredoc(current, word->value))
+			return (parse_error()); /* gestion d’erreur maison */
+		tok = tok->next;            /* skip le mot après <<    */
 	}
 	*tokens = curr->next; // skip both tokens
 	return (1);
