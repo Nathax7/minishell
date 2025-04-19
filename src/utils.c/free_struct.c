@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:11:14 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/19 19:33:43 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/19 19:35:25 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	free_cmd(t_cmd *cmd, int status, char *str, char *str2)
 	if (cmd->outfile >= 0)
 		close(cmd->outfile);
 	if (cmd->fd[0] >= 0)
-		close(cmd->fd[0]);#include "../../includes/parsing.h"
+		close(cmd->fd[0]);
 
 		ft_freesplit(cmd->cmd_args);
 	if (cmd->here_doc == HEREDOC && cmd->infile_name)
