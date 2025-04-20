@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:07:53 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/20 18:57:20 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/20 20:38:20 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,6 @@ void	free_cmd(t_cmd *cmd, int status, char *str, char *str2);
 void	free_cmd_list(t_cmd *lst);
 void	ft_lstadd_back(t_cmd **lst, t_cmd *new);
 t_cmd	*ft_lstlast(t_cmd *lst);
+void ft_close(t_cmd *cmd, char *str);
 
 #endif
