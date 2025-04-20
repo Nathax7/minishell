@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 20:38:10 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/20 20:18:45 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:15:07 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,10 @@ int	exec(int ac, char **av, char **envp)
 
 	if (ac < 5)
 		usage();
-	init_path(&cmd, envp);
+	init_cmd(&cmd, envp);
 	cmd.pids = malloc(sizeof(pid_t) * (cmd.cmd_nbr));
 	if (!cmd.pids)
-		free_cmd(&cmd, 1, NULL, "minishell: malloc");
+		free_cmd(&cmd, 1, NULL, "Error malloc");
 	while (++cmd.i < cmd.cmd_nbr)
 		child_process(&cmd, av[cmd.i + 2 + cmd.here_doc], envp);
 	while (++cmd.i_wait < cmd.cmd_nbr)

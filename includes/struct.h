@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:44:04 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/20 20:09:46 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:45:00 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,14 @@ typedef enum e_token_type
 	T_HEREDOC
 } t_token_type;
 
+typedef enum e_close
+{
+	INFILE,
+	OUTFILE,
+	FD0,
+	FD1
+}	t_close;
+
 typedef enum e_quote
 {
 	Q_NONE,
@@ -52,19 +60,19 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-typedef enum
+typedef enum e_heredoc
 {
 	NO_HEREDOC,
 	HEREDOC
 }	t_heredoc;
 
-typedef enum
+typedef enum e_env
 {
 	NO_ENV,
 	ENV
 }	t_env;
 
-typedef enum
+typedef enum e_append
 {
 	NO_APPEND,
 	APPEND

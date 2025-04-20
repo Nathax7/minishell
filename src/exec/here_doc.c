@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:43:04 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/20 20:19:23 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/20 22:03:53 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,16 @@ void	here_doc(t_cmd *cmd, char *limiter)
 		if (!temp)
 			msg_cmd(NULL, "Error readline");
 	}
-	close(cmd->infile);
+	ft_close(cmd, INFILE);
 	cmd->infile = open(cmd->infile_name, O_RDONLY);
 }
 
-void init_path(t_cmd *cmd, char **envp)
+void init_cmd(t_cmd *cmd, char **envp)
 {
 	int i;
 
 	i = 0;
-	while (envp && envp[i] && ft_strnstr(envp[i], "PATH", 4) == 0)
+	while (envp && envp[i] && ft_strnstr(envp[i], "PATH=", 5) == 0)
 			i++;
 	if (!envp || !envp[i])
 	{
@@ -80,25 +80,10 @@ void init_path(t_cmd *cmd, char **envp)
 	}
 	cmd->paths = ft_split(envp[i] + 5, ':');
 	if (!cmd->paths)
-		free_cmd(cmd, 1, NULL, "minishell: malloc");
-}
-
-void	what_is(t_cmd *cmd, char **av, int ac)
-{
-	if (cmd->here_doc == HEREDOC)
-	{
-		open_infile(cmd, cmd->infile_name);
-		if (cmd->append = APPEND)
-			open_outfile(cmd, cmd->outfile_name, 0);
-		else
-			open_outfile(cmd, cmd->outfile_name, 1);
-	}
+	free_cmd(cmd, 1, NULL, "Error malloc");
+	open_infile(cmd, cmd->infile_name);
+	if (cmd->append == APPEND)
+		open_outfile(cmd, cmd->outfile_name, 0);
 	else
-	{
-		open_infile(cmd, cmd->infile_name);
-		if (cmd->append = APPEND)
-			open_outfile(cmd, cmd->outfile_name, 0);
-		else
-			open_outfile(cmd, cmd->outfile_name, 1);
-	}
+		open_outfile(cmd, cmd->outfile_name, 1);
 }
