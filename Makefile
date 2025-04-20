@@ -6,85 +6,64 @@
 #    By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/10 12:31:08 by almeekel          #+#    #+#              #
-#    Updated: 2025/04/20 16:50:03 by almeekel         ###   ########.fr        #
+#    Updated: 2025/04/20 17:44:22 by almeekel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# # Makefile de test du tokenizer ;) #
-
-# **************************************************************************** #
-#                               Minishell – Makefile                            #
-# **************************************************************************** #
-
-# ———————————————————  CONFIG  ——————————————————— #
-NAME        := minishell
-TESTNAME    := parse_test
-
-# compiler ------------------------------------------------------------------- #
 CC      := cc
 CFLAGS  := -Wall -Wextra -Werror
 
-# directories ---------------------------------------------------------------- #
-INC_DIR     := includes
-SRC_DIR     := src
-PAR_DIR     := $(SRC_DIR)/parsing
-LIBFT_DIR   := libft
+INC_DIR := includes
+PAR_DIR := src/parsing
+LIBFT   := libft        # path to your libft
+LIBFT_A := $(LIBFT)/libft.a
 
-# library / includes --------------------------------------------------------- #
-LIBFT_A     := $(LIBFT_DIR)/libft.a
-INCLUDES    := -I$(INC_DIR) -I$(LIBFT_DIR)      # libft headers are usually here
-READLINE    := -lreadline                       # add -ltermcap on some Linux
+INCS    := -I$(INC_DIR) -I$(LIBFT)
+READLINE:= -lreadline           # add -ltermcap if needed on Linux
 
-# parsing sources ------------------------------------------------------------ #
+# -------- source files ----------------------------------------------------- #
 PAR_SRCS := \
-	$(PAR_DIR)/tokenizer.c \
-	$(PAR_DIR)/tokenizer_utils.c \
-	$(PAR_DIR)/quote_handling.c \
-	$(PAR_DIR)/expanser.c \
-	$(PAR_DIR)/parser.c \
-	$(PAR_DIR)/heredoc.c
+    $(PAR_DIR)/tokenizer.c \
+    $(PAR_DIR)/tokenizer_utils.c \
+    $(PAR_DIR)/quote_handling.c \
+    $(PAR_DIR)/expanser.c \
+    $(PAR_DIR)/parser.c \
+    $(PAR_DIR)/heredoc.c \
+    $(PAR_DIR)/parsing.c
 
-MAIN_SRC    := $(SRC_DIR)/parsing_main.c
-SRCS        := $(PAR_SRCS) $(MAIN_SRC)
+# Add utils sources (note the path seems unusual - check if "utils.c" is a directory)
+UTILS_DIR := src/utils.c
+UTILS_SRCS := \
+    $(UTILS_DIR)/free_struct.c
 
-OBJS        := $(SRCS:.c=.o)
+TEST_SRC   := parse-test.c
+TEST_OBJS  := $(TEST_SRC:.c=.o) $(PAR_SRCS:.c=.o) $(UTILS_SRCS:.c=.o)
+TEST_BIN   := parse_test
 
-# test ----------------------------------------------------------------------- #
-TEST_SRC    := parse-test.c
-TEST_OBJS   := $(TEST_SRC:.c=.o) $(PAR_SRCS:.c=.o)
+# -------- rules ------------------------------------------------------------ #
+.PHONY: all clean fclean re
 
-# ———————————————————  RULES  ——————————————————— #
-.PHONY: all clean fclean re test
+all: $(TEST_BIN)
 
-all: $(NAME)
+$(TEST_BIN): $(LIBFT_A) $(TEST_OBJS)
+	$(CC) $(CFLAGS) $(INCS) $(TEST_OBJS) -o $@ -L$(LIBFT) -lft $(READLINE)
 
-$(NAME): $(LIBFT_A) $(OBJS)
-	$(CC) $(CFLAGS) $(INCLUDES) $^ $(READLINE) -o $@
-
-# automatic libft build
 $(LIBFT_A):
-	$(MAKE) -C $(LIBFT_DIR)
+	$(MAKE) -C $(LIBFT)
 
-# generic object rule
 %.o: %.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
-
-# --------------------------------------------------------------------------- #
-#                TEST:  make test   →  ./parse_test                           #
-# --------------------------------------------------------------------------- #
-test: $(LIBFT_A) $(TEST_OBJS)
-	$(CC) $(CFLAGS) $(INCLUDES) $(TEST_OBJS) $(READLINE) -o $(TESTNAME)
-	@echo "✔  Built $(TESTNAME). Run it with ./$(TESTNAME)"
+	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
 
 clean:
-	$(MAKE) -C $(LIBFT_DIR) clean
-	rm -f $(OBJS) $(TEST_OBJS)
+	rm -f $(TEST_OBJS)
+	$(MAKE) -C $(LIBFT) clean
 
 fclean: clean
-	$(MAKE) -C $(LIBFT_DIR) fclean
-	rm -f $(NAME) $(TESTNAME)
+	rm -f $(TEST_BIN)
+	$(MAKE) -C $(LIBFT) fclean
 
 re: fclean all
+
 
 
 

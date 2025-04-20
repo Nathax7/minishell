@@ -1,25 +1,16 @@
-/* ************************************************************************** *//* ************************************************************************** */
-/*  heredoc.c – realise every << found during parsing                         */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/20 17:07:18 by almeekel          #+#    #+#             */
+/*   Updated: 2025/04/20 17:16:46 by almeekel         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
-#include "struct.h"
-
-static int	ft_strcmp(char *s1, char *s2)
-{
-	char	*str;
-	int		k;
-	int		i;
-
-	i = 0;
-	if (!s1 || !s2)
-		return (0);
-	str = get_string(ft_strdup(s2), 0, 0, get_size(s2));
-	while (s1[i] == str[i] && s1[i] != '\0' && str[i] != '\0')
-		i++;
-	k = s1[i] - str[i];
-	free(str);
-	return (k);
-}
+#include "../../includes/parsing.h"
 
 static int	open_tmp(char **path_out)
 {
@@ -42,13 +33,14 @@ int	fill_heredocs(t_cmd *cmds)
 	{
 		if (cmds->here_doc == HEREDOC)
 		{
-			fd = open_tmp(&cmds->infile_name);
+			fd = open_tmp(&cmds->infile_name);        /* /tmp/msh_hd_N  */
 			if (fd < 0)
 				return (perror("heredoc"), 1);
 			while (1)
 			{
 				line = readline("> ");
-				if (!line || !ft_strcmp(line, cmds->infile_name) )
+				if (!line || ft_strncmp(line, cmds->infile_name, \
+						ft_strlen(cmds->infile_name) + 1) == 0)
 					break ;
 				ft_putendl_fd(line, fd);
 				free(line);
