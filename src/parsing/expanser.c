@@ -6,81 +6,76 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 16:07:25 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/19 19:29:19 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/20 14:43:00 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
 
-char	*get_env_value(const char *name, char **env)
+static char	*get_env_val(const char *name, char **env)
 {
-	int	i;
-	int	len;
+	size_t	n;
 
-	i = 0;
-	len = ft_strlen(name);
-	while (env[i])
-	{
-		if (ft_strncmp(env[i], name, len) == 0 && env[i][len] == '=')
-			return (env[i] + len + 1);
-		i++;
-	}
+	n = ft_strlen(name);
+	for (int i = 0; env[i]; i++)
+		if (!ft_strncmp(env[i], name, n) && env[i][n] == '=')
+			return (env[i] + n + 1);
 	return (NULL);
 }
 
-char	*expand_one(const char *src, char **env, int last_exit)
+static char	*expand_one(const char *src, char **env, int last_exit)
 {
-	char	*res;
-	int		i;
-	char	*code;
-	int		start;
-	char	*var;
+	char	*dst;
+	size_t	i;
+	size_t	start;
+	char	*name;
 	char	*val;
 
-	res = ft_calloc(1, 1);
-	i = 0;
+	dst = ft_calloc(1, 1);
+	i = 0,
+	start = 0;
 	while (src[i])
 	{
-		if (src[i] == '$' && src[i + 1])
+		if (src[i] == '$' && src[i + 1]) /* si expand   */
 		{
-			if (src[i + 1] == '?')
+			if (src[i + 1] == '?') /* $?>  */
 			{
-				code = ft_itoa(last_exit);
-				res = ft_strjoin_free(res, code);
-				free(code);
+				dst = ft_strjoin_free(dst, ft_itoa(last_exit));
 				i += 2;
 			}
-			else if (ft_isalpha(src[i + 1]) || src[i + 1] == '_')
+			else if (ft_isalpha(src[i + 1]) || src[i + 1] == '_') /* $VAR      */
 			{
 				start = ++i;
 				while (src[i] && (ft_isalnum(src[i]) || src[i] == '_'))
 					i++;
-				var = ft_substr(src, start, i - start);
-				val = get_env_value(var, env);
+				name = ft_substr(src, start, i - start);
+				val = get_env_val(name, env);
 				if (val)
-					res = ft_strjoin_free(res, val);
-				free(var);
+					dst = ft_strjoin_free(dst, val);
+				free(name);
 			}
-			else
-				res = ft_strjoin_free_c(res, src[i++]);
+			else /* just "$x"   */
+				dst = ft_strjoin_free_c(dst, src[i++]);
 		}
-		else
-			res = ft_strjoin_free_c(res, src[i++]);
+		else /* normal char */
+			dst = ft_strjoin_free_c(dst, src[i++]);
 	}
-	return (res);
+	return (dst);
 }
 
-void	expand_variables(t_token *tokens, char **env, int last_exit)
+void	expand_variables(t_token *token, char **env, int last_exit)
 {
-	char *expanded;
-	while (tokens)
+	char	*e;
+
+	while (token)
 	{
-		if (tokens->type == T_WORD && ft_strchr(tokens->value, '$'))
+		if (token->type == T_WORD && token->quote != Q_SINGLE
+			&& ft_strchr(token->value, '$'))
 		{
-			expanded = expand_one(tokens->value, env, last_exit);
-			free(tokens->value);
-			tokens->value = expanded;
+			e = expand_one(token->value, env, last_exit);
+			free(token->value);
+			token->value = e;
 		}
-		tokens = tokens->next;
+		token = token->next;
 	}
 }

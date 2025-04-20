@@ -6,119 +6,93 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 16:02:41 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/19 22:34:04 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/20 14:35:23 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// parser.c
 #include "../../includes/parsing.h"
 
-static t_cmd	*new_cmd_node(void)
+// j'initialise cmd
+static t_cmd	*cmd_new(void)
 {
 	t_cmd	*cmd;
 
-	cmd = malloc(sizeof(t_cmd));
+	cmd = ft_calloc(1, sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
-	cmd->args = NULL;
-	cmd->infile = NULL;
-	cmd->outfile = NULL;
-	cmd->append = 0;
-	cmd->heredoc = 0;
-	cmd->heredoc_delim = NULL;
-	cmd->next = NULL;
+	cmd->infile = STDIN_FILENO;
+	cmd->outfile = STDOUT_FILENO;
+	cmd->here_doc = NO_HEREDOC;
+	cmd->env = NO_ENV;
+	cmd->fd[0] = -1;
+	cmd->fd[1] = -1;
 	return (cmd);
 }
 
-static int	add_arg(t_cmd *cmd, char *arg)
+static int	cmd_add_arg(t_cmd *cmd, char *arg)
 {
-	int		count;
-	char	**new_args;
+	size_t	len;
+	char	**tmp;
 
-	count = 0;
-	while (cmd->args && cmd->args[count])
-		count++;
-	new_args = malloc(sizeof(char *) * (count + 2));
-	if (!new_args)
-		return (0);
-	for (int i = 0; i < count; i++)
-		new_args[i] = cmd->args[i];
-	new_args[count] = arg;
-	new_args[count + 1] = NULL;
-	free(cmd->args);
-	cmd->args = new_args;
-	return (1);
+	len = 0;
+	while (cmd->cmd_args && cmd->cmd_args[len])
+		len++;
+	tmp = ft_calloc(len + 2, sizeof(char *));
+	if (!tmp)
+		return (1);
+	while (cmd->cmd_args && len--)
+		tmp[len] = cmd->cmd_args[len];
+	tmp[++len] = arg;
+	cmd->cmd_args = tmp;
+	if (!cmd->cmd)
+		cmd->cmd = arg;
+	return (0);
 }
 
-static int	parse_redirection(t_cmd *cmd, t_token **tokens)
+static int	parse_redir(t_cmd *cmd, t_token **tk)
 {
-	t_token	*curr;
-	char	*filename;
+	t_token	*op;
 	t_token	*word;
 
-	curr = *tokens;
-	if (!curr->next || curr->next->type != T_WORD)
-		return (0);
-	filename = curr->next->value;
-	if (curr->type == T_REDIRECT_IN)
-		cmd->infile = filename;
-	else if (curr->type == T_REDIRECT_OUT)
+	op = *tk;
+	if (!op->next || op->next->type != T_WORD)
+		return (ft_putstr_fd("minishell: syntax error\n", 2), 258);
+	word = op->next;
+	if (op->type == T_REDIRECT_IN)
+		cmd->infile_name = word->value;
+	else if (op->type == T_REDIRECT_OUT || op->type == T_APPEND)
+		cmd->outfile_name = word->value;
+	else if (op->type == T_HEREDOC)
 	{
-		cmd->outfile = filename;
-		cmd->append = 0;
+		cmd->here_doc = HEREDOC;
+		cmd->infile_name = word->value; /* retenir la delim        */
 	}
-	else if (curr->type == T_APPEND)
-	{
-		cmd->outfile = filename;
-		cmd->append = 1;
-	}
-	if (tokens->type == T_HEREDOC)
-	{
-		word = tok->next;
-		if (!word || word->type != T_WORD)
-			return (syntax_error("newline"));
-		if (create_heredoc(current, word->value))
-			return (parse_error()); /* gestion d’erreur maison */
-		tok = tok->next;            /* skip le mot après <<    */
-	}
-	*tokens = curr->next; // skip both tokens
-	return (1);
+	*tk = word; /* passer le token du filename   */
+	return (0);
 }
 
-t_cmd	*build_command_list(t_token *tokens)
+t_cmd	*build_cmd_list(t_token *tk)
 {
-	t_cmd	*head;
-	t_cmd	*curr_cmd;
-	t_cmd	*tmp;
+	t_cmd	*head = NULL;
+	t_cmd	*cur  = NULL;
 
-	head = NULL;
-	curr_cmd = NULL;
-	while (tokens)
+	while (tk)
 	{
-		if (!curr_cmd)
+		if (!cur) /* nouvelle commande simple    */
 		{
-			curr_cmd = new_cmd_node();
-			if (!head)
-				head = curr_cmd;
-			else
-			{
-				tmp = head;
-				while (tmp->next)
-					tmp = tmp->next;
-				tmp->next = curr_cmd;
-			}
+			cur = cmd_new();
+			ft_lstadd_back((t_list **)&head, (t_list *)cur);
 		}
-		if (tokens->type == T_WORD)
-			add_arg(curr_cmd, tokens->value);
-		else if (tokens->type == T_REDIRECT_IN || tokens->type == T_REDIRECT_OUT
-			|| tokens->type == T_APPEND || tokens->type == T_HEREDOC)
-		{
-			if (!parse_redirection(curr_cmd, &tokens))
+		if (tk->type == T_WORD)
+			if (cmd_add_arg(cur, tk->value))
 				return (NULL);
-		}
-		else if (tokens->type == T_PIPE)
-			curr_cmd = NULL;
-		tokens = tokens->next;
+		if (tk->type >= T_REDIRECT_IN && tk->type <= T_HEREDOC)
+			if (parse_redir(cur, &tk))
+				return (NULL);
+		if (tk->type == T_PIPE)
+			cur = NULL;
+		tk = tk->next;
 	}
 	return (head);
 }
+

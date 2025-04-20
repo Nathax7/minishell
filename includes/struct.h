@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:44:04 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/19 22:55:18 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/20 14:28:43 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,21 @@ typedef struct s_token
 	t_token_type	type;
 	struct s_token	*next;
 } t_token;
+
+typedef enum e_quote
+{
+	Q_NONE,
+	Q_SINGLE,
+	Q_DOUBLE
+}	t_quote;
+
+typedef struct s_token
+{
+	char			*value;
+	t_token_type	type;
+	t_quote			quote;    /* nouveau en gros c'est pour savoir si le word a des double ou single quote       */
+	struct s_token	*next;
+}	t_token;
 
 typedef enum
 {

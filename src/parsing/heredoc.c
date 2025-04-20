@@ -1,53 +1,46 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   heredoc.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/19 19:26:56 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/19 23:07:07 by almeekel         ###   ########.fr       */
-/*                                                                            */
+/* ************************************************************************** *//* ************************************************************************** */
+/*  heredoc.c – realise every << found during parsing                         */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "struct.h"
 
-void	handle_heredocs(t_token *tokens, t_cmd *cmd)
+static int	open_tmp(char **path_out)
 {
-	int		fd;
-	char	*delim;
-	char	*line;
-	char	*temp;
+	static int	idx;
+	char		*name;
 
-	random_filename(cmd, token);
-	while (tokens)
+	name = ft_strjoin("/tmp/msh_hd_", ft_itoa(idx++));
+	if (!name)
+		return (-1);
+	*path_out = name;
+	return (open(name, O_WRONLY | O_CREAT | O_TRUNC, 0600));
+}
+
+int	fill_heredocs(t_cmd *cmds)
+{
+	char	*line;
+	int		fd;
+
+	while (cmds)
 	{
-		if (tokens->type == T_HEREDOC && tokens->next
-			&& tokens->next->type == T_WORD)
+		if (cmds->here_doc == HEREDOC)
 		{
-			delim = tokens->next->value;
-			cmd->infile = open(cmd->infile_name, O_WRONLY | O_CREAT | O_TRUNC,
-				0644);
-			temp = readline("> ");
-			if (!temp)
-				msg_cmd(NULL, "Error gnl");
-			while (temp != NULL)
+			fd = open_tmp(&cmds->infile_name);
+			if (fd < 0)
+				return (perror("heredoc"), 1);
+			while (1)
 			{
-				if (ft_strncmp(temp, delim, ft_strlen(delim)) == 0
-					&& ft_strlen(temp) == ft_strlen(delim))
-				{
-					free(temp);
+				line = readline("> ");
+				if (!line || !ft_strcmp(line, cmds->infile_name) )
 					break ;
-				}
-				write(cmd->infile, temp, ft_strlen(temp));
-				write(cmd->infile, "\n", 1);
-				free(temp);
-				temp = readline("> ");
-				if (!temp)
-					msg_cmd(NULL, "Error readline");
+				ft_putendl_fd(line, fd);
+				free(line);
 			}
+			free(line);
+			close(fd);
+			cmds->infile = open(cmds->infile_name, O_RDONLY);
 		}
-		close(cmd->infile);
-		tokens = tokens->next;
+		cmds = cmds->next;
 	}
+	return (0);
 }

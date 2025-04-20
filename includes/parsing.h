@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:44:00 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/19 19:27:53 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/20 14:44:03 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,8 @@
 t_token			*tokenize(char *input);
 t_token_type	identify_operator(const char *s, int *i);
 t_token_type	identify_redirect(const char *s, int *i, int flag);
+int				fill_heredocs(t_cmd *cmds);
+char			*identify_word(const char *src, int *i, t_quote *quote_kind);
+static t_quote	get_quote_kind(const char *s, int start, int end);
 
 #endif

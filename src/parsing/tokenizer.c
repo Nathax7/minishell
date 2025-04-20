@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 17:14:42 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/19 22:31:58 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/20 14:35:04 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,45 +17,23 @@ int	is_operator(char c)
 	return (c == '|' || c == '<' || c == '>');
 }
 
-char	*identify_word(const char *str, int *i)
-{
-	int		start;
-	char	quote;
-
-	start = *i;
-	while (str[*i] && !ft_strchr(" \t|<>", str[*i]))
-	{
-		if (str[*i] == '\'' || str[*i] == '"')
-		{
-			quote = str[*i];
-			(*i) = (*i) + 1;
-			while (str[*i] && str[*i] != quote)
-				(*i) = (*i) + 1;
-			if (str[*i] == quote)
-				(*i) = (*i) + 1;
-		}
-		else
-			(*i) = (*i) + 1;
-	}
-	return (strndup(&str[start], *i - start));
-}
-
-void	add_token(t_token **head, char *value, t_token_type type)
+static void	add_token4(t_token **lst, char *val, t_token_type ty, t_quote qk)
 {
 	t_token	*new;
 	t_token	*tmp;
 
-	new = malloc(sizeof(t_token));
+	new = malloc(sizeof *new);
 	if (!new)
 		return ;
-	new->value = value;
-	new->type = type;
+	new->value = val;
+	new->type = ty;
+	new->quote = qk;
 	new->next = NULL;
-	if (!*head)
-		*head = new;
+	if (!*lst)
+		*lst = new;
 	else
 	{
-		tmp = *head;
+		tmp = *lst;
 		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = new;
@@ -64,12 +42,13 @@ void	add_token(t_token **head, char *value, t_token_type type)
 
 t_token	*tokenize(char *argument)
 {
-	t_token	*tokens;
-	int		i;
-	t_token_type type;
+	t_token			*tokens;
+	int				i;
+	t_token_type	type;
 
 	tokens = NULL;
 	i = 0;
+	t_quote quote_type; /* mon nathax ou miel */
 	while (argument[i])
 	{
 		while (argument[i] && ft_strchr(" \t", argument[i]))
@@ -80,19 +59,19 @@ t_token	*tokenize(char *argument)
 		{
 			type = identify_operator(argument, &i);
 			if (type == T_HEREDOC)
-				add_token(&tokens, ft_strdup("<<"), type);
+				add_token4(&tokens, ft_strdup("<<"), type, Q_NONE);
 			else if (type == T_APPEND)
-				add_token(&tokens, ft_strdup(">>"), type);
+				add_token4(&tokens, ft_strdup(">>"), type, Q_NONE);
 			else if (type == T_REDIRECT_IN)
-				add_token(&tokens, ft_strdup("<"), type);
+				add_token4(&tokens, ft_strdup("<"), type, Q_NONE);
 			else if (type == T_REDIRECT_OUT)
-				add_token(&tokens, ft_strdup(">"), type);
-			else if (type == T_PIPE)
-				add_token(&tokens, ft_strdup("|"), type);
+				add_token4(&tokens, ft_strdup(">"), type, Q_NONE);
+			else /* si c'est un T_PIPE du coup */
+				add_token4(&tokens, ft_strdup("|"), type, Q_NONE);
 		}
 		else
-			add_token(&tokens, identify_word(argument, &i), T_WORD);
+			add_token4(&tokens, identify_word(argument, &i, &quote_type),
+				T_WORD, quote_type);
 	}
 	return (tokens);
 }
-
