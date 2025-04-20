@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:11:14 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/20 16:20:29 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/20 16:41:14 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,16 @@ static void	free_cmd_core(t_cmd *cmd)
 		free(cmd->infile_name);
 	}
 }
+// // // au cas ou
+// // if (cmd->infile  > 2) 
+// 	close(cmd->infile);
+// // if (cmd->outfile > 2) 
+// 	close(cmd->outfile);
+// // if (cmd->fd[0]   > 2) 
+// 	close(cmd->fd[0]);
+// // if (cmd->fd[1]   > 2) 
+// 	close(cmd->fd[1]);
+
 
 void	free_cmd(t_cmd *cmd, int status, char *str, char *str2)
 {
