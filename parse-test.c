@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 16:44:43 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/20 16:45:15 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/20 19:28:44 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,17 +73,44 @@ int	main(int ac, char **av, char **envp)
 	(void)ac; (void)av;
 
 	const char *tests[] = {
-		"ls -l /tmp",
-		"echo 'hello world'",
-		"echo \"$USER\"",
-		"cat < infile.txt > outfile.txt",
-		"grep foo file1 | wc -l",
-		"echo hi >> log.txt",
-		"cat << EOF",
-		"echo $HOME $?",
-		NULL
-	};
-
+		/* ───── SIMPLE WORDS / ARGS ───────────────────────────────────────────── */
+			"grep pattern << LIMIT | wc -l",
+		
+		/* ───── QUOTING ───────────────────────────────────────────────────────── */
+			"echo '$USER literal' \"and $USER expanded\"",
+			"echo \"double \\\" inner\" 'single \" inside'",
+		
+		/* ───── ENV‑EXPANSION ─────────────────────────────────────────────────── */
+			"echo $HOME",
+			"echo $UNDEFINED_VAR end",
+			"echo first=$FIRST second=$SECOND",   /* set in your shell before run */
+		
+		/* ───── REDIRECTIONS ──────────────────────────────────────────────────── */
+			"cat < infile.txt",
+			"grep foo < in1.txt > out1.txt",
+			"echo hi >> append.log",
+			"sort < unsorted.txt | uniq | wc -l > count.txt",
+		
+		/* ───── PIPES (with and without spaces) ───────────────────────────────── */
+			"ls -1 | wc -l",
+			"ps ax|grep mysql|awk '{print $1}'",
+		
+		/* ───── HEREDOCS ──────────────────────────────────────────────────────── */
+			
+		/*  for those two you’ll be prompted; type a few lines then the delimiter  */
+		
+		/* ───── MIXED QUOTES + EXPANSION IN PIPES ─────────────────────────────── */
+			"echo \"User is $USER\" | cat -n",
+		
+		/* ───── SYNTAX‑ERROR CASES (should return NULL) ───────────────────────── */
+			"< infile ls",          /* redirection before command              */
+			"echo unmatched \"",    /* unclosed quote                          */
+			"ls | | wc",            /* double pipe                             */
+			"cat > ",               /* redirect without file                   */
+		
+		/* ───── START / END MARKERS ───────────────────────────────────────────── */
+			NULL
+		};		
 	for (int i = 0; tests[i]; i++)
 		one_test(tests[i], envp, 42);   /* use 42 as previous exit status */
 

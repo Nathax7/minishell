@@ -6,13 +6,14 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 17:37:52 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/20 17:47:14 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/20 18:53:58 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ALL_H
 # define ALL_H
 
+# include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
 # include <stdarg.h>
@@ -20,9 +21,9 @@
 # include <stdint.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <unistd.h>
-# include <errno.h>
 # include <string.h>
+# include <unistd.h>
+
 
 // Standard Library Functions
 int					ft_isalpha(int c);
@@ -82,13 +83,9 @@ typedef struct s_list
 t_list				*ft_lstnew(void *content);
 void				ft_lstadd_front(t_list **lst, t_list *new);
 int					ft_lstsize(t_list *lst);
-t_list				*ft_lstlast(t_list *lst);
-void				ft_lstadd_back(t_list **lst, t_list *new);
 void				ft_lstdelone(t_list *lst, void (*del)(void *));
 void				ft_lstclear(t_list **lst, void (*del)(void *));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
-t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
-						void (*del)(void *));
 
 // ft_printf function
 size_t				ft_len_putaddress(void *ptr);

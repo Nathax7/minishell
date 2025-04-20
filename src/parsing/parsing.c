@@ -29,6 +29,6 @@ t_cmd	*ft_parsing(char *input, char **envp, int last_exit)
 	expand_variables(tokens, envp, last_exit);
 	/* 3 / construire l'AST */
 	cmd_tree = build_cmd_list(tokens);
-	free_token(tokens, -1, NULL, NULL);
+	// free_token(tokens, -1, NULL, NULL);
 	return (cmd_tree);
 }

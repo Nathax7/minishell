@@ -34,8 +34,8 @@ PRINTF_FILES = ft_printf/ft_len_putaddress.c ft_printf/ft_len_putchar.c ft_print
 
 GNL_FILES = get_next_line/get_next_line.c get_next_line/get_next_line_bonus.c
 
-LIBFT_BONUS_FILES = ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c ft_lstlast_bonus.c ft_lstiter_bonus.c \
- ft_lstdelone_bonus.c ft_lstclear_bonus.c ft_lstadd_back_bonus.c ft_lstmap_bonus.c
+LIBFT_BONUS_FILES = ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c ft_lstiter_bonus.c \
+ ft_lstdelone_bonus.c ft_lstclear_bonus.c
 
 SRC_FILES = $(LIBFT_FILES) $(PRINTF_FILES) $(GNL_FILES) $(LIBFT_BONUS_FILES)
 

@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 16:02:41 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/20 14:35:23 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/20 19:22:32 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,10 @@ static t_cmd	*cmd_new(void)
 {
 	t_cmd	*cmd;
 
-	cmd = ft_calloc(1, sizeof(t_cmd));
+	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
+	*cmd = (t_cmd){0};
 	cmd->infile = STDIN_FILENO;
 	cmd->outfile = STDOUT_FILENO;
 	cmd->here_doc = NO_HEREDOC;
@@ -40,12 +41,14 @@ static int	cmd_add_arg(t_cmd *cmd, char *arg)
 	tmp = ft_calloc(len + 2, sizeof(char *));
 	if (!tmp)
 		return (1);
-	while (cmd->cmd_args && len--)
-		tmp[len] = cmd->cmd_args[len];
-	tmp[++len] = arg;
+	for (size_t i = 0; i < len; i++)
+		tmp[i] = cmd->cmd_args[i];
+	tmp[len] = ft_strdup(arg);
+	tmp[len + 1] = NULL;
+	free(cmd->cmd_args);
 	cmd->cmd_args = tmp;
 	if (!cmd->cmd)
-		cmd->cmd = arg;
+		cmd->cmd = tmp[0];
 	return (0);
 }
 
@@ -73,15 +76,19 @@ static int	parse_redir(t_cmd *cmd, t_token **tk)
 
 t_cmd	*build_cmd_list(t_token *tk)
 {
-	t_cmd	*head = NULL;
-	t_cmd	*cur  = NULL;
+	t_cmd	*head;
+	t_cmd	*cur;
 
+	head = NULL;
+	cur = NULL;
 	while (tk)
 	{
 		if (!cur) /* nouvelle commande simple    */
 		{
 			cur = cmd_new();
-			ft_lstadd_back((t_list **)&head, (t_list *)cur);
+			if (!cur)
+				return (free_cmd_list(head), NULL);
+			ft_lstadd_back(&head, cur);
 		}
 		if (tk->type == T_WORD)
 			if (cmd_add_arg(cur, tk->value))
@@ -95,4 +102,3 @@ t_cmd	*build_cmd_list(t_token *tk)
 	}
 	return (head);
 }
-

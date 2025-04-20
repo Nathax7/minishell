@@ -6,35 +6,44 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 14:05:36 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/20 16:08:39 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/20 19:27:47 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-int	g_signal;
+int				g_signal;
 
-int	main(int ac, char **av, char **envp)
+static t_cmd	*clean_and_null(t_cmd *head)
 {
-	(void)ac; (void)av;
-	char	*line;
-	t_cmd	*cmds;
-
-	while ((line = readline("minishell$> ")))
-	{
-		add_history(line);
-		cmds = ft_parsing(line, envp, 0);
-		if (!cmds)
-		{
-			free(line);
-			continue ;
-		}
-		if (!fill_heredocs(cmds))
-			execute(cmds, envp);
-		free_cmd_list(cmds);
-		free(line);
-	}
-	printf("exit\n");
-	return (0);
+	free_cmd_list(head);
+	return (NULL);
 }
 
+t_cmd	*build_cmd_list(t_token *tk)
+{
+	t_cmd	*head;
+	t_cmd	*cur;
+
+	head = NULL;
+	cur = NULL;
+	while (tk)
+	{
+		if (!cur)
+		{
+			cur = cmd_new();
+			if (!cur)
+				return (clean_and_null(head));
+			cmd_add_back(&head, cur);
+		}
+		if (tk->type == T_WORD && cmd_add_arg(cur, tk->value))
+			return (clean_and_null(head));
+		if (tk->type >= T_REDIRECT_IN && tk->type <= T_HEREDOC)
+			if (parse_redir(cur, &tk))
+				return (clean_and_null(head));
+		if (tk->type == T_PIPE)
+			cur = NULL;
+		tk = tk->next;
+	}
+	return (head);
+}

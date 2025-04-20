@@ -6,7 +6,7 @@
 #    By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/10 12:31:08 by almeekel          #+#    #+#              #
-#    Updated: 2025/04/20 17:44:22 by almeekel         ###   ########.fr        #
+#    Updated: 2025/04/20 18:55:37 by almeekel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,9 @@ PAR_SRCS := \
 # Add utils sources (note the path seems unusual - check if "utils.c" is a directory)
 UTILS_DIR := src/utils.c
 UTILS_SRCS := \
-    $(UTILS_DIR)/free_struct.c
+    $(UTILS_DIR)/free_struct.c \
+	$(UTILS_DIR)/ft_lstadd_back_bonus.c \
+	$(UTILS_DIR)/ft_lstlast_bonus.c
 
 TEST_SRC   := parse-test.c
 TEST_OBJS  := $(TEST_SRC:.c=.o) $(PAR_SRCS:.c=.o) $(UTILS_SRCS:.c=.o)

@@ -1,20 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstlast_bonus.c                                 :+:      :+:    :+:   */
+/*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/14 19:47:43 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/02/06 17:47:23 by nagaudey         ###   ########.fr       */
+/*   Created: 2024/11/14 19:52:16 by nagaudey          #+#    #+#             */
+/*   Updated: 2025/04/20 19:24:28 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "all.h"
+#include "../includes/utils.h"
 
-t_list	*ft_lstlast(t_list *lst)
+void	ft_lstadd_back(t_cmd **head, t_cmd *new)
 {
-	while (lst->next != NULL)
-		lst = lst->next;
-	return (lst);
+	if (!*head)
+		*head = new;
+	else
+	{
+		t_cmd *tmp = *head;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new;
+	}
 }
