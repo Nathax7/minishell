@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 20:38:10 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/19 19:57:49 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/20 20:18:45 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,24 @@ void	execute(t_cmd *cmd, char *argv, char **envp)
 			free_cmd(cmd, 127, NULL, "Error execve");
 		free_cmd(cmd, 1, NULL, "Error execve");
 	}
+}
+
+int	exec(int ac, char **av, char **envp)
+{
+	t_cmd	cmd;
+
+	if (ac < 5)
+		usage();
+	init_path(&cmd, envp);
+	cmd.pids = malloc(sizeof(pid_t) * (cmd.cmd_nbr));
+	if (!cmd.pids)
+		free_cmd(&cmd, 1, NULL, "minishell: malloc");
+	while (++cmd.i < cmd.cmd_nbr)
+		child_process(&cmd, av[cmd.i + 2 + cmd.here_doc], envp);
+	while (++cmd.i_wait < cmd.cmd_nbr)
+		waitpid(cmd.pids[cmd.i_wait], &cmd.status, 0);
+	free_cmd(&cmd, -1, NULL, NULL);
+	if (WIFEXITED(cmd.status))
+		return (WEXITSTATUS(cmd.status));
+	return (cmd.status);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:43:04 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/20 17:16:08 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/20 20:19:23 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,23 +38,6 @@ void	random_filename(t_cmd *cmd, t_token *token)
 	close(urandom_fd);
 }
 
-// static int	ft_strcmp(char *s1, char *s2)
-// {
-// 	char	*str;
-// 	int		k;
-// 	int		i;
-
-// 	i = 0;
-// 	if (!s1 || !s2)
-// 		return (0);
-// 	str = get_string(ft_strdup(s2), 0, 0, get_size(s2));
-// 	while (s1[i] == str[i] && s1[i] != '\0' && str[i] != '\0')
-// 		i++;
-// 	k = s1[i] - str[i];
-// 	free(str);
-// 	return (k);
-// }
-
 void	here_doc(t_cmd *cmd, char *limiter)
 {
 	char	*temp;
@@ -83,23 +66,39 @@ void	here_doc(t_cmd *cmd, char *limiter)
 	cmd->infile = open(cmd->infile_name, O_RDONLY);
 }
 
-void	is_here_doc(t_cmd *cmd, char **av, int ac)
+void init_path(t_cmd *cmd, char **envp)
 {
-	if (cmd->here_doc)
+	int i;
+
+	i = 0;
+	while (envp && envp[i] && ft_strnstr(envp[i], "PATH", 4) == 0)
+			i++;
+	if (!envp || !envp[i])
 	{
-		if (ac < 6)
-		{
-			cmd->here_doc = 0;
-			free_parent_cmd(cmd, -1, NULL, NULL);
-			usage();
-		}
-		random_filename(cmd);
-		here_doc(cmd, av[2]);
-		open_outfile(cmd, av[ac - 1], 0);
+		cmd->env = NO_ENV;
+		return ;
+	}
+	cmd->paths = ft_split(envp[i] + 5, ':');
+	if (!cmd->paths)
+		free_cmd(cmd, 1, NULL, "minishell: malloc");
+}
+
+void	what_is(t_cmd *cmd, char **av, int ac)
+{
+	if (cmd->here_doc == HEREDOC)
+	{
+		open_infile(cmd, cmd->infile_name);
+		if (cmd->append = APPEND)
+			open_outfile(cmd, cmd->outfile_name, 0);
+		else
+			open_outfile(cmd, cmd->outfile_name, 1);
 	}
 	else
 	{
-		open_outfile(cmd, av[ac - 1], 1);
-		open_infile(cmd, av[1]);
+		open_infile(cmd, cmd->infile_name);
+		if (cmd->append = APPEND)
+			open_outfile(cmd, cmd->outfile_name, 0);
+		else
+			open_outfile(cmd, cmd->outfile_name, 1);
 	}
 }

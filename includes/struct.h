@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:44:04 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/20 16:51:58 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/20 20:09:46 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,20 @@ typedef enum
 	ENV
 }	t_env;
 
+typedef enum
+{
+	NO_APPEND,
+	APPEND
+}	t_append;
+
 typedef struct s_cmd
 {
 	pid_t	*pids;
 	t_heredoc	here_doc;
+	t_append	append;
 	t_env		env;
 	char	*cmd;
+	int		cmd_nbr;
 	char	**cmd_args;
 	char	**paths;
 	char	*path;
@@ -79,6 +87,8 @@ typedef struct s_cmd
 	char	*outfile_name;
 	int		fd[2];
 	int		status;
+	int		i;
+	int		i_wait;
 	struct s_cmd	*next;
 }	t_cmd;
 

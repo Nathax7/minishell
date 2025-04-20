@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 16:02:41 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/20 19:22:32 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/20 20:08:01 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@ static t_cmd	*cmd_new(void)
 	if (!cmd)
 		return (NULL);
 	*cmd = (t_cmd){0};
+	cmd->i = -1;
+	cmd->i_wait = -1;
+	cmd->env = 1;
 	cmd->infile = STDIN_FILENO;
 	cmd->outfile = STDOUT_FILENO;
 	cmd->here_doc = NO_HEREDOC;
