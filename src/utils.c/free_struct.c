@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:11:14 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/20 20:38:41 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/20 20:49:13 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static void	free_cmd_core(t_cmd *cmd)
 		free(cmd->pids);
 // >= 0 c'est bon ou je mets plutot > 2 pour etre sur ? //
 	if (cmd->infile  >= 0)
-		ft_close(cmd, "infile");
+		close(cmd->infile);
 	if (cmd->outfile >= 0)
 		close(cmd->outfile);
 	if (cmd->fd[0]  >= 0)
