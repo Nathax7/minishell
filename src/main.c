@@ -6,15 +6,13 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 14:05:36 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/20 15:56:44 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/20 16:08:39 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
 int	g_signal;
-
-static void	free_cmd_list(t_cmd *c) { /* … */ }
 
 int	main(int ac, char **av, char **envp)
 {

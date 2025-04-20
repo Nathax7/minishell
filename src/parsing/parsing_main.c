@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 14:54:42 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/20 15:57:10 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/20 16:07:29 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,6 @@ t_cmd	*ft_parsing(char *input, char **envp, int last_exit)
 	expand_variables(tokens, envp, last_exit);
 	/* 3 / construire l'AST */
 	cmd_tree = build_cmd_list(tokens);
-	free_tokens(tokens);
+	free_token(tokens, -1, NULL, NULL);
 	return (cmd_tree);
 }

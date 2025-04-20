@@ -6,7 +6,7 @@
 #    By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/10 12:31:08 by almeekel          #+#    #+#              #
-#    Updated: 2025/04/10 13:28:41 by almeekel         ###   ########.fr        #
+#    Updated: 2025/04/20 16:22:04 by almeekel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,10 +18,10 @@ CC		=	cc
 CFLAGS	=	-Wall -Wextra -Werror -g
 LIBFT	=	./libft/libft.a
 
-SRC		=	src/tokenizer.c src/tokenizer_utils.c
+SRC		=	src/tokenizer.c src/tokenizer_utils.c expanser.c heredoc.c parser.c parsing_main.c quote_handling.c
 OBJ		=	$(SRC:.c=.o)
 
-INC		=	-I./inc
+INC		=	-I./includes
 
 all: $(NAME)
 
