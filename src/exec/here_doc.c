@@ -6,11 +6,28 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:43:04 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/19 23:06:34 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/20 17:06:28 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
+
+// static int	ft_strcmp(char *s1, char *s2)
+// {
+// 	char	*str;
+// 	int		k;
+// 	int		i;
+
+// 	i = 0;
+// 	if (!s1 || !s2)
+// 		return (0);
+// 	str = get_string(ft_strdup(s2), 0, 0, get_size(s2));
+// 	while (s1[i] == str[i] && s1[i] != '\0' && str[i] != '\0')
+// 		i++;
+// 	k = s1[i] - str[i];
+// 	free(str);
+// 	return (k);
+// }
 
 void	random_filename(t_cmd *cmd, t_token *token)
 {
@@ -37,23 +54,6 @@ void	random_filename(t_cmd *cmd, t_token *token)
 	cmd->infile_name[8] = '\0';
 	close(urandom_fd);
 }
-
-// int	ft_strcmp_for_heredoc(char *s1, char *s2)
-// {
-// 	char	*str;
-// 	int		k;
-// 	int		i;
-
-// 	i = 0;
-// 	if (!s1 || !s2)
-// 		return (0);
-// 	str = get_string(ft_strdup(s2), 0, 0, get_size(s2));
-// 	while (s1[i] == str[i] && s1[i] != '\0' && str[i] != '\0')
-// 		i++;
-// 	k = s1[i] - str[i];
-// 	free(str);
-// 	return (k);
-// }
 
 void	here_doc(t_cmd *cmd, char *limiter)
 {

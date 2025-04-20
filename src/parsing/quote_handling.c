@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 12:42:41 by Mimoulapino       #+#    #+#             */
-/*   Updated: 2025/04/20 16:23:11 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/20 17:00:37 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 // Supprime les quotes comme bash le fait
 // - simples quotes : litteralement
 // - double quotes : $ sera expand plus tard
+
+int	is_quote(char c)
+{
+	return (c == '\'' || c == '"');
+}
 char	*remove_quotes(const char *src)
 {
 	char	*dst;

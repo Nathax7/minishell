@@ -50,7 +50,7 @@ t_token_type	identify_operator(const char *s, int *i)
 	return (T_WORD);
 }
 
-/* determine si le mot est 'mot' ou "mot" */
+// /* determine si le mot est 'mot' ou "mot" */
 static t_quote	get_quote_kind(const char *s, int start, int end)
 {
 	if (end - start >= 2 && s[start] == '\'' && s[end - 1] == '\'')

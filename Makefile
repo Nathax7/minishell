@@ -6,40 +6,86 @@
 #    By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/10 12:31:08 by almeekel          #+#    #+#              #
-#    Updated: 2025/04/20 16:22:04 by almeekel         ###   ########.fr        #
+#    Updated: 2025/04/20 16:50:03 by almeekel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # # Makefile de test du tokenizer ;) #
 
-NAME	=	minishell
+# **************************************************************************** #
+#                               Minishell – Makefile                            #
+# **************************************************************************** #
 
-CC		=	cc
-CFLAGS	=	-Wall -Wextra -Werror -g
-LIBFT	=	./libft/libft.a
+# ———————————————————  CONFIG  ——————————————————— #
+NAME        := minishell
+TESTNAME    := parse_test
 
-SRC		=	src/tokenizer.c src/tokenizer_utils.c expanser.c heredoc.c parser.c parsing_main.c quote_handling.c
-OBJ		=	$(SRC:.c=.o)
+# compiler ------------------------------------------------------------------- #
+CC      := cc
+CFLAGS  := -Wall -Wextra -Werror
 
-INC		=	-I./includes
+# directories ---------------------------------------------------------------- #
+INC_DIR     := includes
+SRC_DIR     := src
+PAR_DIR     := $(SRC_DIR)/parsing
+LIBFT_DIR   := libft
+
+# library / includes --------------------------------------------------------- #
+LIBFT_A     := $(LIBFT_DIR)/libft.a
+INCLUDES    := -I$(INC_DIR) -I$(LIBFT_DIR)      # libft headers are usually here
+READLINE    := -lreadline                       # add -ltermcap on some Linux
+
+# parsing sources ------------------------------------------------------------ #
+PAR_SRCS := \
+	$(PAR_DIR)/tokenizer.c \
+	$(PAR_DIR)/tokenizer_utils.c \
+	$(PAR_DIR)/quote_handling.c \
+	$(PAR_DIR)/expanser.c \
+	$(PAR_DIR)/parser.c \
+	$(PAR_DIR)/heredoc.c
+
+MAIN_SRC    := $(SRC_DIR)/parsing_main.c
+SRCS        := $(PAR_SRCS) $(MAIN_SRC)
+
+OBJS        := $(SRCS:.c=.o)
+
+# test ----------------------------------------------------------------------- #
+TEST_SRC    := parse-test.c
+TEST_OBJS   := $(TEST_SRC:.c=.o) $(PAR_SRCS:.c=.o)
+
+# ———————————————————  RULES  ——————————————————— #
+.PHONY: all clean fclean re test
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	make -C ./libft
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -lreadline -o $(NAME)
+$(NAME): $(LIBFT_A) $(OBJS)
+	$(CC) $(CFLAGS) $(INCLUDES) $^ $(READLINE) -o $@
+
+# automatic libft build
+$(LIBFT_A):
+	$(MAKE) -C $(LIBFT_DIR)
+
+# generic object rule
+%.o: %.c
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+# --------------------------------------------------------------------------- #
+#                TEST:  make test   →  ./parse_test                           #
+# --------------------------------------------------------------------------- #
+test: $(LIBFT_A) $(TEST_OBJS)
+	$(CC) $(CFLAGS) $(INCLUDES) $(TEST_OBJS) $(READLINE) -o $(TESTNAME)
+	@echo "✔  Built $(TESTNAME). Run it with ./$(TESTNAME)"
 
 clean:
-	make clean -C ./libft
-	rm -f $(OBJ)
+	$(MAKE) -C $(LIBFT_DIR) clean
+	rm -f $(OBJS) $(TEST_OBJS)
 
 fclean: clean
-	make fclean -C ./libft
-	rm -f $(NAME)
+	$(MAKE) -C $(LIBFT_DIR) fclean
+	rm -f $(NAME) $(TESTNAME)
 
 re: fclean all
 
-.PHONY: all clean fclean re
 
 
 
