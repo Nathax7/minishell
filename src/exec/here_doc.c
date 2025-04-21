@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:43:04 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/20 22:03:53 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/21 19:54:46 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	random_filename(t_cmd *cmd, t_token *token)
 	int				i;
 
 	i = -1;
-	cmd->infile_name = malloc(sizeof(char) * 9);
+	cmd->file = malloc(sizeof(char) * 9);
 	if (!cmd->infile)
 		free_cmd(cmd, 1, NULL, "Error malloc");
 	urandom_fd = open("/dev/urandom", O_RDONLY);
@@ -32,9 +32,9 @@ void	random_filename(t_cmd *cmd, t_token *token)
 			close(urandom_fd);
 			free_cmd(cmd, 1, NULL, "Error read");
 		}
-		cmd->infile_name[i] = CHARSET[random % (sizeof(CHARSET) - 1)];
+		cmd->file[i] = CHARSET[random % (sizeof(CHARSET) - 1)];
 	}
-	cmd->infile_name[8] = '\0';
+	cmd->file[8] = '\0';
 	close(urandom_fd);
 }
 
@@ -42,7 +42,7 @@ void	here_doc(t_cmd *cmd, char *limiter)
 {
 	char	*temp;
 
-	cmd->infile = open(cmd->infile_name, O_WRONLY | O_CREAT | O_TRUNC,
+	cmd->infile = open(cmd->file, O_WRONLY | O_CREAT | O_TRUNC,
 		0644);
 	temp = readline("> ");
 	if (!temp)
@@ -63,14 +63,15 @@ void	here_doc(t_cmd *cmd, char *limiter)
 			msg_cmd(NULL, "Error readline");
 	}
 	ft_close(cmd, INFILE);
-	cmd->infile = open(cmd->infile_name, O_RDONLY);
+	cmd->infile = open(cmd->file, O_RDONLY);
 }
 
-void init_cmd(t_cmd *cmd, char **envp)
+void init_cmd(t_cmd *cmd, char **envp, int nb)
 {
 	int i;
 
 	i = 0;
+	cmd->cmd_nbr = nb;
 	while (envp && envp[i] && ft_strnstr(envp[i], "PATH=", 5) == 0)
 			i++;
 	if (!envp || !envp[i])
@@ -81,9 +82,9 @@ void init_cmd(t_cmd *cmd, char **envp)
 	cmd->paths = ft_split(envp[i] + 5, ':');
 	if (!cmd->paths)
 	free_cmd(cmd, 1, NULL, "Error malloc");
-	open_infile(cmd, cmd->infile_name);
-	if (cmd->append == APPEND)
-		open_outfile(cmd, cmd->outfile_name, 0);
+	open_infile(cmd, cmd->file);
+	if (cmd->type == APPEND)
+		open_outfile(cmd, cmd->file, 0);
 	else
-		open_outfile(cmd, cmd->outfile_name, 1);
+		open_outfile(cmd, cmd->file, 1);
 }

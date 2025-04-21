@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:12:21 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/20 21:53:42 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/21 19:58:37 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 
 void	free_cmd(t_cmd *cmd, int status, char *str, char *str2);
 void	ft_message(char *str, char *str2);
-void	init_cmd(t_cmd *cmd, char **envp);
-void	execute(t_cmd *cmd, char *argv, char **envp);
-void	child_process(t_cmd *cmd, char *argv, char **envp);
+void	init_cmd(t_cmd *cmd, char **envp, int nb);
+void	execute(t_cmd *cmd, char **envp);
+void	child_process(t_cmd *cmd, char **envp);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:36:22 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/21 18:47:07 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/21 20:00:47 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,13 +81,10 @@ typedef struct s_cmd
 	pid_t	*pids;
 	t_env		env;
 	int		cmd_nbr;
-	char	*cmd;
 	char	**paths;
 	char	*path;
 	int		infile;
 	int		outfile;
-	char	*infile_name;
-	char	*outfile_name;
 	int		fd[2];
 	int		status;
 	int		i;

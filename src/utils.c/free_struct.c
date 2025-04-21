@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_struct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:11:14 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/20 20:49:13 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/21 20:00:25 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ static void	free_cmd_core(t_cmd *cmd)
 		ft_freesplit(cmd->cmd_args);
 	if (cmd->pids)
 		free(cmd->pids);
+	if (cmd->path)
+		free(cmd->path);
 // >= 0 c'est bon ou je mets plutot > 2 pour etre sur ? //
 	if (cmd->infile  >= 0)
 		close(cmd->infile);
@@ -60,24 +62,22 @@ static void	free_cmd_core(t_cmd *cmd)
 		close(cmd->fd[0]);
 	if (cmd->fd[1]  >= 0)
 		close(cmd->fd[1]);
-	if (cmd->outfile_name)
-		free(cmd->outfile_name);
 	if (cmd->path)
 		free(cmd->path);
-	if (cmd->here_doc == HEREDOC && cmd->infile_name)
+	if (cmd->type == HEREDOC && cmd->file)
 	{
-		unlink(cmd->infile_name);
-		free(cmd->infile_name);
+		unlink(cmd->file);
+		free(cmd->file);
 	}
 }
 // // // au cas ou
-// // if (cmd->infile  > 2) 
+// // if (cmd->infile  > 2)
 // 	close(cmd->infile);
-// // if (cmd->outfile > 2) 
+// // if (cmd->outfile > 2)
 // 	close(cmd->outfile);
-// // if (cmd->fd[0]   > 2) 
+// // if (cmd->fd[0]   > 2)
 // 	close(cmd->fd[0]);
-// // if (cmd->fd[1]   > 2) 
+// // if (cmd->fd[1]   > 2)
 // 	close(cmd->fd[1]);
 
 
