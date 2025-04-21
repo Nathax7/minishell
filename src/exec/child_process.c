@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 22:58:16 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/21 19:58:09 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/21 21:15:10 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,10 @@ void	child_process(t_cmd *cmd, char **envp)
 {
 	if (pipe(cmd->fd) == -1)
 		free_cmd(cmd, 1, NULL, "Error pipe");
-	cmd->pids[cmd->i] = fork();
-	if (cmd->pids[cmd->i] == -1)
+	cmd->pid = fork();
+	if (cmd->pid == -1)
 		free_cmd(cmd, 1, NULL, "Error pids");
-	if (cmd->pids[cmd->i] == 0)
+	if (cmd->pid == 0)
 		execute_child(cmd, envp);
 	ft_close(cmd, FD1);
 	if (dup2(cmd->fd[0], STDIN_FILENO) == -1)

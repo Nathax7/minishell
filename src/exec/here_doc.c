@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:43:04 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/21 19:54:46 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/21 20:56:01 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,11 @@ void	here_doc(t_cmd *cmd, char *limiter)
 	cmd->infile = open(cmd->file, O_RDONLY);
 }
 
-void init_cmd(t_cmd *cmd, char **envp, int nb)
+void init_cmd(t_cmd *cmd, char **envp)
 {
 	int i;
 
 	i = 0;
-	cmd->cmd_nbr = nb;
 	while (envp && envp[i] && ft_strnstr(envp[i], "PATH=", 5) == 0)
 			i++;
 	if (!envp || !envp[i])

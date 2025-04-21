@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 20:38:10 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/21 20:50:02 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/21 21:14:08 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,21 +76,30 @@ void	execute(t_cmd *cmd, char **envp)
 
 int	exec(t_cmd *cmd, int cmd_nbr, char **envp)
 {
-	init_cmd(cmd, envp, cmd_nbr);
-	cmd->pids = malloc(sizeof(pid_t) * (cmd->cmd_nbr));
-	if (!cmd->pids)
-		free_cmd(cmd, 1, NULL, "Error malloc");
-	while (++cmd->i < cmd->cmd_nbr)
+	t_cmd *first;
+	int i;
+	int i_wait;
+
+	i = -1;
+	i_wait = -1;
+	first = cmd;
+	init_cmd(cmd, envp);
+	while (++i < cmd_nbr)
 	{
 		child_process(cmd, envp);
 		cmd = cmd->next;
 		if (cmd)
-			init_cmd(cmd, envp, cmd_nbr);
+			init_cmd(cmd, envp);
 	}
-	while (++cmd->i_wait < cmd->cmd_nbr)
-		waitpid(cmd->pids[cmd->i_wait], &cmd->status, 0);
-	free_cmd(cmd, -1, NULL, NULL);
-	if (WIFEXITED(cmd->status))
-		return (WEXITSTATUS(cmd->status));
-	return (cmd->status);
+	cmd = first;
+	while (++i_wait < cmd_nbr)
+	{
+		waitpid(cmd->pid, &cmd->status, 0);
+		cmd = cmd->next;
+	}
+	free_cmd(first, -1, NULL, NULL);
+	if (WIFEXITED(first->status))
+		return (WEXITSTATUS(first->status));
+	return (first->status);
 }
+
