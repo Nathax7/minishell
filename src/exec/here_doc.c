@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:43:04 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/21 22:50:41 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/21 23:53:50 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@
 // 	cmd->infile = open(cmd->file, O_RDONLY);
 // }
 
-void init_cmd(t_cmd *cmd, char **envp)
+void init_path(t_cmd *cmd, char **envp)
 {
 	int i;
 
@@ -81,6 +81,10 @@ void init_cmd(t_cmd *cmd, char **envp)
 	cmd->paths = ft_split(envp[i] + 5, ':');
 	if (!cmd->paths)
 		free_cmd(cmd, 1, NULL, "Error malloc");
+}
+
+void init_file(t_cmd *cmd)
+{
 	if (cmd->type == INFILE || cmd->type == HEREDOC)
 		open_infile(cmd, cmd->file);
 	if (cmd->type == APPEND)

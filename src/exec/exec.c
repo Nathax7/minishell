@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 20:38:10 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/21 23:42:58 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/22 00:08:58 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void	find_path(t_cmd *cmd, char *cmd_name)
 
 void	execute(t_cmd *cmd, char **envp)
 {
+	init_path(cmd, envp);
 	if (cmd->cmd_args[0] == NULL)
 		free_cmd(cmd, 127, NULL, "Error execve");
 	find_path(cmd, cmd->cmd_args[0]);
@@ -86,13 +87,13 @@ int	exec(t_cmd *cmd, int cmd_nbr, char **envp)
 	i = -1;
 	i_wait = -1;
 	first = cmd;
-	init_cmd(cmd, envp);
+	init_file(cmd);
 	while (++i < cmd_nbr)
 	{
 		child_process(cmd, envp);
 		cmd = cmd->next;
 		if (cmd)
-			init_cmd(cmd, envp);
+			init_file(cmd);
 	}
 	cmd = first;
 	while (++i_wait < cmd_nbr)
