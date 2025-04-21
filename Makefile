@@ -1,129 +1,69 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/04/10 12:31:08 by almeekel          #+#    #+#              #
-#    Updated: 2025/04/21 16:27:24 by almeekel         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+NAME = minishell
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -g3
+LIBFT_DIR = ./libft
+LIBFT = $(LIBFT_DIR)/libft.a
+OBJ_DIR = obj
+OBJ = $(addprefix $(OBJ_DIR)/, $(SRC_ALL:%.c=%.o))
+DEPS = $(OBJ:.o=.d)
 
-# Aliases #
+SRC_EXEC =	src/exec/child_process.c 				\
+			src/exec/exec.c src/exec/here_doc.c		\
 
-NAME		=	minishell
-CC			=	cc
-FLAGS		=	-Werror -Wall -Wextra -g3 $(IFLAGS)
-IFLAGS		=	-I $(INCS) -I $(LIBFT_DIR)includes/
-LFLAGS		=	-L libft -lft -lreadline
+SRC_PARSE_TEST =	src/parse_test_exec/ft_split_whitespace.c \
+					src/parse_test_exec/parse_line.c 		  \
+					src/parse_test_exec/main.c				  \
 
-INCS		=	inc/
-HEADER		=	$(addprefix $(INCS), minishell.h)
-LIBFT_H		=	$(addprefix $(LIBFT_DIR)includes/, libft.h)
+SRC_UTILS =	src/utils/ft_close.c	\
+			src/utils/free_struct.c	\
+			src/utils/utils.c		\
 
-SRC_DIR		=	src/
-OBJ_DIR		=	obj/
-LIBFT_DIR	=	libft/
+SRC_ALL = $(SRC_EXEC) $(SRC_PARSE_TEST) $(SRC_UTILS)
 
+GREEN=\033[0;32m
+BLUE=\033[38;2;64;224;208m
+RED=\033[0;91m
+WHITE=\033[2;37m
+NC=\033[0m
 
-# Sources & Objects #
+all: $(LIBFT) $(OBJ_DIR) $(NAME)
 
-BUILTINS	=	cd				\
-				echo			\
-				env				\
-				exit			\
-				export_utils	\
-				export			\
-				pwd				\
-				unset
+$(OBJ_DIR)/%.o: %.c Makefile libft/Makefile
+	@echo "$(WHITE) mkdir -p $(dir $@) $(NC)"
+	@mkdir -p $(dir $@)
+	@echo "$(GREEN) $(CC) $(CFLAGS) -MMD -MP -o $@ -c $< -I$(LIBFT_DIR) $(NC)"
+	@$(CC) $(CFLAGS) -MMD -MP -o $@ -c $< -I$(LIBFT_DIR)
 
-ENV			=	environment		\
-				path			\
-				init			\
-				shlvl			\
-				sort_env
+-include $(DEPS)
 
-ERROR		=	builtin_err		\
-				error_manager	\
-				lexer_err		\
-				parser_err
+$(NAME): $(OBJ) $(LIBFT)
+	@echo "$(GREEN) $(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L$(LIBFT_DIR) -lft $(NC)"
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L$(LIBFT_DIR) -lft
 
-EXEC		=	exec_utils		\
-				executer
+$(OBJ_DIR):
+	@echo "$(WHITE) mkdir -p $(OBJ_DIR) $(NC)"
+	@mkdir -p $(OBJ_DIR)
 
-LEXER		=	heredoc			\
-				heredoc_utils	\
-				lex_checks		\
-				lex_quotes		\
-				lex_utils		\
-				lexer
+$(LIBFT):
+	make -C $(LIBFT_DIR)
 
-PARSING		=	expansions		\
-				expand_utils	\
-				parser_utils	\
-				parser_check	\
-				parser
+libft:
+	make -C $(LIBFT_DIR)
 
-UTILS		=	clean_exit		\
-				fd				\
-				signal
+clean:
+	@echo "$(RED) rm -rf $(OBJ_DIR) $(NC)"
+	@echo "$(RED) make -C $(LIBFT_DIR) clean $(NC)"
+	@rm -rf $(OBJ_DIR)
+	@make -C $(LIBFT_DIR) clean
 
-MAIN		=	minishell
+fclean: clean
+	@echo "$(RED) rm -f $(NAME) $(NC)"
+	@echo "$(RED) make -C $(LIBFT_DIR) fclean $(NC)"
+	@rm -f $(NAME)
+	@make -C $(LIBFT_DIR) fclean
 
-SRCS		=	$(addprefix $(SRC_DIR)builtins/, $(addsuffix .c, $(BUILTINS)))	\
-				$(addprefix $(SRC_DIR)env/, $(addsuffix .c, $(ENV)))			\
-				$(addprefix $(SRC_DIR)error/, $(addsuffix .c, $(ERROR)))		\
-				$(addprefix $(SRC_DIR)exec/, $(addsuffix .c, $(EXEC)))			\
-				$(addprefix $(SRC_DIR)lexer/, $(addsuffix .c, $(LEXER)))		\
-				$(addprefix $(SRC_DIR)parser/, $(addsuffix .c, $(PARSING)))		\
-				$(addprefix $(SRC_DIR)utils/, $(addsuffix .c, $(UTILS)))		\
-				$(addprefix $(SRC_DIR), $(addsuffix .c, $(MAIN)))
+re: fclean all
 
-OBJS		=	$(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRCS))
+re_bonus: fclean
 
-# Rules #
-
-.DEFAULT_GOAL	:=	all
-
-all				:	force $(NAME)
-
-$(NAME)			:	$(OBJS)
-				@echo "\nCompiling minishell"
-				@$(CC) $(OBJ) $(FLAGS) -o $@ $(OBJS) $(LFLAGS)
-				@echo "Done !"
-
-$(OBJ_DIR)%.o	:	$(SRC_DIR)%.c $(HEADER) $(LIBFT_H) Makefile | $(OBJ_DIR)
-				@mkdir -p $(dir $@)
-				@printf "Generating minishell objects... %-33.33s\r" $@
-				@$(CC) $(FLAGS) -c $< -o $@
-
-$(OBJ_DIR)		:
-				@mkdir -p $(OBJ_DIR)
-
-force			:
-				@make -sC libft
-				@if [ ! -f "libft/libft.a" ]; then	\
-					echo "Making libft.a";			\
-					make -sC libft;					\
-				fi
-
-
-clean			:
-				@if [ -d "$(OBJ_DIR)" ]; then					\
-					echo "Cleaning minishell obj/ directory";	\
-					rm -rf $(OBJ_DIR);							\
-				fi
-				@make -sC libft clean
-
-fclean			:	clean
-				@if [ -f "minishell" ]; then			\
-					echo "Cleaning program: minishell";	\
-					rm -f $(NAME);						\
-				fi
-				@make -sC libft fclean
-
-
-re				:	fclean all
-
-.PHONY			:	all re clean fclean force
+.PHONY: all clean fclean re libft

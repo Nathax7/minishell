@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 22:58:16 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/21 21:15:10 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/21 23:42:49 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ static void	setup_redirections(t_cmd *cmd)
 		if (dup2(cmd->fd[1], STDOUT_FILENO) == -1)
 			free_cmd(cmd, 1, NULL, "Error dup2");
 		ft_close(cmd, OUTFILE);
-		ft_close(cmd, INFILE);
 	}
 	ft_close(cmd, FD1);
 }

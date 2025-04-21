@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:11:14 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/21 20:00:25 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/21 22:03:37 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ static void	free_cmd_core(t_cmd *cmd)
 		ft_freesplit(cmd->paths);
 	if (cmd->cmd_args)
 		ft_freesplit(cmd->cmd_args);
-	if (cmd->pids)
-		free(cmd->pids);
 	if (cmd->path)
 		free(cmd->path);
 // >= 0 c'est bon ou je mets plutot > 2 pour etre sur ? //
