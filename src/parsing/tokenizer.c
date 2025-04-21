@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 17:14:42 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/20 14:35:04 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/21 16:14:08 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ t_token	*tokenize(char *argument)
 				add_token4(&tokens, ft_strdup("<<"), type, Q_NONE);
 			else if (type == T_APPEND)
 				add_token4(&tokens, ft_strdup(">>"), type, Q_NONE);
-			else if (type == T_REDIRECT_IN)
+			else if (type == T_REDIR_IN)
 				add_token4(&tokens, ft_strdup("<"), type, Q_NONE);
-			else if (type == T_REDIRECT_OUT)
+			else if (type == T_REDIR_OUT)
 				add_token4(&tokens, ft_strdup(">"), type, Q_NONE);
 			else /* si c'est un T_PIPE du coup */
 				add_token4(&tokens, ft_strdup("|"), type, Q_NONE);

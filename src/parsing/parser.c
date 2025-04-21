@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 16:02:41 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/20 20:08:01 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/21 16:14:08 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ static int	parse_redir(t_cmd *cmd, t_token **tk)
 	if (!op->next || op->next->type != T_WORD)
 		return (ft_putstr_fd("minishell: syntax error\n", 2), 258);
 	word = op->next;
-	if (op->type == T_REDIRECT_IN)
+	if (op->type == T_REDIR_IN)
 		cmd->infile_name = word->value;
-	else if (op->type == T_REDIRECT_OUT || op->type == T_APPEND)
+	else if (op->type == T_REDIR_OUT || op->type == T_APPEND)
 		cmd->outfile_name = word->value;
 	else if (op->type == T_HEREDOC)
 	{
@@ -96,7 +96,7 @@ t_cmd	*build_cmd_list(t_token *tk)
 		if (tk->type == T_WORD)
 			if (cmd_add_arg(cur, tk->value))
 				return (NULL);
-		if (tk->type >= T_REDIRECT_IN && tk->type <= T_HEREDOC)
+		if (tk->type >= T_REDIR_IN && tk->type <= T_HEREDOC)
 			if (parse_redir(cur, &tk))
 				return (NULL);
 		if (tk->type == T_PIPE)

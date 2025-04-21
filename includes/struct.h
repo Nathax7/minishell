@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/09 16:44:04 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/20 22:24:17 by nagaudey         ###   ########.fr       */
+/*   Created: 2025/04/21 18:36:22 by almeekel          #+#    #+#             */
+/*   Updated: 2025/04/21 18:47:07 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,16 @@ typedef enum e_token_type
 	T_HEREDOC
 } t_token_type;
 
-typedef enum e_close
+typedef enum e_type
 {
+	CMD,
 	INFILE,
 	OUTFILE,
+	HEREDOC,
+	APPEND,
 	FD0,
 	FD1
-}	t_close;
+}	t_type;
 
 typedef enum e_quote
 {
@@ -61,33 +64,24 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-typedef enum e_heredoc
-{
-	NO_HEREDOC,
-	HEREDOC
-}	t_heredoc;
-
 typedef enum e_env
 {
 	NO_ENV,
 	ENV
 }	t_env;
 
-typedef enum e_append
-{
-	NO_APPEND,
-	APPEND
-}	t_append;
-
 typedef struct s_cmd
 {
-	pid_t	*pids;
-	t_heredoc	here_doc;
-	t_append	append;
-	t_env		env;
-	char	*cmd;
-	int		cmd_nbr;
+	// partie sacha
+	t_type	type;
 	char	**cmd_args;
+	char	*file;
+	char	*limiter;
+	// partie nathan
+	pid_t	*pids;
+	t_env		env;
+	int		cmd_nbr;
+	char	*cmd;
 	char	**paths;
 	char	*path;
 	int		infile;

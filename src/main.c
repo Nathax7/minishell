@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 14:05:36 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/20 19:27:47 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/21 16:14:08 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_cmd	*build_cmd_list(t_token *tk)
 		}
 		if (tk->type == T_WORD && cmd_add_arg(cur, tk->value))
 			return (clean_and_null(head));
-		if (tk->type >= T_REDIRECT_IN && tk->type <= T_HEREDOC)
+		if (tk->type >= T_REDIR_IN && tk->type <= T_HEREDOC)
 			if (parse_redir(cur, &tk))
 				return (clean_and_null(head));
 		if (tk->type == T_PIPE)

@@ -22,7 +22,7 @@ t_token_type	identify_redirect(const char *s, int *i, int flag)
 			return (T_HEREDOC);
 		}
 		(*i) = (*i) + 1;
-		return (T_REDIRECT_IN);
+		return (T_REDIR_IN);
 	}
 	else
 	{
@@ -32,7 +32,7 @@ t_token_type	identify_redirect(const char *s, int *i, int flag)
 			return (T_APPEND);
 		}
 		(*i) = (*i) + 1;
-		return (T_REDIRECT_OUT);
+		return (T_REDIR_OUT);
 	}
 }
 

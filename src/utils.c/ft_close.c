@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_close.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:29:01 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/20 21:44:24 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/21 18:41:05 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/utils.h"
 
-void ft_close(t_cmd *cmd, t_close type)
+void ft_close(t_cmd *cmd, t_type type)
 {
 	int ret = 0;
 
