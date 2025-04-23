@@ -4,6 +4,7 @@
 		"struct.h": "c",
 		"errno.h": "c",
 		"fcntl.h": "c",
-		"utils.h": "c"
+		"utils.h": "c",
+		"exec.h": "c"
 	}
 }

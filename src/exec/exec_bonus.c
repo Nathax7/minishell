@@ -6,11 +6,11 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 02:36:30 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/09 20:48:07 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/23 18:35:49 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "../../includes/exec.h"
 
 void	check_exec_file(t_pipex *pipex, char *cmd)
 {
@@ -89,4 +89,3 @@ void	execute_bonus(t_pipex *pipex, char *argv, char **envp)
 		free_parent(pipex, 1, "pipex: execve: %s\n", strerror(errno));
 	}
 }
-

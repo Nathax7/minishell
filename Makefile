@@ -7,8 +7,8 @@ OBJ_DIR = obj
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC_ALL:%.c=%.o))
 DEPS = $(OBJ:.o=.d)
 
-SRC_EXEC =	src/exec/child_process.c 				\
-			src/exec/exec.c src/exec/here_doc.c		\
+SRC_EXEC =	src/exec/split_exec.c	\
+			src/exec/main.c			\
 
 SRC_PARSE_TEST =	src/parse_test_exec/ft_split_whitespace.c \
 					src/parse_test_exec/parse_line.c 		  \
@@ -18,7 +18,7 @@ SRC_UTILS =	src/utils/ft_close.c	\
 			src/utils/free_struct.c	\
 			src/utils/utils.c		\
 
-SRC_ALL = $(SRC_EXEC) $(SRC_PARSE_TEST) $(SRC_UTILS)
+SRC_ALL = $(SRC_EXEC)
 
 GREEN=\033[0;32m
 BLUE=\033[38;2;64;224;208m

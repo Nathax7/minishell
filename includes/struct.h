@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:36:22 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/21 21:03:00 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/23 18:31:34 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,27 +70,25 @@ typedef enum e_env
 	ENV
 }	t_env;
 
-typedef struct s_cmd
+typedef struct s_pipex
 {
-	// partie sacha
-	t_type	type;
+	pid_t	*pids;
+	char	*cmd;
 	char	**cmd_args;
-	char	*file;
-	char	*limiter;
-	// partie nathan
-	pid_t	pid;
-	t_env		env;
-	int		cmd_nbr;
 	char	**paths;
 	char	*path;
 	int		infile;
 	int		outfile;
+	char	*infile_name;
+	char	*outfile_name;
 	int		fd[2];
 	int		status;
-	int		i;
+	int		here_doc;
+	int		cmd_nbr;
 	int		i_wait;
-	struct s_cmd	*next;
-}	t_cmd;
+	int		i;
+	int		envp;
+}			t_pipex;
 
 extern int	g_signal;
 

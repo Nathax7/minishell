@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:07:53 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/21 18:41:22 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/04/23 18:39:42 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,17 @@
 
 # include "struct.h"
 
-void	minishell_init(t_cmd *cmd, char **envp);
-void	open_infile(t_cmd *cmd, char *infile);
-void	open_outfile(t_cmd *cmd, char *outfile, int mode);
+void	minishell_init(t_pipex *pipex, char **envp);
+void	open_infile(t_pipex *pipex, char *infile);
+void	open_outfile(t_pipex *pipex, char *outfile, int mode);
 void	usage(void);
 // void	delete_list(t_node *head);
 // void	delete_list_exit(t_node *head);
 void	free_token(t_token *token, int status, char *str, char *str2);
-void	free_cmd(t_cmd *cmd, int status, char *str, char *str2);
-void	free_cmd_list(t_cmd *lst);
-void	ft_lstadd_back(t_cmd **lst, t_cmd *new);
-t_cmd	*ft_lstlast(t_cmd *lst);
-void ft_close(t_cmd *cmd, t_type type);
+void	free_pipex(t_pipex *pipex, int status, char *str, char *str2);
+void	free_pipex_list(t_pipex *lst);
+void	ft_lstadd_back(t_pipex **lst, t_pipex *new);
+t_pipex	*ft_lstlast(t_pipex *lst);
+void ft_close(t_pipex *pipex, t_type type);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:01:32 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/19 19:57:31 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/23 18:42:28 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,23 +67,23 @@ char	*get_string(char *s, size_t i, size_t k, size_t size)
 	return (ptr);
 }
 
-void	remove_quotes(t_cmd *lst)
-{
-	int		i;
+// void	remove_quotes(t_cmd *lst)
+// {
+// 	int		i;
 
-	while (lst)
-	{
-		i = 0;
-		while (lst->cmd[i])
-		{
-			if (lst->cmd[i] != NULL
-				&& get_size(lst->cmd[i]) != ft_strlen(lst->cmd[i]))
-			{
-				lst->cmd[i] = get_string(lst->cmd[i], 0, 0,
-						get_size(lst->cmd[i]));
-			}
-			i++;
-		}
-		lst = lst->next;
-	}
-}
+// 	while (lst)
+// 	{
+// 		i = 0;
+// 		while (lst->cmd[i])
+// 		{
+// 			if (lst->cmd[i] != NULL
+// 				&& get_size(lst->cmd[i]) != ft_strlen(lst->cmd[i]))
+// 			{
+// 				lst->cmd[i] = get_string(lst->cmd[i], 0, 0,
+// 						get_size(lst->cmd[i]));
+// 			}
+// 			i++;
+// 		}
+// 		lst = lst->next;
+// 	}
+// }

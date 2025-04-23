@@ -6,24 +6,11 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:11:14 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/21 22:03:37 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/23 18:41:27 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/utils.h"
-
-/* fermer chaque node de la liste chainee t_cmd, sans gerer le message d'erreur (pour l'init et si besoin) */
-void	free_cmd_list(t_cmd *lst)
-{
-	t_cmd	*next;
-
-	while (lst)
-	{
-		next = lst->next;
-		free_cmd(lst, -1, NULL, NULL);   /* -1  ⇒  no exit, no message */
-		lst = next;
-	}
-}
 
 void	ft_message(char *str, char *str2)
 {
@@ -40,48 +27,46 @@ void	ft_message(char *str, char *str2)
 		perror(str2);
 }
 
-// Deux fonctions pour liberer cmd fermer les fichiers ouverts et afficher un msg si voulu
-static void	free_cmd_core(t_cmd *cmd)
+// Deux fonctions pour liberer pipex fermer les fichiers ouverts et afficher un msg si voulu
+static void	free_pipex_core(t_pipex *pipex)
 {
-	if (!cmd)
+	if (!pipex)
 		return ;
-	if (cmd->paths)
-		ft_freesplit(cmd->paths);
-	if (cmd->cmd_args)
-		ft_freesplit(cmd->cmd_args);
-	if (cmd->path)
-		free(cmd->path);
+	if (pipex->paths)
+		ft_freesplit(pipex->paths);
+	if (pipex->cmd_args)
+		ft_freesplit(pipex->cmd_args);
+	if (pipex->cmd)
+		free(pipex->cmd);
 // >= 0 c'est bon ou je mets plutot > 2 pour etre sur ? //
-	if (cmd->infile  >= 0)
-		close(cmd->infile);
-	if (cmd->outfile >= 0)
-		close(cmd->outfile);
-	if (cmd->fd[0]  >= 0)
-		close(cmd->fd[0]);
-	if (cmd->fd[1]  >= 0)
-		close(cmd->fd[1]);
-	if (cmd->path)
-		free(cmd->path);
-	if (cmd->type == HEREDOC && cmd->file)
+	if (pipex->infile  >= 0)
+		close(pipex->infile);
+	if (pipex->outfile >= 0)
+		close(pipex->outfile);
+	if (pipex->fd[0]  >= 0)
+		close(pipex->fd[0]);
+	if (pipex->fd[1]  >= 0)
+		close(pipex->fd[1]);
+	if (pipex->here_doc == 1 && pipex->infile_name)
 	{
-		unlink(cmd->file);
-		free(cmd->file);
+		unlink(pipex->infile_name);
+		free(pipex->infile_name);
 	}
 }
 // // // au cas ou
-// // if (cmd->infile  > 2)
-// 	close(cmd->infile);
-// // if (cmd->outfile > 2)
-// 	close(cmd->outfile);
-// // if (cmd->fd[0]   > 2)
-// 	close(cmd->fd[0]);
-// // if (cmd->fd[1]   > 2)
-// 	close(cmd->fd[1]);
+// // if (pipex->infile  > 2)
+// 	close(pipex->infile);
+// // if (pipex->outfile > 2)
+// 	close(pipex->outfile);
+// // if (pipex->fd[0]   > 2)
+// 	close(pipex->fd[0]);
+// // if (pipex->fd[1]   > 2)
+// 	close(pipex->fd[1]);
 
 
-void	free_cmd(t_cmd *cmd, int status, char *str, char *str2)
+void	free_pipex(t_pipex *pipex, int status, char *str, char *str2)
 {
-	if (!cmd)
+	if (!pipex)
 	{
 		if (status != -1)
 			exit(status);
@@ -89,8 +74,8 @@ void	free_cmd(t_cmd *cmd, int status, char *str, char *str2)
 	}
 	if (str || str2)
 		ft_message(str, str2);
-	free_cmd_core(cmd);
-	free(cmd);
+	free_pipex_core(pipex);
+	free(pipex);
 	if (status != -1)
 		exit(status);
 }
@@ -126,7 +111,7 @@ void	free_token(t_token *token, int status, char *str, char *str2)
 // 			exit(status);
 // 		return ;
 // 	}
-// 	free_cmd(&shell->cmd, status, str, str2);
+// 	free_pipex(&shell->pipex, status, str, str2);
 // 	free_token(&shell->token, status, str, str2);
 // 	if (status != -1)
 // 		exit(status);
