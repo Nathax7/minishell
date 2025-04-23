@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:12:21 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/23 18:43:22 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/23 20:41:27 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,14 @@ void	init_file(t_pipex *pipex, t_type type);
 int		exec(char **envp, int cmd_nbr, char **line);
 void	free_triple(char ***triple);
 char	***split_pipeline_groups(char **tokens);
+void	child_process(t_pipex *pipex, char *argv, char **envp);
+void	here_doc(t_pipex *pipex, char *limiter);
+void	free_parent(t_pipex *pipex, int status, char *str, char *arg);
+void	pipex_init(t_pipex *pipex, char **envp);
+void	open_infile(t_pipex *pipex, char *infile);
+void	open_outfile(t_pipex *pipex, char *outfile, int mode);
+void	execute_bonus(t_pipex *pipex, char *argv, char **envp);
+int		pipex(int ac, char **av, char **envp);
+void	random_filename(t_pipex *pipex);
 
 #endif

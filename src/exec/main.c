@@ -6,32 +6,36 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:05:00 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/23 18:55:27 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/23 22:15:41 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 
-int main(void)
+int main(int ac, char **av, char **envp)
 {
-	char *input[] = {
-		"cmd1", "|", "cmd2", "|", "cmd3",
-		"<", "infile4", "<", "infile5",
-		NULL
-	};
+	int i;
+	int j;
 
-	char ***result = split_pipeline_groups(input);
+	(void)ac;
+	// (void)av;
+	// char *input[] = {
+	// 	"cmd1", "|", "cmd2", "|", "cmd3",
+	// 	"<", "infile4", "<", "infile5",
+	// 	NULL
+	// };
+
+	char ***result = split_pipeline_groups(av + 1);
 	if (!result)
 	{
 		printf("Erreur : résultat NULL\n");
 		return 1;
 	}
-
-	int i = 0;
+	i = 0;
 	while (result[i])
 	{
 		printf("Groupe %d : ", i);
-		int j = 0;
+		j = 0;
 		while (result[i][j])
 		{
 			printf("\"%s\" ", result[i][j]);
@@ -40,8 +44,16 @@ int main(void)
 		printf("\n");
 		i++;
 	}
-
-	// Libération de la mémoire
+	i = 0;
+	j = 0;
+	while (result[i])
+	{
+		while (result[i][j])
+			j++;
+		pipex(j, result[i], envp);
+		i++;
+		j = 0;
+	}
 	free_triple(result);
 	return 0;
 }
