@@ -5,6 +5,7 @@
 		"errno.h": "c",
 		"fcntl.h": "c",
 		"utils.h": "c",
-		"exec.h": "c"
+		"exec.h": "c",
+		"algorithm": "c"
 	}
 }

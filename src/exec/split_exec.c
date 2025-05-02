@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:01:32 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/23 18:29:20 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/02 17:11:20 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,15 @@
 
 static void	free_split(char **arr)
 {
-	for (char **p = arr; p && *p; ++p)
+	char **p;
+
+	p = arr;
+
+	while (p && *p)
+	{
 		free(*p);
+		p++;
+	}
 	free(arr);
 }
 
@@ -50,124 +57,108 @@ static char	***allocate_groups(int count)
 	return (malloc((count + 1) * sizeof(char **)));
 }
 
-static char	**finalize_group(char **cmds, int ncmd, char *infile, char *outfile)
+static char	**finalize_group(t_exec *exec)
 {
-	int		total;
-	char	**group;
-	int		idx;
-	int		j;
-
-	total = ncmd;
-	if (infile)
-		total = total + 1;
-	if (outfile)
-		total = total + 1;
-	group = malloc((total + 1) * sizeof(char *));
-	if (!group)
+	exec->total = exec->ncmd;
+	if (exec->infile)
+		exec->total = exec->total + 1;
+	if (exec->outfile)
+		exec->total = exec->total + 1;
+	exec->group = malloc((exec->total + 1) * sizeof(char *));
+	if (!exec->group)
 		return (NULL);
-	idx = 0;
-	if (infile)
+	exec->idx = 0;
+	if (exec->infile)
 	{
-		group[idx] = infile;
-		idx = idx + 1;
+		exec->group[exec->idx] = exec->infile;
+		exec->idx = exec->idx + 1;
 	}
-	j = 0;
-	while (j < ncmd)
+	exec->j = 0;
+	while (exec->j < exec->ncmd)
 	{
-		group[idx] = cmds[j];
-		idx = idx + 1;
-		j = j + 1;
+		exec->group[exec->idx] = exec->cmds[exec->j];
+		exec->idx = exec->idx + 1;
+		exec->j = exec->j + 1;
 	}
-	if (outfile)
+	if (exec->outfile)
 	{
-		group[idx] = outfile;
-		idx = idx + 1;
+		exec->group[exec->idx] = exec->outfile;
+		exec->idx = exec->idx + 1;
 	}
-	group[idx] = NULL;
-	if (idx == 0)
+	exec->group[exec->idx] = NULL;
+	if (exec->idx == 0)
 	{
-		group[0] = ft_strdup("0");
-		group[1] = NULL;
+		exec->group[0] = ft_strdup("0");
+		exec->group[1] = NULL;
 	}
-	return (group);
+	return (exec->group);
 }
 
-char	***split_pipeline_groups(char **tokens)
+char	***split_pipeline_groups(t_exec *exec, char **tokens)
 {
-	int		count;
-	char	***groups;
-	char	**cmds;
-	int		i;
-	int		ncmd;
-	int		ng;
-	char	*infile;
-	char	*outfile;
-	char	**group;
-
-
-	count = 0;
-	while (tokens && tokens[count])
-		count = count + 1;
-	groups = allocate_groups(count);
-	if (!groups)
+	exec->count = 0;
+	while (tokens && tokens[exec->count])
+		exec->count = exec->count + 1;
+	exec->groups = allocate_groups(exec->count);
+	if (!exec->groups)
 		return (NULL);
-	cmds = allocate_cmd_buffer(count);
-	if (!cmds)
+	exec->cmds = allocate_cmd_buffer(exec->count);
+	if (!exec->cmds)
 	{
-		free(groups);
+		free(exec->groups);
 		return (NULL);
 	}
-	i = 0;
-	ncmd = 0;
-	ng = 0;
-	infile = NULL;
-	outfile = NULL;
-	while (i < count)
+	exec->i = 0;
+	exec->ncmd = 0;
+	exec->ng = 0;
+	exec->infile = NULL;
+	exec->outfile = NULL;
+	while (exec->i < exec->count)
 	{
-		if (is_token(tokens[i], "<") && i + 1 < count)
+		if (is_token(tokens[exec->i], "<") && exec->i + 1 < exec->count)
 		{
-			free(infile);
-			infile = ft_strdup(tokens[i + 1]);
-			i = i + 2;
+			free(exec->infile);
+			exec->infile = ft_strdup(tokens[exec->i + 1]);
+			exec->i = exec->i + 2;
 		}
-		else if (is_token(tokens[i], ">") && i + 1 < count)
+		else if (is_token(tokens[exec->i], ">") && exec->i + 1 < exec->count)
 		{
-			free(outfile);
-			outfile = ft_strdup(tokens[i + 1]);
-			i = i + 2;
-			if (!(i < count && is_token(tokens[i], ">")))
+			free(exec->outfile);
+			exec->outfile = ft_strdup(tokens[exec->i + 1]);
+			exec->i = exec->i + 2;
+			if (!(exec->i < exec->count && is_token(tokens[exec->i], ">")))
 			{
-				group = finalize_group(cmds, ncmd, infile, outfile);
-				if (!group)
+				exec->group = finalize_group(exec);
+				if (!exec->group)
 					break ;
-				groups[ng] = group;
-				ng = ng + 1;
-				ncmd = 0;
-				infile = NULL;
-				outfile = NULL;
+				exec->groups[exec->ng] = exec->group;
+				exec->ng = exec->ng + 1;
+				exec->ncmd = 0;
+				exec->infile = NULL;
+				exec->outfile = NULL;
 			}
 		}
-		else if (is_token(tokens[i], "|"))
+		else if (is_token(tokens[exec->i], "|"))
 		{
-			i = i + 1;
+			exec->i = exec->i + 1;
 		}
 		else
 		{
-			cmds[ncmd] = ft_strdup(tokens[i]);
-			ncmd = ncmd + 1;
-			i = i + 1;
+			exec->cmds[exec->ncmd] = ft_strdup(tokens[exec->i]);
+			exec->ncmd = exec->ncmd + 1;
+			exec->i = exec->i + 1;
 		}
 	}
-	if (ncmd > 0 || infile || outfile)
+	if (exec->ncmd > 0 || exec->infile || exec->outfile)
 	{
-		group = finalize_group(cmds, ncmd, infile, outfile);
-		if (group)
+		exec->group = finalize_group(exec);
+		if (exec->group)
 		{
-			groups[ng] = group;
-			ng = ng + 1;
+			exec->groups[exec->ng] = exec->group;
+			exec->ng = exec->ng + 1;
 		}
 	}
-	groups[ng] = NULL;
-	free(cmds);
-	return (groups);
+	exec->groups[exec->ng] = NULL;
+	free(exec->cmds);
+	return (exec->groups);
 }

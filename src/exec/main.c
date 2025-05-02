@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:05:00 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/23 22:49:35 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/02 17:00:57 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int main(int ac, char **av, char **envp)
 {
 	int i;
 	int j;
+	t_exec exec;
 
 	(void)ac;
 	// (void)av;
@@ -25,7 +26,7 @@ int main(int ac, char **av, char **envp)
 	// 	NULL
 	// };
 
-	char ***result = split_pipeline_groups(av + 1);
+	char ***result = split_pipeline_groups(&exec, av + 1);
 	if (!result)
 	{
 		printf("Erreur : résultat NULL\n");
@@ -57,3 +58,5 @@ int main(int ac, char **av, char **envp)
 	free_triple(result);
 	return 0;
 }
+
+//si y'a que 2 arguments, infile et outfile, faire une fonction qui copie l'un dans l'autre

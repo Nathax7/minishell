@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:36:22 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/23 18:31:34 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/02 16:52:57 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,22 @@ typedef struct s_pipex
 	int		i;
 	int		envp;
 }			t_pipex;
+
+typedef struct s_exec
+{
+	int		count;
+	char	***groups;
+	char	**cmds;
+	int		i;
+	int		ncmd;
+	int		ng;
+	char	*infile;
+	char	*outfile;
+	char	**group;
+	int		total;
+	int		idx;
+	int		j;
+}			t_exec;
 
 extern int	g_signal;
 
