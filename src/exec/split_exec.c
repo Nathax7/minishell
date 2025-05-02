@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:01:32 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/02 17:11:20 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/02 17:14:50 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,15 @@ static char	***allocate_groups(int count)
 {
 	return (malloc((count + 1) * sizeof(char **)));
 }
+void init_exec(t_exec *exec)
+{
+	exec->count = 0;
+	exec->i = 0;
+	exec->ncmd = 0;
+	exec->ng = 0;
+	exec->infile = NULL;
+	exec->outfile = NULL;
+}
 
 static char	**finalize_group(t_exec *exec)
 {
@@ -96,7 +105,7 @@ static char	**finalize_group(t_exec *exec)
 
 char	***split_pipeline_groups(t_exec *exec, char **tokens)
 {
-	exec->count = 0;
+	init_exec(exec);
 	while (tokens && tokens[exec->count])
 		exec->count = exec->count + 1;
 	exec->groups = allocate_groups(exec->count);
@@ -108,11 +117,6 @@ char	***split_pipeline_groups(t_exec *exec, char **tokens)
 		free(exec->groups);
 		return (NULL);
 	}
-	exec->i = 0;
-	exec->ncmd = 0;
-	exec->ng = 0;
-	exec->infile = NULL;
-	exec->outfile = NULL;
 	while (exec->i < exec->count)
 	{
 		if (is_token(tokens[exec->i], "<") && exec->i + 1 < exec->count)
