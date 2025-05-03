@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:12:21 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/02 17:00:21 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/03 16:18:56 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void	ft_message(char *str, char *str2);
 void	init_file(t_pipex *pipex, t_type type);
 int		exec(char **envp, int cmd_nbr, char **line);
 void	free_triple(char ***triple);
-char	***split_pipeline_groups(t_exec *exec, char **tokens);
+void	free_exec(t_exec *exec);
+void	split_pipeline_groups(t_exec *exec, char **tokens);
 void	child_process(t_pipex *pipex, char *argv, char **envp);
 void	here_doc(t_pipex *pipex, char *limiter);
 void	free_parent(t_pipex *pipex, int status, char *str, char *arg);
