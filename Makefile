@@ -14,6 +14,7 @@ SRC_EXEC =	src/exec/split_exec.c		\
 			src/exec/here_doc.c			\
 			src/exec/utils_bonus.c		\
 			src/exec/pipex_bonus.c		\
+			src/exec/exec_one.c			\
 
 SRC_PARSE_TEST =	src/parse_test_exec/ft_split_whitespace.c \
 					src/parse_test_exec/parse_line.c 		  \

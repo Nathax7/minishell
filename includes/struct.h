@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:36:22 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/02 16:52:57 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/03 16:49:43 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ typedef struct s_pipex
 	int		fd[2];
 	int		status;
 	int		here_doc;
+	int		append;
 	int		cmd_nbr;
 	int		i_wait;
 	int		i;
