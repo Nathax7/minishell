@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:07:53 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/02 17:54:42 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/03 17:40:30 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 void	minishell_init(t_pipex *pipex, char **envp);
 void	open_infile(t_pipex *pipex, char *infile);
 void	open_outfile(t_pipex *pipex, char *outfile, int mode);
-void	usage(void);
+int	usage(void);
 void	free_split(char **arr);
 void	free_triple(char ***triple);
 // void	delete_list(t_node *head);

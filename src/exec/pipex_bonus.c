@@ -6,20 +6,20 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:01:49 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/03 17:13:51 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/03 17:40:17 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 
-void	usage(void)
+int	usage(void)
 {
 	ft_putstr_fd("\033[31mError: Bad argument\n\e[0m", 2);
 	ft_putstr_fd("Ex: ./pipex <file1> <cmd1> <cmd2> <...> <file2>\n", 1);
 	ft_putstr_fd("    ./pipex \"here_doc\" <LIMITER> <cmd> <cmd1>"
 					"<...> <file>\n",
 					1);
-	exit(EXIT_FAILURE);
+	return (-1);
 }
 
 void	ft_parse(t_pipex *pipex, char **av, int ac)
@@ -50,7 +50,7 @@ int	pipex(int ac, char **av, char **envp)
 	t_pipex	pipex;
 
 	if (ac < 3)
-		usage();
+		return (usage());
 	pipex_init(&pipex, envp);
 	ft_parse(&pipex, av, ac);
 	pipex.cmd_nbr = ac - 2 - pipex.here_doc;
