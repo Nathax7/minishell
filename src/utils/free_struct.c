@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:11:14 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/07 17:37:32 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/07 18:58:43 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	free_exec_core(t_exec *exec)
         free(exec->groups);
     }
     if (exec->cmds)
-        free(exec->cmds);
+        free_split(exec->cmds);
     if (exec->infile)
         free(exec->infile_name);
     if (exec->outfile)

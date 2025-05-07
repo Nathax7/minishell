@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:01:32 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/07 15:39:45 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/07 18:59:32 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ static int	is_token(const char *tok, const char *s)
 
 static char	**allocate_cmd_buffer(int count)
 {
-	return (malloc((count + 1) * sizeof(char *)));
+	return (ft_calloc((count + 1), sizeof(char *)));
 }
 
 static char	***allocate_groups(int count)
 {
-	return (malloc((count + 1) * sizeof(char **)));
+	return (ft_calloc((count + 1), sizeof(char **)));
 }
 void init_exec(t_exec *exec)
 {
@@ -35,8 +35,12 @@ void init_exec(t_exec *exec)
 	exec->i = 0;
 	exec->ncmd = 0;
 	exec->ng = 0;
+	exec->group = NULL;
+	exec->groups = NULL;
 	exec->infile_name = NULL;
 	exec->outfile_name = NULL;
+	exec->infile = -1;
+	exec->outfile = -1;
 }
 
 // void free_exec(t_exec *exec)
