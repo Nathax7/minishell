@@ -6,25 +6,24 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:05:00 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/03 16:18:51 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/07 16:04:54 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 
 
-void	free_split(char **arr)
+void	free_split(char **str)
 {
-	char **p;
+	size_t	i;
 
-	p = arr;
-
-	while (p && *p)
+	i = 0;
+	while (str && str[i])
 	{
-		free(*p);
-		p++;
+		free(str[i]);
+		i++;
 	}
-	free(arr);
+	free(str);
 }
 
 
@@ -39,36 +38,6 @@ void	free_triple(char ***triple)
 		p++;
 	}
 	free(triple);
-}
-
-
-void free_exec(t_exec *exec)
-{
-    int i;
-    int j;
-
-    i = 0;
-    if (exec->groups)
-    {
-        while (exec->groups[i])
-        {
-            j = 0;
-            while (exec->groups[i][j])
-            {
-                free(exec->groups[i][j]);
-                j++;
-            }
-            free(exec->groups[i]);
-            i++;
-        }
-        free(exec->groups);
-    }
-    if (exec->cmds)
-        free(exec->cmds);
-    if (exec->infile)
-        free(exec->infile);
-    if (exec->outfile)
-        free(exec->outfile);
 }
 
 int main(int ac, char **av, char **envp)
@@ -88,7 +57,7 @@ int main(int ac, char **av, char **envp)
 	split_pipeline_groups(&exec, av + 1);
 	if (!exec.groups)
 	{
-		free_exec(&exec);
+		free_exec(&exec, -1, NULL, NULL);
 		printf("Erreur : résultat NULL\n");
 		return 1;
 	}
@@ -115,7 +84,7 @@ int main(int ac, char **av, char **envp)
 		i++;
 		j = 0;
 	}
-	free_exec(&exec);
+	free_exec(&exec, -1, NULL, NULL);
 	return 0;
 }
 

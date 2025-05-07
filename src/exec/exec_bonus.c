@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 02:36:30 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/23 18:35:49 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/07 15:17:58 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,18 @@
 void	check_exec_file(t_pipex *pipex, char *cmd)
 {
 	if (access(cmd, F_OK) == -1)
-	{
-		ft_putstr_fd("pipex: ", 2);
-		ft_putstr_fd(cmd, 2);
-		free_parent(pipex, 127, ": no such file or directory\n", NULL);
-	}
+		free_pipex(pipex, 127, cmd, "no such file or directory");
 	if (access(cmd, X_OK) == -1)
-	{
-		ft_putstr_fd("pipex: ", 2);
-		ft_putstr_fd(cmd, 2);
-		free_parent(pipex, 126, ": Permission denied\n", NULL);
-	}
+		free_pipex(pipex, 126, cmd, "Permission denied");
 	pipex->cmd = cmd;
 }
 
 void	check_exec(t_pipex *pipex, char *cmd)
 {
 	if (access(cmd, F_OK) == -1)
-		free_parent(pipex, 127, "pipex: %s: Command not found\n", cmd);
+		free_pipex(pipex, 127, cmd, "Command not found");
 	if (access(cmd, X_OK) == -1)
-		free_parent(pipex, 126, "pipex: %s: Permission denied\n", cmd);
+		free_pipex(pipex, 126, cmd, "Permission denied");
 }
 
 void	find_path(t_pipex *pipex, char *cmd)
@@ -52,11 +44,11 @@ void	find_path(t_pipex *pipex, char *cmd)
 	{
 		tmp = ft_strjoin(pipex->paths[i], "/");
 		if (!tmp)
-			free_parent(pipex, 1, "pipex: malloc: %s\n", strerror(errno));
+			free_pipex(pipex, 1, "malloc", strerror(errno));
 		pipex->cmd = ft_strjoin(tmp, cmd);
 		free(tmp);
 		if (!pipex->cmd)
-			free_parent(pipex, 1, "pipex: malloc: %s\n", strerror(errno));
+			free_pipex(pipex, 1, "malloc", strerror(errno));
 		if (access(pipex->cmd, F_OK) == 0)
 			break ;
 		free(pipex->cmd);
@@ -70,22 +62,18 @@ void	execute_bonus(t_pipex *pipex, char *argv, char **envp)
 {
 	pipex->cmd_args = ft_split(argv, ' ');
 	if (pipex->cmd_args[0] == NULL)
-		free_parent(pipex, 127, "pipex: %s: Command not found\n", argv);
+		free_pipex(pipex, 127, argv, "Command not found");
 	find_path(pipex, pipex->cmd_args[0]);
 	if (!pipex->cmd)
-	{
-		ft_putstr_fd("pipex: ", 2);
-		ft_putstr_fd(pipex->cmd_args[0], 2);
-		free_parent(pipex, 127, "pipex %s: Command not found\n", argv);
-	}
+		free_pipex(pipex, 127, pipex->cmd_args[0], "Command not found");
 	if (execve(pipex->cmd, pipex->cmd_args, envp) == -1)
 	{
 		if (errno == EACCES || errno == EISDIR)
-			free_parent(pipex, 126, "pipex: execve: %s\n", strerror(errno));
+			free_pipex(pipex, 126, "pipex: execve", strerror(errno));
 		if (errno == ENOENT || errno == EPERM)
-			free_parent(pipex, 127, "pipex: execve: %s\n", strerror(errno));
+			free_pipex(pipex, 127, "pipex: execve", strerror(errno));
 		if (errno == ENOTDIR)
-			free_parent(pipex, 127, "pipex: execve: %s\n", strerror(errno));
-		free_parent(pipex, 1, "pipex: execve: %s\n", strerror(errno));
+			free_pipex(pipex, 127, "pipex: execve", strerror(errno));
+		free_pipex(pipex, 1, "execve", strerror(errno));
 	}
 }

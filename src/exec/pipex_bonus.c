@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:01:49 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/03 17:40:17 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/07 15:08:18 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	pipex(int ac, char **av, char **envp)
 	pipex.cmd_nbr = ac - 2 - pipex.here_doc;
 	pipex.pids = malloc(sizeof(pid_t) * (pipex.cmd_nbr));
 	if (!pipex.pids)
-		ft_printf_error(-1, "pipex: malloc: %s\n", strerror(errno));
+		free_pipex(&pipex, -1, "pipex: malloc: %s\n", strerror(errno));
 	if (ac > 3)
 		while (++pipex.i < pipex.cmd_nbr)
 			child_process(&pipex, av[pipex.i + 1 + pipex.here_doc], envp);
@@ -65,7 +65,7 @@ int	pipex(int ac, char **av, char **envp)
 			exec_one(&pipex, av[pipex.i + 1 + pipex.here_doc], envp);
 	while (++pipex.i_wait < pipex.cmd_nbr)
 		waitpid(pipex.pids[pipex.i_wait], &pipex.status, 0);
-	free_parent(&pipex, -1, NULL, NULL);
+	free_pipex(&pipex, -1, NULL, NULL);
 	if (WIFEXITED(pipex.status))
 		return (WEXITSTATUS(pipex.status));
 	return (pipex.status);

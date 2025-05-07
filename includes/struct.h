@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:36:22 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/03 16:49:43 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:04:12 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,12 +99,15 @@ typedef struct s_exec
 	int		i;
 	int		ncmd;
 	int		ng;
-	char	*infile;
-	char	*outfile;
+	char	*infile_name;
+	char	*outfile_name;
+	int		infile;
+	int		outfile;
 	char	**group;
 	int		total;
 	int		idx;
 	int		j;
+	t_pipex		pipex;
 }			t_exec;
 
 extern int	g_signal;

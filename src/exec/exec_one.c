@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 16:03:21 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/03 17:20:09 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/07 15:09:23 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@ void	exec_one(t_pipex *pipex, char *argv, char **envp)
 {
 	pipex->pids[pipex->i] = fork();
 	if (pipex->pids[pipex->i] == -1)
-		free_parent(pipex, 1, "pipex: pid: %s\n", strerror(errno));
+		free_pipex(pipex, 1, "pid", strerror(errno));
 	if (pipex->pids[pipex->i] == 0)
 	{
 		if (dup2(pipex->infile, STDIN_FILENO) == -1)
-			free_parent(pipex, 1, "pipex: dup2: %s\n", strerror(errno));
+			free_pipex(pipex, 1, "dup2", strerror(errno));
 		if (dup2(pipex->outfile, STDOUT_FILENO) == -1)
-			free_parent(pipex, 1, "pipex: dup2: %s\n", strerror(errno));
+			free_pipex(pipex, 1, "dup2", strerror(errno));
 		close(pipex->outfile);
 		close(pipex->infile);
 		execute_bonus(pipex, argv, envp);

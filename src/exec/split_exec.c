@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:01:32 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/02 21:48:29 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/07 15:39:45 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ void init_exec(t_exec *exec)
 	exec->i = 0;
 	exec->ncmd = 0;
 	exec->ng = 0;
-	exec->infile = NULL;
-	exec->outfile = NULL;
+	exec->infile_name = NULL;
+	exec->outfile_name = NULL;
 }
 
 // void free_exec(t_exec *exec)
@@ -47,17 +47,17 @@ void init_exec(t_exec *exec)
 static void finalize_group(t_exec *exec)
 {
 	exec->total = exec->ncmd;
-	if (exec->infile)
+	if (exec->infile_name)
 		exec->total = exec->total + 1;
-	if (exec->outfile)
+	if (exec->outfile_name)
 		exec->total = exec->total + 1;
 	exec->group = malloc((exec->total + 1) * sizeof(char *));
 	if (!exec->group)
 		return ;
 	exec->idx = 0;
-	if (exec->infile)
+	if (exec->infile_name)
 	{
-		exec->group[exec->idx] = exec->infile;
+		exec->group[exec->idx] = exec->infile_name;
 		exec->idx = exec->idx + 1;
 	}
 	exec->j = 0;
@@ -67,9 +67,9 @@ static void finalize_group(t_exec *exec)
 		exec->idx = exec->idx + 1;
 		exec->j = exec->j + 1;
 	}
-	if (exec->outfile)
+	if (exec->outfile_name)
 	{
-		exec->group[exec->idx] = exec->outfile;
+		exec->group[exec->idx] = exec->outfile_name;
 		exec->idx = exec->idx + 1;
 	}
 	exec->group[exec->idx] = NULL;
@@ -86,18 +86,18 @@ void	split_groups(t_exec *exec, char **tokens)
 	{
 		if (is_token(tokens[exec->i], "<") && exec->i + 1 < exec->count)
 		{
-			free(exec->infile);
-			exec->infile = ft_strdup(tokens[exec->i + 1]);
-			// if (open(exec->infile, O_RDONLY) != -1)
-			// 	close(exec->infile);
-			// else
-			// 	printf("minishell: %s: No such file or directory", exec->infile);
+			free(exec->infile_name);
+			exec->infile_name = ft_strdup(tokens[exec->i + 1]);
+			open_infile_exec(exec, exec->infile_name);
+			close(exec->infile);
 			exec->i = exec->i + 2;
 		}
 		else if (is_token(tokens[exec->i], ">") && exec->i + 1 < exec->count)
 		{
-			free(exec->outfile);
-			exec->outfile = ft_strdup(tokens[exec->i + 1]);
+			free(exec->outfile_name);
+			exec->outfile_name = ft_strdup(tokens[exec->i + 1]);
+			open_outfile_exec(exec, exec->outfile_name, 1);
+			close(exec->outfile);
 			exec->i = exec->i + 2;
 			if (!(exec->i < exec->count && is_token(tokens[exec->i], ">")))
 			{
@@ -107,8 +107,8 @@ void	split_groups(t_exec *exec, char **tokens)
 				exec->groups[exec->ng] = exec->group;
 				exec->ng = exec->ng + 1;
 				exec->ncmd = 0;
-				exec->infile = NULL;
-				exec->outfile = NULL;
+				exec->infile_name = NULL;
+				exec->outfile_name = NULL;
 			}
 		}
 		else if (is_token(tokens[exec->i], "|"))
@@ -133,11 +133,11 @@ void split_pipeline_groups(t_exec *exec, char **tokens)
 	exec->cmds = allocate_cmd_buffer(exec->count);
 	if (!exec->cmds)
 	{
-		free_exec(exec);
+		free_exec(exec, -1, NULL, NULL);
 		return ;
 	}
 	split_groups(exec, tokens);
-	if (exec->ncmd > 0 || exec->infile || exec->outfile)
+	if (exec->ncmd > 0 || exec->infile_name || exec->outfile_name)
 	{
 		finalize_group(exec);
 		if (exec->group)

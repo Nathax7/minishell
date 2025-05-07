@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:11:14 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/23 18:41:27 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/07 17:37:32 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	ft_message(char *str, char *str2)
 			ft_putstr_fd("\n", 2);
 	}
 	if (str2)
-		perror(str2);
+		ft_putstr_fd(str2, 2);
 }
 
 // Deux fonctions pour liberer pipex fermer les fichiers ouverts et afficher un msg si voulu
@@ -34,35 +34,55 @@ static void	free_pipex_core(t_pipex *pipex)
 		return ;
 	if (pipex->paths)
 		ft_freesplit(pipex->paths);
-	if (pipex->cmd_args)
-		ft_freesplit(pipex->cmd_args);
-	if (pipex->cmd)
-		free(pipex->cmd);
-// >= 0 c'est bon ou je mets plutot > 2 pour etre sur ? //
-	if (pipex->infile  >= 0)
+	if (pipex->pids)
+		free(pipex->pids);
+	if (pipex->infile >= 0)
 		close(pipex->infile);
 	if (pipex->outfile >= 0)
 		close(pipex->outfile);
-	if (pipex->fd[0]  >= 0)
+	if (pipex->fd[0] >= 0)
 		close(pipex->fd[0]);
-	if (pipex->fd[1]  >= 0)
+	if (pipex->fd[1] >= 0)
 		close(pipex->fd[1]);
+	if (pipex->cmd_args)
+		ft_freesplit(pipex->cmd_args);
+	pipex->fd[0] = -1;
+	pipex->fd[1] = -1;
 	if (pipex->here_doc == 1 && pipex->infile_name)
 	{
 		unlink(pipex->infile_name);
 		free(pipex->infile_name);
 	}
 }
-// // // au cas ou
-// // if (pipex->infile  > 2)
-// 	close(pipex->infile);
-// // if (pipex->outfile > 2)
-// 	close(pipex->outfile);
-// // if (pipex->fd[0]   > 2)
-// 	close(pipex->fd[0]);
-// // if (pipex->fd[1]   > 2)
-// 	close(pipex->fd[1]);
 
+void	free_exec_core(t_exec *exec)
+{
+	int i;
+    int j;
+
+    i = 0;
+    if (exec->groups)
+    {
+        while (exec->groups[i])
+        {
+            j = 0;
+            while (exec->groups[i][j])
+            {
+                free(exec->groups[i][j]);
+                j++;
+            }
+            free(exec->groups[i]);
+            i++;
+        }
+        free(exec->groups);
+    }
+    if (exec->cmds)
+        free(exec->cmds);
+    if (exec->infile)
+        free(exec->infile_name);
+    if (exec->outfile)
+        free(exec->outfile_name);
+}
 
 void	free_pipex(t_pipex *pipex, int status, char *str, char *str2)
 {
@@ -75,7 +95,6 @@ void	free_pipex(t_pipex *pipex, int status, char *str, char *str2)
 	if (str || str2)
 		ft_message(str, str2);
 	free_pipex_core(pipex);
-	free(pipex);
 	if (status != -1)
 		exit(status);
 }
@@ -103,16 +122,18 @@ void	free_token(t_token *token, int status, char *str, char *str2)
 		exit(status);
 }
 
-// void	free_all(t_minishell *shell, int status, char *str, char *str2)
-// {
-// 	if (!shell)
-// 	{
-// 		if (status != -1)
-// 			exit(status);
-// 		return ;
-// 	}
-// 	free_pipex(&shell->pipex, status, str, str2);
-// 	free_token(&shell->token, status, str, str2);
-// 	if (status != -1)
-// 		exit(status);
-// }
+void	free_exec(t_exec *exec, int status, char *str, char *str2)
+{
+	if (!exec)
+	{
+		if (status != -1)
+			exit(status);
+		return ;
+	}
+	if (str || str2)
+		ft_message(str, str2);
+	free_exec_core(exec);
+	if (status != -1)
+		exit(status);
+}
+

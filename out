@@ -23,9 +23,8 @@ SRC_PARSE_TEST =	src/parse_test_exec/ft_split_whitespace.c \
 SRC_UTILS =	src/utils/ft_close.c	\
 			src/utils/free_struct.c	\
 			src/utils/utils.c		\
-			src/utils/open.c		\
 
-SRC_ALL = $(SRC_EXEC) $(SRC_UTILS)
+SRC_ALL = $(SRC_EXEC)
 
 GREEN=\033[0;32m
 BLUE=\033[38;2;64;224;208m

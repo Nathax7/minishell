@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 14:05:36 by almeekel          #+#    #+#             */
-/*   Updated: 2025/04/21 16:14:08 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/05/07 15:40:43 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,3 +47,4 @@ t_cmd	*build_cmd_list(t_token *tk)
 	}
 	return (head);
 }
+

@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:43:04 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/23 18:34:12 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/07 15:31:19 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,16 @@ void	random_filename(t_pipex *pipex)
 	i = -1;
 	pipex->infile_name = malloc(sizeof(char) * 9);
 	if (!pipex->infile_name)
-		free_parent(pipex, 1, "pipex: malloc: ", strerror(errno));
+		free_pipex(pipex, 1, "malloc", strerror(errno));
 	urandom_fd = open("/dev/urandom", O_RDONLY);
 	if (urandom_fd < 0)
-		free_parent(pipex, 1, "pipex: open: %s", strerror(errno));
+		free_pipex(pipex, 1, "open", strerror(errno));
 	while (++i < 8)
 	{
 		if (read(urandom_fd, &random, 1) < 0)
 		{
 			close(urandom_fd);
-			free_parent(pipex, 1, "pipex: read: ", strerror(errno));
+			free_pipex(pipex, 1, "read", strerror(errno));
 		}
 		pipex->infile_name[i] = CHARSET[random % (sizeof(CHARSET) - 1)];
 	}
@@ -46,7 +46,7 @@ void	here_doc(t_pipex *pipex, char *limiter)
 			0644);
 	temp = readline("> ");
 	if (!temp)
-		ft_printf_error(1, "pipex: malloc: %s\n", strerror(errno));
+		free_pipex(pipex, 1, "malloc", strerror(errno));
 	while (temp != NULL)
 	{
 		if (ft_strncmp(temp, limiter, ft_strlen(limiter)) == 0 && ft_strlen(temp) == ft_strlen(limiter))
@@ -59,7 +59,7 @@ void	here_doc(t_pipex *pipex, char *limiter)
 		free(temp);
 		temp = readline("> ");
 		if (!temp)
-			ft_printf_error(1, "pipex: malloc: %s\n", strerror(errno));
+			free_pipex(pipex, 1, "malloc:", strerror(errno));
 	}
 	close(pipex->infile);
 	pipex->infile = open(pipex->infile_name, O_RDONLY);
