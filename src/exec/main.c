@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:05:00 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/07 16:04:54 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/07 19:09:59 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,34 @@ int main(int ac, char **av, char **envp)
 		i++;
 		j = 0;
 	}
-	free_exec(&exec, -1, NULL, NULL);
+    i = 0;
+    if (exec.groups)
+    {
+        while (exec.groups[i])
+        {
+            j = 0;
+            while (exec.groups[i][j])
+            {
+                free(exec.groups[i][j]);
+                j++;
+            }
+            free(exec.groups[i]);
+            i++;
+        }
+        free(exec.groups);
+    }
+    if (exec.infile)
+	{
+        free(exec.infile_name);
+	}
+	if (exec.cmds)
+	{
+		free(exec.cmds);
+	}
+    if (exec.outfile)
+	{
+        free(exec.outfile_name);
+	}
 	return 0;
 }
 
