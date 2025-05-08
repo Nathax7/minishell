@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:12:21 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/07 15:25:13 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:00:34 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,7 @@ void	execute_bonus(t_pipex *pipex, char *argv, char **envp);
 int		pipex(int ac, char **av, char **envp);
 void	exec_one(t_pipex *pipex, char *argv, char **envp);
 void	random_filename(t_pipex *pipex);
+void	finalize_group(t_exec *exec);
+void	split_groups(t_exec *exec, char **tokens);
 
 #endif

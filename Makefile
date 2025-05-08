@@ -7,7 +7,7 @@ OBJ_DIR = obj
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC_ALL:%.c=%.o))
 DEPS = $(OBJ:.o=.d)
 
-SRC_EXEC =	src/exec/split_exec.c		\
+SRC_EXEC =	src/exec/split_group.c		\
 			src/exec/main.c				\
 			src/exec/child_process.c	\
 			src/exec/exec_bonus.c		\
@@ -15,6 +15,8 @@ SRC_EXEC =	src/exec/split_exec.c		\
 			src/exec/utils_bonus.c		\
 			src/exec/pipex_bonus.c		\
 			src/exec/exec_one.c			\
+			src/exec/split_pipeline_group.c		\
+			src/exec/finalize_group.c		\
 
 SRC_PARSE_TEST =	src/parse_test_exec/ft_split_whitespace.c \
 					src/parse_test_exec/parse_line.c 		  \
