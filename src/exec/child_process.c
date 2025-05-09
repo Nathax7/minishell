@@ -6,58 +6,58 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 22:58:16 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/07 15:14:43 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/09 16:42:41 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 
-void	setup_redirections(t_pipex *pipex)
+void	setup_redirections(t_exec *exec)
 {
-	if (pipex->i == 0)
+	if (exec->pipex.i == 0)
 	{
-		if (dup2(pipex->infile, STDIN_FILENO) == -1)
-			free_pipex(pipex, 1, "dup2", strerror(errno));
-		if (dup2(pipex->fd[1], STDOUT_FILENO) == -1)
-			free_pipex(pipex, 1, "dup2", strerror(errno));
-		close(pipex->infile);
-		close(pipex->outfile);
+		if (dup2(exec->pipex.infile, STDIN_FILENO) == -1)
+			free_pipex(exec, 1, "dup2", strerror(errno));
+		if (dup2(exec->pipex.fd[1], STDOUT_FILENO) == -1)
+			free_pipex(exec, 1, "dup2", strerror(errno));
+		close(exec->pipex.infile);
+		close(exec->pipex.outfile);
 	}
-	else if (pipex->i == pipex->cmd_nbr - 1)
+	else if (exec->pipex.i == exec->pipex.cmd_nbr - 1)
 	{
-		if (dup2(pipex->outfile, STDOUT_FILENO) == -1)
-			free_pipex(pipex, 1, "dup2", strerror(errno));
-		close(pipex->outfile);
-		close(pipex->infile);
+		if (dup2(exec->pipex.outfile, STDOUT_FILENO) == -1)
+			free_pipex(exec, 1, "dup2", strerror(errno));
+		close(exec->pipex.outfile);
+		close(exec->pipex.infile);
 	}
 	else
 	{
-		if (dup2(pipex->fd[1], STDOUT_FILENO) == -1)
-			free_pipex(pipex, 1, "dup2", strerror(errno));
-		close(pipex->outfile);
-		close(pipex->infile);
+		if (dup2(exec->pipex.fd[1], STDOUT_FILENO) == -1)
+			free_pipex(exec, 1, "dup2", strerror(errno));
+		close(exec->pipex.outfile);
+		close(exec->pipex.infile);
 	}
-	close(pipex->fd[1]);
+	close(exec->pipex.fd[1]);
 }
 
-void	execute_child(t_pipex *pipex, char *argv, char **envp)
+void	execute_child(t_exec *exec, char *argv, char **envp)
 {
-	close(pipex->fd[0]);
-	setup_redirections(pipex);
-	execute_bonus(pipex, argv, envp);
+	close(exec->pipex.fd[0]);
+	setup_redirections(exec);
+	execute_bonus(exec, argv, envp);
 }
 
-void	child_process(t_pipex *pipex, char *argv, char **envp)
+void	child_process(t_exec *exec, char *argv, char **envp)
 {
-	if (pipe(pipex->fd) == -1)
-		free_pipex(pipex, 1, "pipe", strerror(errno));
-	pipex->pids[pipex->i] = fork();
-	if (pipex->pids[pipex->i] == -1)
-		free_pipex(pipex, 1, "pid", strerror(errno));
-	if (pipex->pids[pipex->i] == 0)
-		execute_child(pipex, argv, envp);
-	close(pipex->fd[1]);
-	if (dup2(pipex->fd[0], STDIN_FILENO) == -1)
-		free_pipex(pipex, 1, "dup2 ", strerror(errno));
-	close(pipex->fd[0]);
+	if (pipe(exec->pipex.fd) == -1)
+		free_pipex(exec, 1, "pipe", strerror(errno));
+	exec->pipex.pids[exec->pipex.i] = fork();
+	if (exec->pipex.pids[exec->pipex.i] == -1)
+		free_pipex(exec, 1, "pid", strerror(errno));
+	if (exec->pipex.pids[exec->pipex.i] == 0)
+		execute_child(exec, argv, envp);
+	close(exec->pipex.fd[1]);
+	if (dup2(exec->pipex.fd[0], STDIN_FILENO) == -1)
+		free_pipex(exec, 1, "dup2 ", strerror(errno));
+	close(exec->pipex.fd[0]);
 }

@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 20:38:10 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/02 16:25:53 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/09 16:42:41 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,14 +95,14 @@
 // 		free_cmd(cmd, 1, NULL, "Error malloc");
 // }
 
-// void init_file(t_pipex *pipex, t_type type)
+// void init_file(t_exec *exec, t_type type)
 // {
 // 	if (type == INFILE)
-// 		open_infile(pipex, pipex->infile_name);
+// 		open_infile(exec, exec->pipex.infile_name);
 // 	if (type == APPEND)
-// 		open_outfile(pipex, pipex->outfile_name, 0);
+// 		open_outfile(exec, exec->pipex.outfile_name, 0);
 // 	else if (type == OUTFILE)
-// 		open_outfile(pipex, pipex->outfile, 1);
+// 		open_outfile(exec, exec->pipex.outfile, 1);
 // }
 
 // int	exec(char **envp, int cmd_nbr, char **line)

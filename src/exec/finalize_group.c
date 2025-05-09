@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:01:32 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/08 17:00:08 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/09 17:04:25 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,17 @@
 static void	finalize_group2(t_exec *exec)
 {
 	exec->group[exec->idx] = exec->cmds[exec->j];
-		exec->idx = exec->idx + 1;
-		exec->j = exec->j + 1;
+	exec->idx = exec->idx + 1;
+	exec->j = exec->j + 1;
 }
 
 static void	finalize_group3(t_exec *exec)
 {
 	exec->group[exec->idx] = exec->outfile_name;
-		exec->idx = exec->idx + 1;
+	exec->idx = exec->idx + 1;
 }
 
-void finalize_group(t_exec *exec)
+void	finalize_group(t_exec *exec)
 {
 	exec->total = exec->ncmd;
 	if (exec->infile_name)

@@ -6,13 +6,13 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 16:56:23 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/08 16:59:48 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/09 17:05:01 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 
-static void init_exec(t_exec *exec)
+static void	init_exec(t_exec *exec)
 {
 	exec->count = 0;
 	exec->i = 0;
@@ -36,7 +36,7 @@ static char	***allocate_groups(int count)
 	return (ft_calloc((count + 1), sizeof(char **)));
 }
 
-void split_pipeline_groups(t_exec *exec, char **tokens)
+void	split_pipeline_groups(t_exec *exec, char **tokens)
 {
 	init_exec(exec);
 	while (tokens && tokens[exec->count])
@@ -61,4 +61,5 @@ void split_pipeline_groups(t_exec *exec, char **tokens)
 		}
 	}
 	exec->groups[exec->ng] = NULL;
+	free(exec->cmds);
 }

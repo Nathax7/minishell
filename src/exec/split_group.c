@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 16:57:38 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/08 16:58:58 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/09 17:04:57 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,26 +20,26 @@ static int	is_token(const char *tok, const char *s)
 static void	is_infile(t_exec *exec, char **tokens)
 {
 	free(exec->infile_name);
-			exec->infile_name = ft_strdup(tokens[exec->i + 1]);
-			open_infile_exec(exec, exec->infile_name);
-			close(exec->infile);
-			exec->i = exec->i + 2;
+	exec->infile_name = ft_strdup(tokens[exec->i + 1]);
+	open_infile_exec(exec, exec->infile_name);
+	close(exec->infile);
+	exec->i = exec->i + 2;
 }
 
 static void	is_outfile(t_exec *exec, char **tokens)
 {
 	free(exec->outfile_name);
-			exec->outfile_name = ft_strdup(tokens[exec->i + 1]);
-			open_outfile_exec(exec, exec->outfile_name, 1);
-			close(exec->outfile);
-			exec->i = exec->i + 2;
+	exec->outfile_name = ft_strdup(tokens[exec->i + 1]);
+	open_outfile_exec(exec, exec->outfile_name, 1);
+	close(exec->outfile);
+	exec->i = exec->i + 2;
 }
 
 static void	is_notpipe(t_exec *exec, char **tokens)
 {
 	exec->cmds[exec->ncmd] = ft_strdup(tokens[exec->i]);
-			exec->ncmd = exec->ncmd + 1;
-			exec->i = exec->i + 1;
+	exec->ncmd = exec->ncmd + 1;
+	exec->i = exec->i + 1;
 }
 
 void	split_groups(t_exec *exec, char **tokens)

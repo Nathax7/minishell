@@ -6,25 +6,25 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 16:03:21 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/07 15:09:23 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/09 17:04:15 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 
-void	exec_one(t_pipex *pipex, char *argv, char **envp)
+void	exec_one(t_exec *exec, char *argv, char **envp)
 {
-	pipex->pids[pipex->i] = fork();
-	if (pipex->pids[pipex->i] == -1)
-		free_pipex(pipex, 1, "pid", strerror(errno));
-	if (pipex->pids[pipex->i] == 0)
+	exec->pipex.pids[exec->pipex.i] = fork();
+	if (exec->pipex.pids[exec->pipex.i] == -1)
+		free_pipex(exec, 1, "pid", strerror(errno));
+	if (exec->pipex.pids[exec->pipex.i] == 0)
 	{
-		if (dup2(pipex->infile, STDIN_FILENO) == -1)
-			free_pipex(pipex, 1, "dup2", strerror(errno));
-		if (dup2(pipex->outfile, STDOUT_FILENO) == -1)
-			free_pipex(pipex, 1, "dup2", strerror(errno));
-		close(pipex->outfile);
-		close(pipex->infile);
-		execute_bonus(pipex, argv, envp);
+		if (dup2(exec->pipex.infile, STDIN_FILENO) == -1)
+			free_pipex(exec, 1, "dup2", strerror(errno));
+		if (dup2(exec->pipex.outfile, STDOUT_FILENO) == -1)
+			free_pipex(exec, 1, "dup2", strerror(errno));
+		close(exec->pipex.outfile);
+		close(exec->pipex.infile);
+		execute_bonus(exec, argv, envp);
 	}
 }
