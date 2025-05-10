@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 21:32:35 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/21 21:38:57 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/10 22:06:13 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,31 @@
 
 # include "utils.h"
 
-t_token			*tokenize(char *input);
-t_token_type	identify_operator(const char *s, int *i);
-t_token_type	identify_redirect(const char *s, int *i, int flag);
+//string builder
+void	sb_init(t_str_builder *sb);
+int		sb_append_char(t_str_builder *sb, char c);
+int		sb_append_str(t_str_builder *sb, const char *s);
+char	*sb_to_string(t_str_builder *sb);
+void	sb_free(t_str_builder *sb);
 
-// test
-char			**ft_split_whitespace(const char *str);
-t_cmd			*parse_line(char *line);
+//lexer functions
+t_token	*lexer(const char *line);
+
+//lexer utilities
+void	free_token_list(t_token *list);
+int	create_and_append_token(t_token **head, char *value, t_token_type type,
+	t_quote quote_status);
+int	is_whitespace(char c);
+int	is_word_char(char c);
+int	is_operator_start(char c);
+	
+//token conversion to array functions
+char	**convert_token_list_to_char_array(t_token *token_list);
+void	free_char_array(char **array);
+
+//error management functions
+void	display_error(const char *context, const char *msg, int print_perror);
+void	report_syntax_error(const char *near_token);
+void	report_syntax_error_detail(const char *message, const char *detail);
 
 #endif
