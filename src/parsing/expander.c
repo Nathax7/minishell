@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 23:07:26 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/11 20:14:34 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/05/11 21:21:28 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_token	*perform_all_expansions(t_token *raw_list_head, char **envp,
 					current_raw->quote, envp, current_exit_status);
 		else
 			expanded_value = ft_strdup(original_value);
-		if (!expanded_value) // Malloc error during expansion/strdup
+		if (!expanded_value)
 		{
 			free_token_list(expanded_list_head); // Clean up deja fait du coup donc on est bon pour free
 			// display_error("expander", "memory allocation failure", 0); A AJOUTER AVEC l'ERROR
