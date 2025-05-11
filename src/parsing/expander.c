@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 23:07:26 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/11 21:21:28 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/05/11 21:22:22 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ t_token	*perform_all_expansions(t_token *raw_list_head, char **envp,
 {
 	t_token *current_raw;
 	t_token *expanded_list_head;
-	t_token *new_token_node; // Node temporaire pour construire la nvel liste
 	char *original_value;
 	char *expanded_value;
 
