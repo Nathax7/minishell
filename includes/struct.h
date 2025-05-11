@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:36:22 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/10 21:53:02 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/05/11 19:07:15 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 
 # define CHARSET "abcdefghijklmnopqrstuvwxyz"
 
+// struct to build a string in the second phase of parsing
 typedef struct s_str_builder
 {
 	char			*str;
@@ -33,6 +34,7 @@ typedef struct s_str_builder
 	size_t			capacity;
 }					t_str_builder;
 
+//tokenization struct
 typedef enum e_token_type
 {
 	T_WORD,
@@ -43,6 +45,7 @@ typedef enum e_token_type
 	T_HEREDOC
 }					t_token_type;
 
+//typing struct
 typedef enum e_type
 {
 	CMD,
@@ -54,6 +57,7 @@ typedef enum e_type
 	FD1
 }					t_type;
 
+//quote-typing struct
 typedef enum e_quote
 {
 	Q_NONE,
@@ -61,6 +65,7 @@ typedef enum e_quote
 	Q_DOUBLE
 }					t_quote;
 
+// list used during tokenization
 typedef struct s_token
 {
 	char			*value;
@@ -70,6 +75,7 @@ typedef struct s_token
 	struct s_token	*next;
 }					t_token;
 
+// enum to indicate the presence of an env
 typedef enum e_env
 {
 	NO_ENV,
