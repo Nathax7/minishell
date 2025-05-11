@@ -15,7 +15,10 @@ PARSING_CORE_FILES = \
     lexer.c \
     lexer_utils.c \
     convert_token_list.c \
-	error.c
+    error.c \
+    expand_variable.c \
+    expander_utils.c \
+    expander.c
 
 # Test main source file
 TEST_MAIN_FILE = main.c

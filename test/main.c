@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 21:49:01 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/10 23:01:33 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/05/11 20:23:06 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,44 +88,61 @@ static void	display_char_array_core(char **array)
 	}
 }
 
-int	main(void)
+int	main(int ac, char **av, char **envp)
 {
-	char *line;
-	t_token *token_list;
-	char **char_array_tokens;
+    char	*line;
+    t_token	*raw_token_list;
+    t_token	*expanded_token_list;
+    char	**char_array_tokens;
 
-	printf("Core Parser Test (string_builder, lexer, lexer_utils, convert_token_list, error)\n");
-	printf("Ctrl+D or 'exit' to quit.\n");
+    (void)ac;
+    (void)av;
+    printf("Core Parser Test (lexer, expander, converter, error handling)\n");
+    printf("Ctrl+D or 'exit' to quit.\n");
 
-	while (1)
-	{
-		g_exit_status = 0;
-		line = readline("test_core_parser> ");
-		if (line == NULL || ft_strcmp(line, "exit") == 0)
-		{
-			if (line)
-				free(line);
-			printf("Exiting core parser test.\n");
-			break ;
-		}
-		if (*line)
-			add_history(line);
-		printf("\nInput: \"%s\"\n", line);
-		token_list = lexer(line);
-		display_tokens_core(token_list);
+    while (1)
+    {
+        g_exit_status = 0;
+        line = readline("test_core_parser> ");
+        if (line == NULL || ft_strcmp(line, "exit") == 0)
+        {
+            if (line)
+                free(line);
+            printf("Exiting core parser test.\n");
+            break ;
+        }
+        if (*line)
+            add_history(line);
+        printf("\nInput: \"%s\"\n", line);
 
-		if (token_list)
-		{
-			char_array_tokens = convert_token_list_to_char_array(token_list);
-			display_char_array_core(char_array_tokens);
-			free_char_array(char_array_tokens);
-		}
+        // 1. Lexing
+        raw_token_list = lexer(line);
+        printf("\n--- Tokens (raw, from lexer): ---\n");
+        display_tokens_core(raw_token_list);
 
-		free_token_list(token_list);
-		free(line);
-		printf("g_exit_status after processing: %d\n", g_exit_status);
-		printf("--------------NATHAX----------------\n");
-	}
-	rl_clear_history();
-	return (g_exit_status);
+        // 2. Expansion
+        if (raw_token_list && g_exit_status == 0) // Proceed only if lexing was successful
+        {
+            expanded_token_list = perform_all_expansions(raw_token_list, envp, g_exit_status);
+            printf("\n--- Tokens (after expansion): ---\n");
+            display_tokens_core(expanded_token_list);
+
+            // 3. Conversion of expanded tokens to char**
+            if (expanded_token_list && g_exit_status == 0) // Proceed only if expansion was successful
+            {
+                char_array_tokens = convert_token_list_to_char_array(expanded_token_list);
+                printf("\n--- Tokens (expanded, as char** array): ---\n");
+                display_char_array_core(char_array_tokens);
+                free_char_array(char_array_tokens);
+            }
+            free_token_list(expanded_token_list); // Free the list from expansion
+        }
+
+        free_token_list(raw_token_list); // Free the original list from lexer
+        free(line);
+        printf("\ng_exit_status after processing: %d\n", g_exit_status);
+        printf("--------------MINISHELL_TEST_CYCLE_END----------------\n");
+    }
+    rl_clear_history();
+    return (g_exit_status);
 }
