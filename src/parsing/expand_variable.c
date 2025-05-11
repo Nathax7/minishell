@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 23:08:05 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/11 19:03:38 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/05/11 19:41:41 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,39 @@ static char	*process_variable_expansion(const char **str_ptr, char **envp,
 	var_value = get_env_var_value(var_name, envp, last_exit_status);
 	free(var_name);
 	return (var_value);
+}
+// input str c'est le char * original qui contient des var a expand
+// on oublie pas de passer le last_exit_status qui contient lexit de la derniere
+// commande executee ! 
+char	*expand_variables_in_str(const char *input_str, t_quote quote_type,
+		char **envp, int last_exit_status)
+{
+	t_str_builder	sb;
+	const char		*ip;
+	char			*expanded_part;
+
+	if (!input_str)
+		return (NULL); // logik si ya pas de string on return null
+	sb_init(&sb);
+	ip = input_str; // iterateur
+	while (*ip)
+	{
+		if (*ip == '$' && quote_type != Q_SINGLE && (is_valid_var_char(*(ip + 1))
+				|| *(ip + 1) == '?' || *(ip + 1) == '{')) // verifie si ya une var dans le cas ou p est $ et si c un cas valide
+		{
+			expanded_part = process_variable_expansion(&ip, envp,
+					last_exit_status);
+			if (expanded_part)
+			{
+				sb_append_str(&sb, expanded_part);
+				free(expanded_part);
+			}
+		}
+		else
+		{
+			sb_append_char(&sb, *ip);
+			ip++;
+		}
+	}
+	return (sb_to_string(&sb));
 }
