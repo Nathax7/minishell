@@ -6,13 +6,12 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 21:59:05 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/11 19:38:28 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/05/11 21:50:57 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
 
-// utilise dans le expand var et le lexer ;)
 void	sb_init(t_str_builder *sb)
 {
 	if (!sb)

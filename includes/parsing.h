@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 21:32:35 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/11 20:19:38 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/05/11 22:07:07 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,18 @@ int		sb_append_str(t_str_builder *sb, const char *s);
 char	*sb_to_string(t_str_builder *sb);
 void	sb_free(t_str_builder *sb);
 
-// lexer functions
-t_token	*lexer(const char *line);
-
 // lexer utilities
 void	free_token_list(t_token *list);
-int		create_and_append_token(t_token **head, char *value, t_token_type type,
-			t_quote quote_status);
+int	create_and_append_token(t_token **head, char *value, t_token_type type,
+	t_quote quote_status, t_word_segment *segments);
 int		is_whitespace(char c);
 int		is_word_char(char c);
 int		is_operator_start(char c);
+void	append_segment(t_word_segment **head, t_word_segment *new_segment);
+t_word_segment	*create_word_segment(char *value, t_quote quote_type);
+
+// lexer functions
+t_token	*lexer(const char *line);
 
 // token conversion to array functions
 char	**convert_token_list_to_char_array(t_token *token_list);

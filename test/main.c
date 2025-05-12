@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 21:49:01 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/11 20:23:06 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/05/11 21:47:16 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,28 +46,54 @@ static void	print_quote_status_core(t_quote quote)
 		printf("Q_UNKNOWN_QUOTE_STATUS");
 }
 // pour afficher les token
-static void	display_tokens_core(t_token *token_list)
+static void	display_tokens_core(t_token *token_list, bool is_raw_list)
 {
-	t_token	*current;
-	int		i;
+    t_token	*current_token;
+    int		i;
 
-	i = 0;
-	current = token_list;
-	if (!current)
-	{
-		printf("No tokens generated (or lexer error occurred).\n");
-		return ;
-	}
-	printf("Tokens (from lexer):\n");
-	while (current)
-	{
-		printf("  [%d]: Value=\"%s\", Type=", i++, current->value);
-		print_token_type_core(current->type);
-		printf(", Quote=");
-		print_quote_status_core(current->quote);
-		printf("\n");
-		current = current->next;
-	}
+    i = 0;
+    current_token = token_list;
+    if (!current_token)
+    {
+        printf("No tokens generated (or error occurred).\n");
+        return ;
+    }
+    // printf("Tokens:\n"); // Generic title
+    while (current_token)
+    {
+        printf("  [%d]: Type=", i++);
+        print_token_type_core(current_token->type);
+
+        if (current_token->type == T_WORD)
+        {
+            if (is_raw_list && current_token->segments)
+            {
+                printf("\n    Segments:\n");
+                t_word_segment *seg = current_token->segments;
+                int j = 0;
+                while(seg)
+                {
+                    printf("      Seg[%d]: Value=\"%s\", Quote=", j++, seg->value);
+                    print_quote_status_core(seg->quote_type);
+                    printf("\n");
+                    seg = seg->next;
+                }
+            }
+            else // Expanded T_WORD or if segments somehow not present
+            {
+                printf(", Value=\"%s\", Quote=", current_token->value ? current_token->value : "(null)");
+                print_quote_status_core(current_token->quote); // Should be Q_NONE after expansion
+                printf("\n");
+            }
+        }
+        else // Operators
+        {
+            printf(", Value=\"%s\", Quote=", current_token->value);
+            print_quote_status_core(current_token->quote); // Should be Q_NONE
+            printf("\n");
+        }
+        current_token = current_token->next;
+    }
 }
 // pour afficher les chaines de caracteres
 static void	display_char_array_core(char **array)
@@ -118,14 +144,14 @@ int	main(int ac, char **av, char **envp)
         // 1. Lexing
         raw_token_list = lexer(line);
         printf("\n--- Tokens (raw, from lexer): ---\n");
-        display_tokens_core(raw_token_list);
+        display_tokens_core(raw_token_list, true); // Pass true for raw list
 
         // 2. Expansion
         if (raw_token_list && g_exit_status == 0) // Proceed only if lexing was successful
         {
             expanded_token_list = perform_all_expansions(raw_token_list, envp, g_exit_status);
             printf("\n--- Tokens (after expansion): ---\n");
-            display_tokens_core(expanded_token_list);
+            display_tokens_core(expanded_token_list, false); // Pass false for expanded list
 
             // 3. Conversion of expanded tokens to char**
             if (expanded_token_list && g_exit_status == 0) // Proceed only if expansion was successful

@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 23:07:26 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/11 21:22:22 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/05/11 21:46:48 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,45 +19,99 @@
 t_token	*perform_all_expansions(t_token *raw_list_head, char **envp,
 		int current_exit_status)
 {
-	t_token *current_raw;
-	t_token *expanded_list_head;
-	char *original_value;
-	char *expanded_value;
+	t_token *current_raw_token;
+	t_token *expanded_list_head = NULL;
+	t_str_builder final_word_sb; // Used to concatenate segment results for a single word
 
-	current_raw = raw_list_head;
-	expanded_list_head = NULL;
-	while (current_raw)
+	current_raw_token = raw_list_head;
+	while (current_raw_token)
 	{
-		original_value = current_raw->value;
-		expanded_value = NULL; // Expansion des variables qui s'applique a Q NONE et Q double
-		if (current_raw->quote != Q_SINGLE)
-			expanded_value = expand_variables_in_str(original_value,
-					current_raw->quote, envp, current_exit_status);
-		else
-			expanded_value = ft_strdup(original_value);
-		if (!expanded_value)
+		if (current_raw_token->type == T_WORD)
 		{
-			free_token_list(expanded_list_head); // Clean up deja fait du coup donc on est bon pour free
-			// display_error("expander", "memory allocation failure", 0); A AJOUTER AVEC l'ERROR
-			// g_exit_status a set ici ...
-			return (NULL);
+			sb_init(&final_word_sb);
+			t_word_segment *current_segment = current_raw_token->segments;
+			while (current_segment)
+			{
+				char *segment_content_to_expand = current_segment->value;
+				char *expanded_segment_value = NULL;
+
+				if (current_segment->quote_type != Q_SINGLE)
+				{
+					expanded_segment_value = expand_variables_in_str(
+						segment_content_to_expand,
+						current_segment->quote_type, // Pass segment's quote type
+						envp,
+						current_exit_status);
+				}
+				else
+				{
+					// Single-quoted segments are not expanded for variables
+					expanded_segment_value = ft_strdup(segment_content_to_expand);
+				}
+
+				if (!expanded_segment_value)
+				{
+					sb_free(&final_word_sb);
+					free_token_list(expanded_list_head);
+					// report_error("expander", "memory allocation failure in segment expansion", 0);
+					// g_exit_status = 1;
+					return (NULL);
+				}
+				
+				// Quote removal for the segment's original quotes is implicitly handled
+				// because the lexer stored the *content* of quotes in segment->value.
+				// The segment->quote_type was used to control expansion.
+
+				if (!sb_append_str(&final_word_sb, expanded_segment_value))
+				{
+					free(expanded_segment_value);
+					sb_free(&final_word_sb);
+					free_token_list(expanded_list_head);
+					// report_error("expander", "memory allocation failure appending segment", 0);
+					// g_exit_status = 1;
+					return (NULL);
+				}
+				free(expanded_segment_value);
+				current_segment = current_segment->next;
+			}
+
+			char *final_word_value = sb_to_string(&final_word_sb); // sb_free is done by sb_to_string
+			if (!final_word_value)
+			{
+				free_token_list(expanded_list_head);
+				// report_error("expander", "memory allocation failure for final word", 0);
+				// g_exit_status = 1;
+				return (NULL);
+			}
+
+			// Create a new token for the expanded list.
+			// Value is the concatenated string, quote is Q_NONE, segments is NULL.
+			if (!create_and_append_token(&expanded_list_head, final_word_value, T_WORD, Q_NONE, NULL))
+			{
+				// create_and_append_token frees final_word_value on failure
+				free_token_list(expanded_list_head);
+				// report_error("expander", "token creation failure for expanded word", 0);
+				// g_exit_status = 1;
+				return (NULL);
+			}
 		}
-		// pour l'instant pas de word splitting ou de globbing donc un token raw -> un token expanse
-		// Si la value expanee est vide et ans quote, comme dans le cas $UNSET_VAR,
-		// Bash la supprime. Ce n'est pas implemente pour l'instant.
-		// On cree un token meme si la valeur expansee est vide.
-		if (!create_and_append_token(&expanded_list_head, expanded_value,
-				current_raw->type, current_raw->quote))
-			// Le quote status va changer apres l'enlevement des quote
+		else // Operator tokens are passed through (copied)
 		{
-			free(expanded_value);
-			free_token_list(expanded_list_head);
-			// display_error("expander", "token creation failure", 0); A AJOUTER AVEC l'ERROR
-			// g_exit_status a set ici aussi
-			return (NULL);
+			char *op_value_copy = ft_strdup(current_raw_token->value);
+			if (!op_value_copy)
+			{
+				free_token_list(expanded_list_head);
+				return (NULL); // Malloc error
+			}
+			if (!create_and_append_token(&expanded_list_head, op_value_copy,
+										current_raw_token->type, Q_NONE, NULL))
+			{
+				// create_and_append_token frees op_value_copy on failure
+				free_token_list(expanded_list_head);
+				return (NULL); // Malloc error
+			}
 		}
-		// create_and_append_token possede la expanded_value si bon.
-		current_raw = current_raw->next;
+		current_raw_token = current_raw_token->next;
 	}
 	return (expanded_list_head);
 }
