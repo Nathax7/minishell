@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:36:22 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/11 19:07:15 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/05/12 14:51:44 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,14 +111,17 @@ typedef struct s_exec
 	int				i;
 	int				ncmd;
 	int				ng;
-	char			*infile_name;
-	char			*outfile_name;
+	char			**infile_name;
+	char			**outfile_name;
 	int				infile;
 	int				outfile;
 	char			**group;
 	int				total;
 	int				idx;
 	int				j;
+	int				redir;
+	int				redir_in;
+	int				redir_out;
 	t_pipex			pipex;
 }					t_exec;
 

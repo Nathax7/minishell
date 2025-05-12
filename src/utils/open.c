@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:23:18 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/09 16:42:41 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/12 14:44:06 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	open_infile_exec(t_exec *exec, char *infile)
 {
 	if (access(infile, F_OK) == -1)
 	{
-		free_exec(exec, 1, "No such file or directory", infile);
+		free_exec(exec, 1, "No such file or directory", "infile");
 	}
 	if (access(infile, R_OK) == -1)
 	{

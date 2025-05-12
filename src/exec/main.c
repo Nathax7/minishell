@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:05:00 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/09 17:04:36 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/12 15:11:50 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ int	main(int ac, char **av, char **envp)
 			printf("\"%s\" ", exec.groups[i][j]);
 			j++;
 		}
+		printf("infile: \"%s\" ", exec.infile_name[i]);
+		printf("outfile: \"%s\" ", exec.outfile_name[i]);
 		printf("\n");
 		i++;
 	}
@@ -81,7 +83,7 @@ int	main(int ac, char **av, char **envp)
 		i++;
 		j = 0;
 	}
-	free_pipex(&exec, -1, NULL, NULL);
+	//free_pipex(&exec, -1, NULL, NULL);
 	return (0);
 }
 

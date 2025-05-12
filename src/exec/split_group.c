@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 16:57:38 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/09 17:04:57 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/12 15:37:03 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,17 @@ static int	is_token(const char *tok, const char *s)
 
 static void	is_infile(t_exec *exec, char **tokens)
 {
-	free(exec->infile_name);
-	exec->infile_name = ft_strdup(tokens[exec->i + 1]);
-	open_infile_exec(exec, exec->infile_name);
-	close(exec->infile);
+	exec->infile_name[exec->ng] = ft_strdup(tokens[exec->i + 1]);
+	// open_infile_exec(exec, exec->infile_name[exec->ng]);
+	// close(exec->infile);
 	exec->i = exec->i + 2;
 }
 
 static void	is_outfile(t_exec *exec, char **tokens)
 {
-	free(exec->outfile_name);
-	exec->outfile_name = ft_strdup(tokens[exec->i + 1]);
-	open_outfile_exec(exec, exec->outfile_name, 1);
-	close(exec->outfile);
+	exec->outfile_name[exec->ng] = ft_strdup(tokens[exec->i + 1]);
+	// open_outfile_exec(exec, exec->outfile_name[exec->ng], 1);
+	// close(exec->outfile);
 	exec->i = exec->i + 2;
 }
 
@@ -59,8 +57,6 @@ void	split_groups(t_exec *exec, char **tokens)
 				exec->groups[exec->ng] = exec->group;
 				exec->ng = exec->ng + 1;
 				exec->ncmd = 0;
-				exec->infile_name = NULL;
-				exec->outfile_name = NULL;
 			}
 		}
 		else if (is_token(tokens[exec->i], "|"))
