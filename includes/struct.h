@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:36:22 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/12 14:51:44 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/12 19:43:40 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,25 @@ typedef enum e_quote
 	Q_DOUBLE
 }					t_quote;
 
+// NEW: Structure for a segment within a T_WORD token
+// This structure will hold parts of a word, like 'abc' or "def" or $VAR
+// from an input like abc"def"$VAR
+typedef struct s_word_segment
+{
+	char					*value;     // Literal value of this segment (content *within* quotes, or unquoted part)
+	t_quote					quote_type; // Original quoting style of this segment (Q_NONE, Q_SINGLE, Q_DOUBLE)
+	struct s_word_segment	*next;
+}							t_word_segment;
+
 // list used during tokenization
 typedef struct s_token
 {
-	char			*value;
+	char			*value;          // For operators, or for T_WORD *after* expansion and segment concatenation
 	t_token_type	type;
-	t_quote quote;
-		/* nouveau en gros c'est pour savoir si le word a des double ou single quote       */
+	t_quote			quote;           // For operators (Q_NONE). For T_WORD *after* expansion (Q_NONE).
+                                     // This field is less relevant for raw T_WORD tokens from the lexer.
+	t_word_segment	*segments;       // For T_WORD tokens from the lexer: a list of its constituent parts.
+                                     // Set to NULL for operators, or for T_WORD after expansion.
 	struct s_token	*next;
 }					t_token;
 
