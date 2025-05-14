@@ -72,27 +72,33 @@ OBJ_DIR = obj
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC_ALL:%.c=%.o))
 DEPS = $(OBJ:.o=.d)
 
-SRC_EXEC =	src/exec/split_group.c		\
-			src/exec/main.c				\
-			src/exec/child_process.c	\
-			src/exec/exec_bonus.c		\
-			src/exec/here_doc.c			\
-			src/exec/utils_bonus.c		\
-			src/exec/pipex_bonus.c		\
-			src/exec/exec_one.c			\
+SRC_EXEC =	src/exec/split_group.c				\
+			src/exec/child_process.c			\
+			src/exec/exec_bonus.c				\
+			src/exec/here_doc.c					\
+			src/exec/utils_bonus.c				\
+			src/exec/pipex_bonus.c				\
+			src/exec/exec_one.c					\
 			src/exec/split_pipeline_group.c		\
-			src/exec/finalize_group.c		\
+			src/exec/finalize_group.c			\
 
-SRC_PARSE_TEST =	src/parse_test_exec/ft_split_whitespace.c \
-					src/parse_test_exec/parse_line.c 		  \
-					src/parse_test_exec/main.c				  \
+SRC_PARSING =	src/parsing/convert_token_list.c	\
+				src/parsing/error.c					\
+				src/parsing/expand_variable.c		\
+				src/parsing/expander_utils.c		\
+				src/parsing/expander.c				\
+				src/parsing/lexer_utils.c			\
+				src/parsing/lexer.c					\
+				src/parsing/string_builder.c		\
 
-SRC_UTILS =	src/utils/ft_close.c	\
-			src/utils/free_struct.c	\
-			src/utils/utils.c		\
-			src/utils/open.c		\
+SRC_UTILS =	src/utils/ft_close.c		\
+			src/utils/free_struct.c		\
+			src/utils/utils.c			\
+			src/utils/open.c			\
 
-SRC_ALL = $(SRC_EXEC) $(SRC_UTILS)
+
+
+SRC_ALL = $(SRC_EXEC) $(SRC_UTILS) $(SRC_PARSING) test/mainath.c
 
 GREEN=\033[0;32m
 BLUE=\033[38;2;64;224;208m

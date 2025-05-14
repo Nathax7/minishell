@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 16:57:38 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/12 15:37:03 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/14 15:46:34 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ static void	is_infile(t_exec *exec, char **tokens)
 static void	is_outfile(t_exec *exec, char **tokens)
 {
 	exec->outfile_name[exec->ng] = ft_strdup(tokens[exec->i + 1]);
+	if (is_token(tokens[exec->i], ">>"))
+		exec->append[exec->ng] = 1;
 	// open_outfile_exec(exec, exec->outfile_name[exec->ng], 1);
 	// close(exec->outfile);
 	exec->i = exec->i + 2;
@@ -46,7 +48,8 @@ void	split_groups(t_exec *exec, char **tokens)
 	{
 		if (is_token(tokens[exec->i], "<") && exec->i + 1 < exec->count)
 			is_infile(exec, tokens);
-		else if (is_token(tokens[exec->i], ">") && exec->i + 1 < exec->count)
+		else if ((is_token(tokens[exec->i], ">") || is_token(tokens[exec->i],
+				">>")) && exec->i + 1 < exec->count)
 		{
 			is_outfile(exec, tokens);
 			if (!(exec->i < exec->count && is_token(tokens[exec->i], ">")))

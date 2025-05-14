@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 16:56:23 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/12 15:37:20 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/14 15:45:10 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,19 @@ void	redirections_and_tokens(t_exec *exec, char **tokens)
 {
 	while (tokens && tokens[exec->count])
 	{
-		if (tokens && tokens[exec->count][0] == '<' && tokens[exec->count][1] == '\0')
+		if (tokens && tokens[exec->count][0] == '<'
+			&& tokens[exec->count][1] == '\0')
 			exec->redir_in++;
-		if (tokens && tokens[exec->count][0] == '>' && tokens[exec->count][1] == '\0')
+		if ((tokens && tokens[exec->count][0] == '>'
+				&& tokens[exec->count][1] == '\0') || (tokens
+			&& tokens[exec->count][0] == '>' && tokens[exec->count][1] == '>'
+				&& tokens[exec->count][2] == '\0'))
 			exec->redir_out++;
 		exec->count++;
 	}
 	exec->infile_name = allocate_double(exec->redir_in);
 	exec->outfile_name = allocate_double(exec->redir_out);
+	exec->append = ft_calloc(sizeof(int), exec->redir_out);
 }
 
 void	split_pipeline_groups(t_exec *exec, char **tokens)
@@ -78,6 +83,5 @@ void	split_pipeline_groups(t_exec *exec, char **tokens)
 	exec->groups[exec->ng] = NULL;
 	exec->infile_name[exec->ng] = NULL;
 	exec->outfile_name[exec->ng] = NULL;
-
 	free(exec->cmds);
 }

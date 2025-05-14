@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 21:32:35 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/11 22:07:07 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/05/12 20:53:58 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,7 @@ char	*expand_variables_in_str(const char *input_str, t_quote quote_type,
 // expander
 t_token	*perform_all_expansions(t_token *raw_list_head, char **envp,
 			int current_exit_status);
+
+extern int g_exit_status;
+
 #endif
