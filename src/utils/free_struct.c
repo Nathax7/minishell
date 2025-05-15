@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:11:14 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/09 17:01:32 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:43:38 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,24 @@ void	free_exec_core(t_exec *exec)
 		if (exec->groups)
 			free(exec->groups);
 	}
-	if (exec->infile)
-		free(exec->infile_name);
-	if (exec->outfile)
-		free(exec->outfile_name);
+	i = 0;
+	// while (i <= exec->ng)
+	// {
+	// 	if (exec->infile_name)
+	// 		free(exec->infile_name);
+	// 	i++;
+	// }
+	// free(exec->infile_name);
+	// while (i <= exec->ng)
+	// {
+	// 	if (exec->infile_name)
+	// 		free(exec->outfile_name);
+	// 	i++;
+	// }
+	free_split(exec->infile_name);
+	free_split(exec->outfile_name);
+	if (exec->append)
+		free(exec->append);
 }
 
 // Deux fonctions pour liberer pipex fermer les fichiers ouverts et afficher un msg si voulu

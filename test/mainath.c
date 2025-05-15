@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 20:47:28 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/14 15:54:29 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:33:44 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	main(int ac, char **av, char **envp)
 {
 	int		i;
 	int		j;
-	char **parse;
 	t_exec	exec;
 
 	(void)ac;
@@ -55,7 +54,7 @@ int	main(int ac, char **av, char **envp)
 	// 	"<", "infile4", "<", "infile5",
 	// 	NULL
 	// };
-	
+
 	split_pipeline_groups(&exec, av + 1);
 	if (!exec.groups)
 	{
@@ -88,6 +87,6 @@ int	main(int ac, char **av, char **envp)
 		exec.i++;
 		exec.j = 0;
 	}
-	//free_pipex(&exec, -1, NULL, NULL);
+	free_exec(&exec, -1, NULL, NULL);
 	return (0);
 }
