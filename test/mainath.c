@@ -6,14 +6,14 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 20:47:28 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/14 17:33:44 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/15 20:51:28 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
 #include "../includes/exec.h"
+#include "../includes/parsing.h"
 
-int g_exit_status = 0;
+int		g_exit_status = 0;
 
 void	free_split(char **str)
 {
@@ -43,50 +43,45 @@ void	free_triple(char ***triple)
 
 int	main(int ac, char **av, char **envp)
 {
-	int		i;
-	int		j;
-	t_exec	exec;
+	t_exec *head;
+	t_exec *cur;
+	int i, j;
 
 	(void)ac;
-	// (void)av;
-	// char *input[] = {
-	// 	"cmd1", "|", "cmd2", "|", "cmd3",
-	// 	"<", "infile4", "<", "infile5",
-	// 	NULL
-	// };
-
-	split_pipeline_groups(&exec, av + 1);
-	if (!exec.groups)
+	head = split_pipeline_groups(av + 1);
+	if (!head)
 	{
-		free_exec(&exec, -1, NULL, NULL);
-		printf("Erreur : résultat NULL\n");
+		fprintf(stderr, "Erreur : résultat NULL\n");
 		return (1);
 	}
+	cur = head;
 	i = 0;
-	while (exec.groups[i])
+	while (cur)
 	{
 		printf("Groupe %d : ", i);
 		j = 0;
-		while (exec.groups[i][j])
+		while (cur->group && cur->group[j])
 		{
-			printf("\"%s\" ", exec.groups[i][j]);
+			printf("\"%s\" ", cur->group[j]);
 			j++;
 		}
 		printf("\n");
-		printf("infile: \"%s\"\n", exec.infile_name[i]);
-		printf("outfile: \"%s\"\n", exec.outfile_name[i]);
+		printf("  infile: \"%s\"\n",
+			cur->infile_name ? cur->infile_name : "(none)");
+		printf("  outfile: \"%s\"\n",
+			cur->outfile_name ? cur->outfile_name : "(none)");
+		cur = cur->next;
 		i++;
 	}
-	exec.i = 0;
-	exec.j = 0;
-	while (exec.groups[exec.i])
+	cur = head;
+	while (cur)
 	{
-		while (exec.groups[exec.i][exec.j])
-		exec.j++;
-		pipex(&exec, exec.j, exec.groups[exec.i], envp);
-		exec.i++;
-		exec.j = 0;
+		j = 0;
+		while (cur->group[j])
+			j++;
+		pipex(cur, j, cur->group, envp);
+		cur = cur->next;
 	}
-	free_exec(&exec, -1, NULL, NULL);
+	free_exec(head, -1, NULL, NULL);
 	return (0);
 }

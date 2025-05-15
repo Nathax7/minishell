@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 16:03:21 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/12 19:38:15 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/15 20:10:01 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ void	exec_one(t_exec *exec, char *argv, char **envp)
 		free_pipex(exec, 1, "pid", strerror(errno));
 	if (exec->pipex.pids[exec->pipex.i] == 0)
 	{
-		if (exec->infile_name[exec->i] != NULL)
+		if (exec->infile_name != NULL)
 		{
 			if (dup2(exec->pipex.infile, STDIN_FILENO) == -1)
 				free_pipex(exec, 1, "dup2", strerror(errno));
 		}
-		if (exec->outfile_name[exec->i] != NULL)
+		if (exec->outfile_name != NULL)
 		{
 			if (dup2(exec->pipex.outfile, STDOUT_FILENO) == -1)
 				free_pipex(exec, 1, "caca", strerror(errno));

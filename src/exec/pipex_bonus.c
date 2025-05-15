@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:01:49 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/14 18:42:42 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/15 20:09:40 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,19 @@ void	ft_parse(t_exec *exec)
 	// 		free_parent(exec, -1, NULL, NULL);
 	// 		usage();
 	// 	}
-	if (exec->append[exec->i] == 1)
+	if (exec->append == 1)
 	{
-		if (exec->infile_name[exec->i] != NULL)
-			open_infile(exec, exec->infile_name[exec->i]);
-		if (exec->outfile_name[exec->i] != NULL)
-			open_outfile(exec, exec->outfile_name[exec->i], 0);
+		if (exec->infile_name != NULL)
+			open_infile(exec, exec->infile_name);
+		if (exec->outfile_name != NULL)
+			open_outfile(exec, exec->outfile_name, 0);
 	}
 	else
 	{
-		if (exec->infile_name[exec->i] != NULL)
-			open_infile(exec, exec->infile_name[exec->i]);
-		if (exec->outfile_name[exec->i] != NULL)
-			open_outfile(exec, exec->outfile_name[exec->i], 1);
+		if (exec->infile_name != NULL)
+			open_infile(exec, exec->infile_name);
+		if (exec->outfile_name != NULL)
+			open_outfile(exec, exec->outfile_name, 1);
 	}
 }
 

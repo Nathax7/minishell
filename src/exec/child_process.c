@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 22:58:16 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/12 19:50:57 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/15 20:09:28 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	setup_redirections(t_exec *exec)
 {
-	if (exec->pipex.i == 0 && exec->infile_name[exec->i] != NULL)
+	if (exec->pipex.i == 0 && exec->infile_name != NULL)
 	{
 		if (dup2(exec->pipex.infile, STDIN_FILENO) == -1)
 		free_pipex(exec, 1, "dup2", strerror(errno));
@@ -23,7 +23,7 @@ void	setup_redirections(t_exec *exec)
 		close(exec->pipex.infile);
 		close(exec->pipex.outfile);
 	}
-	else if (exec->pipex.i == exec->pipex.cmd_nbr - 1 && exec->outfile_name[exec->i] != NULL)
+	else if (exec->pipex.i == exec->pipex.cmd_nbr - 1 && exec->outfile_name != NULL)
 	{
 		if (dup2(exec->pipex.outfile, STDOUT_FILENO) == -1)
 		free_pipex(exec, 1, "dup2", strerror(errno));

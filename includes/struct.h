@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:36:22 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/14 15:43:58 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/15 20:40:50 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,26 +117,16 @@ typedef struct s_pipex
 
 typedef struct s_exec
 {
-	int				count;
-	char			***groups;
-	char			**cmds;
-	int				i;
-	int				ncmd;
-	int				ng;
-	char			**infile_name;
-	char			**outfile_name;
-	int				*append;
+    char            **group;        // NULL-terminated array of commands
+    char            *infile_name;   // input redirection (or NULL)
+    char            *outfile_name;  // output redirection (or NULL)
 	int				infile;
 	int				outfile;
-	char			**group;
-	int				total;
-	int				idx;
-	int				j;
-	int				redir;
-	int				redir_in;
-	int				redir_out;
+    int             append;         // 1 if >>, 0 if >
+	int				heredoc;
 	t_pipex			pipex;
-}					t_exec;
+    struct s_exec   *next;          // next group node
+}               t_exec;
 
 extern int g_exit_status; // For the shell's exit status
 extern volatile sig_atomic_t g_signal_received; // To flag if a signal was caught

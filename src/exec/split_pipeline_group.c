@@ -6,82 +6,107 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 16:56:23 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/14 17:37:00 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/15 20:50:26 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 
-static void	init_exec(t_exec *exec)
+static t_exec	*new_exec_node(void)
 {
-	exec->count = 0;
-	exec->i = 0;
-	exec->ncmd = 0;
-	exec->ng = 0;
-	exec->redir = 0;
-	exec->redir_in = 0;
-	exec->redir_out = 0;
-	exec->group = NULL;
-	exec->groups = NULL;
-	exec->infile_name = NULL;
-	exec->outfile_name = NULL;
-	exec->infile = -1;
-	exec->outfile = -1;
+	t_exec	*node;
+
+	node = malloc(sizeof(t_exec));
+	if (!node)
+		return (NULL);
+	node->group = NULL;
+	node->infile_name = NULL;
+	node->outfile_name = NULL;
+	node->append = 0;
+	node->next = NULL;
+	return (node);
 }
 
-static char	**allocate_double(int count)
+static int	is_token(const char *tok, const char *s)
 {
-	return (ft_calloc((count + 1), sizeof(char *)));
+	return (ft_strcmp(tok, s) == 0);
 }
 
-static char	***allocate_groups(int count)
+static int	finalize_group_node(t_exec *node, char **cmds, int ncmd)
 {
-	return (ft_calloc((count + 1), sizeof(char **)));
+	int	i;
+
+	node->group = ft_calloc(ncmd + 1, sizeof(char *));
+	if (!node->group)
+		return (-1);
+	for (i = 0; i < ncmd; ++i)
+		node->group[i] = ft_strdup(cmds[i]);
+	node->group[ncmd] = NULL;
+	return (0);
 }
 
-void	redirections_and_tokens(t_exec *exec, char **tokens)
+t_exec	*split_pipeline_groups(char **tokens)
 {
-	while (tokens && tokens[exec->count])
+	int		count;
+	int		i;
+	t_exec	*head;
+	t_exec	*current;
+	char	**cmds;
+	int		ncmd;
+
+	count = 0;
+	head = NULL;
+	current = NULL;
+	ncmd = 0;
+	while (tokens[count])
+		count++;
+	if (count == 0)
+		return (NULL);
+	cmds = ft_calloc(count + 1, sizeof(char *));
+	if (!cmds)
+		return (NULL);
+	head = new_exec_node();
+	if (!head)
+		return (free(cmds), NULL);
+	current = head;
+	i = 0;
+	while (i < count)
 	{
-		if (tokens && tokens[exec->count][0] == '<'
-			&& tokens[exec->count][1] == '\0')
-			exec->redir_in++;
-		if ((tokens && tokens[exec->count][0] == '>'
-				&& tokens[exec->count][1] == '\0') || (tokens
-			&& tokens[exec->count][0] == '>' && tokens[exec->count][1] == '>'
-				&& tokens[exec->count][2] == '\0'))
-			exec->redir_out++;
-		exec->count++;
-	}
-	exec->infile_name = allocate_double(exec->redir_in);
-	exec->outfile_name = allocate_double(exec->redir_out);
-	exec->append = ft_calloc(sizeof(int), exec->redir_out);
-}
-
-void	split_pipeline_groups(t_exec *exec, char **tokens)
-{
-	init_exec(exec);
-	redirections_and_tokens(exec, tokens);
-	if (!exec->infile_name || !exec->outfile_name)
-		return ;
-	exec->groups = allocate_groups(exec->count);
-	if (!exec->groups)
-		free_exec(exec, 1, "Error malloc <split_pipeline_groups>", NULL);
-	exec->cmds = allocate_double(exec->count);
-	if (!exec->cmds)
-		free_exec(exec, 1, "Error malloc <split_pipeline_groups>", NULL);
-	split_groups(exec, tokens);
-	if (exec->ncmd > 0)
-	{
-		finalize_group(exec);
-		if (exec->group)
+		if (is_token(tokens[i], "<") && i + 1 < count)
 		{
-			exec->groups[exec->ng] = exec->group;
-			exec->ng = exec->ng + 1;
+			current->infile_name = ft_strdup(tokens[i + 1]);
+			i += 2;
+		}
+		else if ((is_token(tokens[i], ">") || is_token(tokens[i], ">>")) && i
+			+ 1 < count)
+		{
+			current->outfile_name = ft_strdup(tokens[i + 1]);
+			if (is_token(tokens[i], ">>"))
+				current->append = 1;
+			i += 2;
+			if (!(i < count && is_token(tokens[i], ">")))
+			{
+				if (finalize_group_node(current, cmds, ncmd) < 0)
+					break ;
+				current->next = new_exec_node();
+				if (!current->next)
+					break ;
+				current = current->next;
+				ncmd = 0;
+			}
+		}
+		else if (is_token(tokens[i], "|"))
+		{
+			i++;
+		}
+		else
+		{
+			cmds[ncmd++] = tokens[i];
+			i++;
 		}
 	}
-	exec->groups[exec->ng] = NULL;
-	exec->infile_name[exec->ng] = NULL;
-	exec->outfile_name[exec->ng] = NULL;
-	free(exec->cmds);
+	if (ncmd > 0)
+		finalize_group_node(current, cmds, ncmd);
+	free(cmds);
+	return (head);
 }

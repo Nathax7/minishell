@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:11:14 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/14 17:43:38 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/15 20:15:38 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,48 +27,34 @@ void	ft_message(char *str, char *str2)
 		ft_putstr_fd(str2, 2);
 }
 
-void	free_exec_core(t_exec *exec)
+void free_exec_core(t_exec *head)
 {
-	int i;
-	int j;
+    t_exec *tmp;
+    int    i;
 
-	i = 0;
-	if (exec->groups)
-	{
-		while (exec->groups[i])
-		{
-			j = 0;
-			while (exec->groups[i][j])
-			{
-				if (exec->groups[i][j])
-					free(exec->groups[i][j]);
-				j++;
-			}
-			if (exec->groups[i])
-				free(exec->groups[i]);
-			i++;
-		}
-		if (exec->groups)
-			free(exec->groups);
-	}
-	i = 0;
-	// while (i <= exec->ng)
-	// {
-	// 	if (exec->infile_name)
-	// 		free(exec->infile_name);
-	// 	i++;
-	// }
-	// free(exec->infile_name);
-	// while (i <= exec->ng)
-	// {
-	// 	if (exec->infile_name)
-	// 		free(exec->outfile_name);
-	// 	i++;
-	// }
-	free_split(exec->infile_name);
-	free_split(exec->outfile_name);
-	if (exec->append)
-		free(exec->append);
+    while (head)
+    {
+        tmp = head->next;
+
+        // libération du tableau de commandes
+        if (head->group)
+        {
+            for (i = 0; head->group[i]; i++)
+                free(head->group[i]);
+            free(head->group);
+        }
+
+        // libération des noms de fichiers
+        if (head->infile_name)
+            free(head->infile_name);
+        if (head->outfile_name)
+            free(head->outfile_name);
+
+        // libération du nœud lui-même
+        free(head);
+
+        head = tmp;
+    }
 }
 
 // Deux fonctions pour liberer pipex fermer les fichiers ouverts et afficher un msg si voulu

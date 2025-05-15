@@ -72,15 +72,13 @@ OBJ_DIR = obj
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC_ALL:%.c=%.o))
 DEPS = $(OBJ:.o=.d)
 
-SRC_EXEC =	src/exec/split_group.c				\
-			src/exec/child_process.c			\
+SRC_EXEC =	src/exec/child_process.c			\
 			src/exec/exec_bonus.c				\
 			src/exec/here_doc.c					\
 			src/exec/utils_bonus.c				\
 			src/exec/pipex_bonus.c				\
 			src/exec/exec_one.c					\
 			src/exec/split_pipeline_group.c		\
-			src/exec/finalize_group.c			\
 
 SRC_PARSING =	src/parsing/convert_token_list.c	\
 				src/parsing/error.c					\
