@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 20:47:28 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/15 20:51:28 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/20 21:18:27 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	main(int ac, char **av, char **envp)
 	while (cur)
 	{
 		j = 0;
-		while (cur->group[j])
+		while (cur->group && cur->group[j])
 			j++;
 		pipex(cur, j, cur->group, envp);
 		cur = cur->next;
