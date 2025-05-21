@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:11:14 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/15 20:15:38 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:28:03 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,6 @@ void free_exec_core(t_exec *head)
                 free(head->group[i]);
             free(head->group);
         }
-
-        // libération des noms de fichiers
-        if (head->infile_name)
-            free(head->infile_name);
-        if (head->outfile_name)
-            free(head->outfile_name);
-
         // libération du nœud lui-même
         free(head);
 
@@ -67,6 +60,11 @@ static void	free_pipex_core(t_exec *exec)
 		ft_freesplit(exec->pipex.paths);
 	if (exec->pipex.pids)
 		free(exec->pipex.pids);
+	// if (exec->pipex.here_doc == 1)
+	// {
+	// 	unlink(exec->infile_name);
+	// 	free(exec->infile_name);
+	// }
 	if (exec->pipex.infile >= 0)
 		close(exec->pipex.infile);
 	if (exec->pipex.outfile >= 0)
@@ -79,11 +77,6 @@ static void	free_pipex_core(t_exec *exec)
 		ft_freesplit(exec->pipex.cmd_args);
 	exec->pipex.fd[0] = -1;
 	exec->pipex.fd[1] = -1;
-	if (exec->pipex.here_doc == 1 && exec->pipex.infile_name)
-	{
-		unlink(exec->pipex.infile_name);
-		free(exec->pipex.infile_name);
-	}
 }
 
 void	free_pipex(t_exec *exec, int status, char *str, char *str2)

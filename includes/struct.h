@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:36:22 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/15 20:40:50 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:56:15 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,6 @@ typedef struct s_pipex
 	char			*path;
 	int				infile;
 	int				outfile;
-	char			*infile_name;
-	char			*outfile_name;
 	int				fd[2];
 	int				status;
 	int				here_doc;

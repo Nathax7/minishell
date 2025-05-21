@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 16:56:23 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/16 10:52:07 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:14:49 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static t_exec	*new_exec_node(void)
 	node->infile_name = NULL;
 	node->outfile_name = NULL;
 	node->append = 0;
+	node->heredoc = 0;
 	node->next = NULL;
 	return (node);
 }
@@ -72,16 +73,20 @@ t_exec	*split_pipeline_groups(char **tokens)
 	i = 0;
 	while (i < count)
 	{
-		if (is_token(tokens[i], "<") && i + 1 < count)
+		if ((is_token(tokens[i], "<") || is_token(tokens[i], "<<")) && i + 1 < count)
 		{
-			current->infile_name = ft_strdup(tokens[i + 1]);
+			if (is_token(tokens[i], "<"))
+				current->heredoc = 0;
+			else
+				current->heredoc = 1;
+			current->infile_name = tokens[i + 1];
 			// open_infile_exec(current, current->infile_name);
 			i += 2;
 		}
 		else if ((is_token(tokens[i], ">") || is_token(tokens[i], ">>")) && i
 			+ 1 < count)
 		{
-			current->outfile_name = ft_strdup(tokens[i + 1]);
+			current->outfile_name = tokens[i + 1];
 			// open_outfile_exec(current, current->outfile_name, 0);
 			if (is_token(tokens[i], ">>"))
 				current->append = 1;
