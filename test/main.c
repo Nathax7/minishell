@@ -1,174 +1,237 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/10 21:49:01 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/11 21:47:16 by almeekel         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include "../includes/minishell.h" 
 
-#include "../includes/parsing.h"
-
-int g_exit_status = 0;
+int						g_exit_status = 0;
 volatile sig_atomic_t	g_signal_received = 0;
 
-// pour afficer le type d etoken
-static void	print_token_type_core(t_token_type type)
+// --- Fonctions utilitaires pour le main ---
+
+static char	**copy_envp(char **envp_main)
 {
-	if (type == T_WORD)
-		printf("T_WORD");
-	else if (type == T_PIPE)
-		printf("T_PIPE");
-	else if (type == T_REDIRECT_IN)
-		printf("T_REDIRECT_IN");
-	else if (type == T_REDIRECT_OUT)
-		printf("T_REDIRECT_OUT");
-	else if (type == T_APPEND)
-		printf("T_APPEND");
-	else if (type == T_HEREDOC)
-		printf("T_HEREDOC");
-	else
-		printf("T_UNKNOWN");
-}
-// pour afficher le status des quote
-static void	print_quote_status_core(t_quote quote)
-{
-	if (quote == Q_NONE)
-		printf("Q_NONE");
-	else if (quote == Q_SINGLE)
-		printf("Q_SINGLE");
-	else if (quote == Q_DOUBLE)
-		printf("Q_DOUBLE");
-	else
-		printf("Q_UNKNOWN_QUOTE_STATUS");
-}
-// pour afficher les token
-static void	display_tokens_core(t_token *token_list, bool is_raw_list)
-{
-    t_token	*current_token;
+    int		count;
+    char	**new_envp;
     int		i;
 
+    count = 0;
+    while (envp_main && envp_main[count])
+        count++;
+    new_envp = (char **)malloc(sizeof(char *) * (count + 1));
+    if (!new_envp)
+        return (NULL);
     i = 0;
-    current_token = token_list;
-    if (!current_token)
+    while (i < count)
     {
-        printf("No tokens generated (or error occurred).\n");
-        return ;
-    }
-    // printf("Tokens:\n"); // Generic title
-    while (current_token)
-    {
-        printf("  [%d]: Type=", i++);
-        print_token_type_core(current_token->type);
-
-        if (current_token->type == T_WORD)
+        new_envp[i] = ft_strdup(envp_main[i]);
+        if (!new_envp[i])
         {
-            if (is_raw_list && current_token->segments)
-            {
-                printf("\n    Segments:\n");
-                t_word_segment *seg = current_token->segments;
-                int j = 0;
-                while(seg)
-                {
-                    printf("      Seg[%d]: Value=\"%s\", Quote=", j++, seg->value);
-                    print_quote_status_core(seg->quote_type);
-                    printf("\n");
-                    seg = seg->next;
-                }
-            }
-            else // Expanded T_WORD or if segments somehow not present
-            {
-                printf(", Value=\"%s\", Quote=", current_token->value ? current_token->value : "(null)");
-                print_quote_status_core(current_token->quote); // Should be Q_NONE after expansion
-                printf("\n");
-            }
+            while (--i >= 0)
+                free(new_envp[i]);
+            free(new_envp);
+            return (NULL);
         }
-        else // Operators
-        {
-            printf(", Value=\"%s\", Quote=", current_token->value);
-            print_quote_status_core(current_token->quote); // Should be Q_NONE
-            printf("\n");
-        }
-        current_token = current_token->next;
+        i++;
     }
-}
-// pour afficher les chaines de caracteres
-static void	display_char_array_core(char **array)
-{
-	int	i;
-
-	i = 0;
-	if (!array || !array[0])
-	{
-		printf("Char array is empty or NULL.\n");
-		return ;
-	}
-	printf("Tokens (as char** array):\n");
-	while (array[i])
-	{
-		printf("  [%d]: \"%s\"\n", i, array[i]);
-		i++;
-	}
+    new_envp[count] = NULL;
+    return (new_envp);
 }
 
-int	main(int ac, char **av, char **envp)
+// Fonction pour joindre un tableau de chaînes en une seule chaîne avec un séparateur
+// Vous pourriez avoir besoin de l'ajouter à votre libft ou utils.
+static char	*join_string_array(char **arr, const char *sep)
 {
-    char	*line;
-    t_token	*raw_token_list;
-    t_token	*expanded_token_list;
-    char	**char_array_tokens;
+    t_str_builder	sb;
+    int				i;
 
-    (void)ac;
-    (void)av;
-    printf("Core Parser Test (lexer, expander, converter, error handling)\n");
-    printf("Ctrl+D or 'exit' to quit.\n");
+    if (!arr || !arr[0])
+        return (ft_strdup(""));
+    sb_init(&sb);
+    i = 0;
+    while (arr[i])
+    {
+        if (!sb_append_str(&sb, arr[i]))
+        {
+            sb_free(&sb);
+            return (NULL);
+        }
+        if (arr[i + 1])
+        {
+            if (!sb_append_str(&sb, (char *)sep)) // sb_append_str prend const char*
+            {
+                sb_free(&sb);
+                return (NULL);
+            }
+        }
+        i++;
+    }
+    return (sb_to_string(&sb)); // sb_to_string s'occupe de sb_free
+}
+
+// Fonction pour préparer et exécuter le pipeline en utilisant la logique existante
+// C'est ici que le "pont" est fait.
+static int	prepare_and_run_pipeline(t_exec *exec_list_head, char **envp_copy)
+{
+    t_exec	pipeline_state_holder;
+    char	**commands_as_strings;
+    int		num_cmds;
+    t_exec	*current_node;
+    t_exec	*last_node;
+    int		i;
+    int		status;
+
+    if (!exec_list_head)
+        return (g_exit_status);
+    num_cmds = 0;
+    current_node = exec_list_head;
+    last_node = exec_list_head;
+    while (current_node)
+    {
+        num_cmds++;
+        if (!current_node->next)
+            last_node = current_node;
+        current_node = current_node->next;
+    }
+    if (num_cmds == 0)
+        return (0);
+
+    commands_as_strings = (char **)malloc(sizeof(char *) * (num_cmds + 1));
+    if (!commands_as_strings)
+    {
+        perror("minishell: malloc error for commands_as_strings");
+        return (1);
+    }
+    current_node = exec_list_head;
+    i = 0;
+    while (i < num_cmds)
+    {
+        commands_as_strings[i] = join_string_array(current_node->group, " ");
+        if (!commands_as_strings[i])
+        {
+            perror("minishell: malloc error joining command group");
+            while (--i >= 0)
+                free(commands_as_strings[i]);
+            free(commands_as_strings);
+            return (1);
+        }
+        current_node = current_node->next;
+        i++;
+    }
+    commands_as_strings[num_cmds] = NULL;
+
+    // Initialiser pipeline_state_holder.
+    // pipex_init s'occupe de la sous-structure pipex.
+    // Les redirections globales sont prises du premier/dernier noeud.
+    ft_memset(&pipeline_state_holder, 0, sizeof(t_exec)); // Important
+    pipeline_state_holder.infile_name = exec_list_head->infile_name; // Peut être NULL
+    pipeline_state_holder.heredoc = exec_list_head->heredoc;
+    pipeline_state_holder.outfile_name = last_node->outfile_name; // Peut être NULL
+    pipeline_state_holder.append = last_node->append;
+    // Note: Les fd infile/outfile de pipeline_state_holder ne sont pas ouverts ici,
+    // pipex_bonus.c -> ft_parse (qui est mal nommé) s'en charge.
+
+    // Appel de votre fonction pipex existante.
+    // Elle attend une seule structure t_exec pour l'état global,
+    // le nombre de commandes, et un char** où chaque élément est une chaîne de commande.
+    status = pipex(&pipeline_state_holder, num_cmds, commands_as_strings, envp_copy);
+    // free_pipex est appelée à l'intérieur de pipex en cas d'erreur ou à la fin.
+    // Cependant, pipeline_state_holder est sur la stack, donc free_exec_core dessus est un problème.
+    // free_pipex devrait être revu pour ne pas free la structure t_exec elle-même si elle est sur la stack.
+    // Pour l'instant, on espère que free_pipex libère seulement les membres alloués dynamiquement de pipeline_state_holder.pipex.
+
+    i = 0;
+    while (commands_as_strings[i])
+    {
+        free(commands_as_strings[i]);
+        i++;
+    }
+    free(commands_as_strings);
+
+    return (status); // pipex devrait retourner le statut du dernier cmd
+}
+
+
+int	main(int argc, char **argv, char **envp_main)
+{
+    char	*line_read;
+    t_token	*raw_tokens;
+    t_token	*expanded_tokens;
+    t_exec	*exec_list_head;
+    char	**envp_copy;
+
+    (void)argc;
+    (void)argv;
+    // Pas de gestion de signaux pour l'instant, comme demandé.
+    // initialize_signals();
+
+    envp_copy = copy_envp(envp_main);
+    if (!envp_copy && envp_main && envp_main[0]) // S'assurer que envp_main n'est pas juste {NULL}
+    {
+        perror("minishell: failed to copy environment");
+        return (1);
+    }
 
     while (1)
     {
-        g_exit_status = 0;
-        line = readline("test_core_parser> ");
-        if (line == NULL || ft_strcmp(line, "exit") == 0)
+        line_read = secure_readline("minishell> "); // de readline_secure.c
+        if (line_read == NULL) // EOF (Ctrl+D)
         {
-            if (line)
-                free(line);
-            printf("Exiting core parser test.\n");
-            break ;
+            ft_putstr_fd("exit\n", STDOUT_FILENO);
+            break;
         }
-        if (*line)
-            add_history(line);
-        printf("\nInput: \"%s\"\n", line);
+        if (*line_read == '\0') // Ligne vide
+        {
+            free(line_read);
+            continue;
+        }
+        // add_history est géré par secure_readline
 
         // 1. Lexing
-        raw_token_list = lexer(line);
-        printf("\n--- Tokens (raw, from lexer): ---\n");
-        display_tokens_core(raw_token_list, true); // Pass true for raw list
-
-        // 2. Expansion
-        if (raw_token_list && g_exit_status == 0) // Proceed only if lexing was successful
+        raw_tokens = lexer(line_read);
+        if (!raw_tokens) // Erreur du lexer (ex: quote non fermée)
         {
-            expanded_token_list = perform_all_expansions(raw_token_list, envp, g_exit_status);
-            printf("\n--- Tokens (after expansion): ---\n");
-            display_tokens_core(expanded_token_list, false); // Pass false for expanded list
-
-            // 3. Conversion of expanded tokens to char**
-            if (expanded_token_list && g_exit_status == 0) // Proceed only if expansion was successful
-            {
-                char_array_tokens = convert_token_list_to_char_array(expanded_token_list);
-                printf("\n--- Tokens (expanded, as char** array): ---\n");
-                display_char_array_core(char_array_tokens);
-                free_char_array(char_array_tokens);
-            }
-            free_token_list(expanded_token_list); // Free the list from expansion
+            // g_exit_status devrait être mis à jour par le lexer/report_syntax_error
+            free(line_read);
+            continue;
         }
 
-        free_token_list(raw_token_list); // Free the original list from lexer
-        free(line);
-        printf("\ng_exit_status after processing: %d\n", g_exit_status);
-        printf("--------------MINISHELL_TEST_CYCLE_END----------------\n");
+        // 2. Expansion
+        expanded_tokens = perform_all_expansions(raw_tokens, envp_copy, g_exit_status);
+        free_token_list(raw_tokens); // Plus besoin des tokens bruts
+        if (!expanded_tokens) // Erreur de l'expander
+        {
+            // g_exit_status devrait être mis à jour par l'expander
+            free(line_read);
+            continue;
+        }
+
+        // 3. Parsing en structure de commandes (liste de t_exec)
+        exec_list_head = split_pipeline_groups(expanded_tokens);
+        free_token_list(expanded_tokens); // Plus besoin des tokens expansés
+        if (!exec_list_head) // Erreur du parser
+        {
+            // g_exit_status devrait être mis à jour (ex: via report_syntax_error)
+            // S'assurer que c'est 2 pour les erreurs de syntaxe.
+            if (g_exit_status == 0 && *line_read) g_exit_status = 2;
+            free(line_read);
+            continue;
+        }
+
+        // 4. Exécution
+        // Note: `prepare_and_run_pipeline` tente de s'adapter à votre `pipex` existant.
+        // La structure `pipeline_state_holder` passée à `pipex` est sur la stack.
+        // Votre `free_pipex` doit être conscient de cela et ne pas essayer de `free`
+        // la structure `t_exec` elle-même, seulement ses membres alloués.
+        g_exit_status = prepare_and_run_pipeline(exec_list_head, envp_copy);
+
+
+        // 5. Nettoyage de l'itération
+        free_exec_list(exec_list_head); // Libère la liste de t_exec et leurs contenus
+        free(line_read);
+        line_read = NULL;
     }
-    rl_clear_history();
+
+    // Nettoyage final
+    if (envp_copy)
+        free_char_array(envp_copy); // Supposant que free_char_array libère chaque chaîne puis le tableau
+    // rl_clear_history(); // Optionnel
+
     return (g_exit_status);
 }
