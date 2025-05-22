@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   all.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 17:37:52 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/23 18:24:30 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/22 16:08:14 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
-
 
 // Standard Library Functions
 int					ft_isalpha(int c);
@@ -76,20 +75,23 @@ void				ft_putnbr_fd(int n, int fd);
 
 typedef struct s_list
 {
-	void			*content;
+	char			*content;
 	struct s_list	*next;
 }					t_list;
 
 // Linked List Bonus Structures and Functions
-t_list				*ft_lstnew(void *content);
+t_list				*ft_lstnew(char *content);
 void				ft_lstadd_front(t_list **lst, t_list *new);
 int					ft_lstsize(t_list *lst);
 void				ft_lstdelone(t_list *lst, void (*del)(void *));
 void				ft_lstclear(t_list **lst, void (*del)(void *));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
+void				ft_lstadd_back(t_list **lst, t_list *new);
+t_list				*ft_lstlast(t_list *lst);
+t_list				*ft_lstnew(char *content);
 
-// ft_printf function
-size_t				ft_len_putaddress(void *ptr);
+	// ft_printf function
+	size_t ft_len_putaddress(void *ptr);
 int					ft_len_putchar(unsigned char c);
 size_t				ft_len_putnbr_hex(unsigned int nbr, int flag);
 int					ft_len_putnbr(int nb);
