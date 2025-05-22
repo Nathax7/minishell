@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_struct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:11:14 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/21 17:28:03 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:53:13 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,27 +27,25 @@ void	ft_message(char *str, char *str2)
 		ft_putstr_fd(str2, 2);
 }
 
-void free_exec_core(t_exec *head)
+void	free_exec_core(t_exec *head)
 {
-    t_exec *tmp;
-    int    i;
+	t_exec	*tmp;
+	int		i;
 
-    while (head)
-    {
-        tmp = head->next;
-
-        // libération du tableau de commandes
-        if (head->group)
-        {
-            for (i = 0; head->group[i]; i++)
-                free(head->group[i]);
-            free(head->group);
-        }
-        // libération du nœud lui-même
-        free(head);
-
-        head = tmp;
-    }
+	while (head)
+	{
+		tmp = head->next;
+		// libération du tableau de commandes
+		if (head->group)
+		{
+			for (i = 0; head->group[i]; i++)
+				free(head->group[i]);
+			free(head->group);
+		}
+		// libération du nœud lui-même
+		free(head);
+		head = tmp;
+	}
 }
 
 // Deux fonctions pour liberer pipex fermer les fichiers ouverts et afficher un msg si voulu
@@ -132,3 +130,24 @@ void	free_exec(t_exec *exec, int status, char *str, char *str2)
 		exit(status);
 }
 
+void	free_exec_list(t_exec *head)
+{
+	t_exec	*current_node;
+	t_exec	*next_node;
+
+	current_node = head;
+	while (current_node)
+	{
+		next_node = current_node->next;
+		if (current_node->group)
+		{
+			free(current_node->group);
+		}
+		free(current_node->infile_name);
+		current_node->infile_name = NULL;
+		free(current_node->outfile_name);
+		current_node->outfile_name = NULL;
+		free(current_node);
+		current_node = next_node;
+	}
+}

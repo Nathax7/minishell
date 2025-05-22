@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstlast_bonus.c                                 :+:      :+:    :+:   */
+/*   ft_lstfirst.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/14 19:47:43 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/04/23 18:42:16 by nagaudey         ###   ########.fr       */
+/*   Created: 2025/05/22 16:00:28 by almeekel          #+#    #+#             */
+/*   Updated: 2025/05/22 16:02:18 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/utils.h"
 
-// t_cmd	*ft_lstlast(t_cmd *lst)
-// {
-// 	if (!lst)
-// 		return (NULL);
-// 	while (lst->next != NULL)
-// 		lst = lst->next;
-// 	return (lst);
-// }
+t_exec	*ft_lstfirst(t_exec *lst)
+{
+	if (!lst)
+		return (NULL);
+	while (lst->prev != NULL)
+		lst = lst->prev;
+	return (lst);
+}
