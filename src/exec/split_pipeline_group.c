@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 16:56:23 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/23 13:59:32 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:13:51 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,17 +105,23 @@ t_exec	*split_pipeline_groups(t_token *tokens)
 		if ((tokens->type == T_REDIRECT_IN || tokens->type == T_HEREDOC)
 			&& tokens->next)
 		{
+			if (current->infile_name)
+				free(current->infile_name);
 			current->heredoc = (tokens->type == T_HEREDOC);
 			tokens = tokens->next;
-			current->infile_name = tokens->value;
+			current->infile_name = ft_strdup(tokens->value);
+			open_infile_exec(current, current->infile_name);
 			tokens = tokens->next;
 		}
 		else if ((tokens->type == T_REDIRECT_OUT || tokens->type == T_APPEND)
 			&& tokens->next)
 		{
+			if (current->outfile_name)
+				free(current->outfile_name);
 			current->append = (tokens->type == T_APPEND);
 			tokens = tokens->next;
-			current->outfile_name = tokens->value;
+			current->outfile_name = ft_strdup(tokens->value);
+			open_outfile_exec(current, current->outfile_name, 0);
 			tokens = tokens->next;
 			if (!(tokens && (tokens->type == T_REDIRECT_OUT
 						|| tokens->type == T_APPEND)))
@@ -131,10 +137,12 @@ t_exec	*split_pipeline_groups(t_token *tokens)
 		else if (tokens->type == T_PIPE)
 		{
 			tokens = tokens->next;
+			//ncmd++;
 		}
 		else
 		{
 			cmds[ncmd++] = tokens->value;
+			// cmds[ncmd++] = ft_strjoin_with_space(tokens->value);
 			tokens = tokens->next;
 		}
 	}

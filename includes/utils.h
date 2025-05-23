@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:07:53 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/23 10:24:10 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/23 15:44:31 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "struct.h"
 
+void	ft_message(char *str, char *str2);
 void	open_infile(t_exec *exec, char *infile);
 void	open_outfile(t_exec *exec, char *outfile, int mode);
 int		usage(void);
@@ -22,12 +23,13 @@ void	free_split(char **arr);
 void	free_triple(char ***triple);
 void	free_token(t_token *token, int status, char *str, char *str2);
 void	free_pipex(t_exec *exec, int status, char *str, char *str2);
+void	free_pipex_core(t_exec *exec);
 void	ft_close(t_exec *exec, t_type type);
 void	free_exec(t_exec *exec, int status, char *str, char *str2);
 void	open_infile(t_exec *exec, char *infile);
-void	open_infile_exec(t_exec *exec, char *infile);
+int	open_infile_exec(t_exec *exec, char *infile);
 void	open_outfile(t_exec *exec, char *outfile, int mode);
-void	open_outfile_exec(t_exec *exec, char *outfile, int mode);
+int	open_outfile_exec(t_exec *exec, char *outfile, int mode);
 t_exec	*find_last(t_exec *lst);
 t_exec	*find_first(t_exec *lst);
 int		find_size(t_token *lst);

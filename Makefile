@@ -95,6 +95,7 @@ SRC_UTILS =	src/utils/ft_close.c		\
 			src/utils/open.c			\
 			src/utils/find_last.c		\
 			src/utils/find_size.c		\
+			src/utils/find_first.c		\
 
 
 

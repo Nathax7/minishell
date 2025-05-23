@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_struct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:11:14 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/22 15:53:13 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:03:32 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,36 +24,50 @@ void	ft_message(char *str, char *str2)
 			ft_putstr_fd("\n", 2);
 	}
 	if (str2)
-		ft_putstr_fd(str2, 2);
-}
-
-void	free_exec_core(t_exec *head)
-{
-	t_exec	*tmp;
-	int		i;
-
-	while (head)
 	{
-		tmp = head->next;
-		// libération du tableau de commandes
-		if (head->group)
-		{
-			for (i = 0; head->group[i]; i++)
-				free(head->group[i]);
-			free(head->group);
-		}
-		// libération du nœud lui-même
-		free(head);
-		head = tmp;
+		ft_putstr_fd(str2, 2);
+		ft_putstr_fd("\n", 2);
 	}
 }
 
-// Deux fonctions pour liberer pipex fermer les fichiers ouverts et afficher un msg si voulu
-static void	free_pipex_core(t_exec *exec)
+void	free_exec_core(t_exec *node)
+{
+	t_exec	*head;
+	t_exec	*next;
+	char	**g;
+
+	head = node;
+	if (!head)
+		return ;
+	while (head->prev)
+		head = head->prev;
+	while (head)
+	{
+		next = head->next;
+		if (head->group)
+		{
+			g = head->group;
+			while (*g)
+				free(*g++);
+			free(head->group);
+		}
+		if (head->infile > STDERR_FILENO)
+			close(head->infile);
+		if (head->outfile > STDERR_FILENO)
+			close(head->outfile);
+		if (head->infile_name >= 0)
+			free(head->infile_name);
+		if (head->outfile_name >= 0)
+			free(head->outfile_name);
+		free(head);
+		head = next;
+	}
+}
+
+void	free_pipex_core(t_exec *exec)
 {
 	if (!exec)
 		return ;
-	free_exec_core(exec);
 	if (exec->pipex.paths)
 		ft_freesplit(exec->pipex.paths);
 	if (exec->pipex.pids)
@@ -88,6 +102,7 @@ void	free_pipex(t_exec *exec, int status, char *str, char *str2)
 	if (str || str2)
 		ft_message(str, str2);
 	free_pipex_core(exec);
+	free_exec_core(exec);
 	if (status != -1)
 		exit(status);
 }
@@ -128,26 +143,4 @@ void	free_exec(t_exec *exec, int status, char *str, char *str2)
 	free_exec_core(exec);
 	if (status != -1)
 		exit(status);
-}
-
-void	free_exec_list(t_exec *head)
-{
-	t_exec	*current_node;
-	t_exec	*next_node;
-
-	current_node = head;
-	while (current_node)
-	{
-		next_node = current_node->next;
-		if (current_node->group)
-		{
-			free(current_node->group);
-		}
-		free(current_node->infile_name);
-		current_node->infile_name = NULL;
-		free(current_node->outfile_name);
-		current_node->outfile_name = NULL;
-		free(current_node);
-		current_node = next_node;
-	}
 }
