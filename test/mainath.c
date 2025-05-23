@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mainath.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 20:47:28 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/23 16:05:13 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/23 18:50:14 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static t_token	*add_token(t_token **head, t_token **tail, t_token_type type,
 	return (node);
 }
 
-static void	print_exec_list(t_exec *cur)
+static void	print_exec_list(t_pipex_input *cur)
 {
 	int	i;
 	int j;
@@ -71,25 +71,25 @@ static void	print_exec_list(t_exec *cur)
 	{
 		printf("Groupe %d : ", i);
 		j = 0;
-		while (cur->group && cur->group[j])
+		while (cur->cmd_argv && cur->cmd_argv[j])
 		{
-			printf("\"%s\" ", cur->group[j]);
+			printf("\"%s\" ", cur->cmd_argv[j]);
 			j++;
 		}
 		printf("\n");
 		printf("  infile: \"%s\"\n",
-			cur->infile_name ? cur->infile_name : "(none)");
+			cur->config_node->infile_name ? cur->config_node->infile_name : "(none)");
 		printf("  outfile: \"%s\"\n",
-			cur->outfile_name ? cur->outfile_name : "(none)");
-		cur = cur->next;
+			cur->config_node->outfile_name ? cur->config_node->outfile_name : "(none)");
+		cur->config_node = cur->config_node->next;
 		i++;
 	}
 }
 
 int	main(int ac, char **av, char **envp)
 {
-	t_exec	*head;
-	t_exec	*cur;
+	t_pipex_input	head;
+	t_pipex_input	cur;
 	t_token *tokens;
 	t_token *tail;
 	int j;
@@ -110,25 +110,25 @@ int	main(int ac, char **av, char **envp)
 	add_token(&tokens, &tail, T_REDIRECT_IN, "<");
 	add_token(&tokens, &tail, T_WORD, "Makefile");
 	add_token(&tokens, &tail, T_WORD, "cat");
-	head = split_pipeline_groups(tokens);
+	head = prepare_pipeline_for_pipex(tokens);
 	free_token(tokens, -1, NULL, NULL);
-	if (!head)
+	if (head.config_node)
 	{
 		fprintf(stderr, "Error: failed to split pipeline\n");
 		return (EXIT_FAILURE);
 	}
 	cur = head;
-	print_exec_list(cur);
+	print_exec_list(&cur);
 	cur = head;
-	while (cur)
+	while (cur.config_node)
 	{
 		j = 0;
-		while (cur->group && cur->group[j])
+		while (cur.config_node->group && cur.config_node->group[j])
 			j++;
-		if (cur->group)
-			pipex(cur, j, cur->group, envp);
-		cur = cur->next;
+		if (cur.config_node->group)
+			pipex(cur.config_node, cur.cmd_argc, cur.cmd_argv, envp);
+		cur.config_node = cur.config_node->next;
 	}
-	free_exec(head, -1, NULL, NULL);
+	free_exec(head.config_node, -1, NULL, NULL);
 	return (0);
 }

@@ -9,7 +9,7 @@
 # PARSING_DIR = src/parsing
 # TESTS_DIR = test
 
-# # Core parsing source files to be tested
+# # Core parsing s// ... inside main loop, after getting expanded_tokens ...
 # PARSING_CORE_FILES = \
 #     string_builder.c \
 #     lexer.c \
@@ -79,6 +79,7 @@ SRC_EXEC =	src/exec/child_process.c			\
 			src/exec/pipex_bonus.c				\
 			src/exec/exec_one.c					\
 			src/exec/split_pipeline_group.c		\
+			src/exec/pipeline_preparer.c
 
 SRC_PARSING =	src/parsing/convert_token_list.c	\
 				src/parsing/error.c					\
