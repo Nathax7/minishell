@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:07:53 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/09 16:41:48 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/23 10:24:10 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,7 @@ void	open_infile(t_exec *exec, char *infile);
 void	open_infile_exec(t_exec *exec, char *infile);
 void	open_outfile(t_exec *exec, char *outfile, int mode);
 void	open_outfile_exec(t_exec *exec, char *outfile, int mode);
-
+t_exec	*find_last(t_exec *lst);
+t_exec	*find_first(t_exec *lst);
+int		find_size(t_token *lst);
 #endif

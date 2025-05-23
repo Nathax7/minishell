@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:36:22 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/21 16:56:15 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/23 09:55:17 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,15 +115,17 @@ typedef struct s_pipex
 
 typedef struct s_exec
 {
-    char            **group;        // NULL-terminated array of commands
-    char            *infile_name;   // input redirection (or NULL)
-    char            *outfile_name;  // output redirection (or NULL)
+    char            **group;
+    char            *infile_name;
+    char            *outfile_name;
 	int				infile;
 	int				outfile;
-    int             append;         // 1 if >>, 0 if >
+    int             append;
 	int				heredoc;
 	t_pipex			pipex;
-    struct s_exec   *next;          // next group node
+    struct s_exec   *next;
+    struct s_exec   *prev;
+
 }               t_exec;
 
 extern int g_exit_status; // For the shell's exit status

@@ -6,110 +6,136 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 16:56:23 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/21 17:14:49 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/23 13:59:32 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 
-static t_exec	*new_exec_node(void)
+static t_exec	*append_exec_node(t_exec **head)
 {
 	t_exec	*node;
+	t_exec	*last;
 
-	node = malloc(sizeof(t_exec));
+	node = malloc(sizeof(*node));
 	if (!node)
 		return (NULL);
 	node->group = NULL;
 	node->infile_name = NULL;
 	node->outfile_name = NULL;
+	node->infile = STDIN_FILENO;
+	node->outfile = STDOUT_FILENO;
 	node->append = 0;
 	node->heredoc = 0;
 	node->next = NULL;
+	node->prev = NULL;
+	if (!*head)
+		*head = node;
+	else
+	{
+		last = find_last(*head);
+		last->next = node;
+		node->prev = last;
+	}
 	return (node);
 }
 
-static int	is_token(const char *tok, const char *s)
-{
-	return (ft_strcmp(tok, s) == 0);
-}
+// static void	free_exec_list(t_exec *head)
+// {
+// 	t_exec	*next;
+
+// 	while (head)
+// 	{
+// 		next = head->next;
+// 		if (head->group)
+// 		{
+// 			for (int i = 0; head->group[i]; ++i)
+// 				free(head->group[i]);
+// 			free(head->group);
+// 		}
+// 		free(head);
+// 		head = next;
+// 	}
+// }
 
 static int	finalize_group_node(t_exec *node, char **cmds, int ncmd)
 {
-	int	i;
-
-	node->group = ft_calloc(ncmd + 1, sizeof(char *));
+	node->group = ft_calloc(ncmd + 1, sizeof(*node->group));
 	if (!node->group)
 		return (-1);
-	for (i = 0; i < ncmd; ++i)
+	for (int i = 0; i < ncmd; ++i)
+	{
 		node->group[i] = ft_strdup(cmds[i]);
+		if (!node->group[i])
+		{
+			while (i-- > 0)
+				free(node->group[i]);
+			free(node->group);
+			return (-1);
+		}
+	}
 	node->group[ncmd] = NULL;
 	return (0);
 }
 
-t_exec	*split_pipeline_groups(char **tokens)
+t_exec	*split_pipeline_groups(t_token *tokens)
 {
-	int		count;
-	int		i;
+	int		max;
+	char	**cmds;
 	t_exec	*head;
 	t_exec	*current;
-	char	**cmds;
 	int		ncmd;
 
-	count = 0;
-	head = NULL;
-	current = NULL;
-	ncmd = 0;
-	while (tokens[count])
-		count++;
-	if (count == 0)
+	max = find_size(tokens);
+	if (max <= 0)
 		return (NULL);
-	cmds = ft_calloc(count + 1, sizeof(char *));
+	cmds = ft_calloc(max + 1, sizeof(*cmds));
 	if (!cmds)
 		return (NULL);
-	head = new_exec_node();
-	if (!head)
-		return (free(cmds), NULL);
-	current = head;
-	i = 0;
-	while (i < count)
+	head = NULL;
+	current = append_exec_node(&head);
+	if (!current)
 	{
-		if ((is_token(tokens[i], "<") || is_token(tokens[i], "<<")) && i + 1 < count)
+		free(cmds);
+		return (NULL);
+	}
+	ncmd = 0;
+	while (tokens)
+	{
+		if ((tokens->type == T_REDIRECT_IN || tokens->type == T_HEREDOC)
+			&& tokens->next)
 		{
-			if (is_token(tokens[i], "<"))
-				current->heredoc = 0;
-			else
-				current->heredoc = 1;
-			current->infile_name = tokens[i + 1];
-			// open_infile_exec(current, current->infile_name);
-			i += 2;
+			current->heredoc = (tokens->type == T_HEREDOC);
+			tokens = tokens->next;
+			current->infile_name = tokens->value;
+			tokens = tokens->next;
 		}
-		else if ((is_token(tokens[i], ">") || is_token(tokens[i], ">>")) && i
-			+ 1 < count)
+		else if ((tokens->type == T_REDIRECT_OUT || tokens->type == T_APPEND)
+			&& tokens->next)
 		{
-			current->outfile_name = tokens[i + 1];
-			// open_outfile_exec(current, current->outfile_name, 0);
-			if (is_token(tokens[i], ">>"))
-				current->append = 1;
-			i += 2;
-			if (!(i < count && is_token(tokens[i], ">")))
+			current->append = (tokens->type == T_APPEND);
+			tokens = tokens->next;
+			current->outfile_name = tokens->value;
+			tokens = tokens->next;
+			if (!(tokens && (tokens->type == T_REDIRECT_OUT
+						|| tokens->type == T_APPEND)))
 			{
 				if (finalize_group_node(current, cmds, ncmd) < 0)
 					break ;
-				current->next = new_exec_node();
-				if (!current->next)
+				current = append_exec_node(&head);
+				if (!current)
 					break ;
-				current = current->next;
 				ncmd = 0;
 			}
 		}
-		else if (is_token(tokens[i], "|"))
+		else if (tokens->type == T_PIPE)
 		{
-			i++;
+			tokens = tokens->next;
 		}
 		else
 		{
-			cmds[ncmd++] = tokens[i];
-			i++;
+			cmds[ncmd++] = tokens->value;
+			tokens = tokens->next;
 		}
 	}
 	if (ncmd > 0)

@@ -93,10 +93,12 @@ SRC_UTILS =	src/utils/ft_close.c		\
 			src/utils/free_struct.c		\
 			src/utils/utils.c			\
 			src/utils/open.c			\
+			src/utils/find_last.c		\
+			src/utils/find_size.c		\
 
 
 
-SRC_ALL = $(SRC_EXEC) $(SRC_UTILS) $(SRC_PARSING) test/mainath.c
+SRC_ALL = $(SRC_EXEC) $(SRC_UTILS) test/mainath.c
 
 GREEN=\033[0;32m
 BLUE=\033[38;2;64;224;208m

@@ -1,23 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstlast.c                                       :+:      :+:    :+:   */
+/*   find_size.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/22 15:59:28 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/23 10:17:19 by nagaudey         ###   ########.fr       */
+/*   Created: 2025/05/23 10:22:17 by nagaudey          #+#    #+#             */
+/*   Updated: 2025/05/23 14:13:25 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "all.h"
+#include "../../includes/utils.h"
 
-t_list	*ft_lstlast(t_list *lst)
+int	find_size(t_token *lst)
 {
-	if (!lst)
-		return (NULL);
-	while (lst->next != NULL)
-		lst = lst->next;
-	return (lst);
-}
+	size_t	size;
 
+	size = 0;
+	while (lst)
+	{
+		lst = lst->next;
+		size++;
+	}
+	return (size);
+}
