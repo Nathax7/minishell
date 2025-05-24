@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:07:53 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/23 15:44:31 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/24 12:04:11 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	free_pipex(t_exec *exec, int status, char *str, char *str2);
 void	free_pipex_core(t_exec *exec);
 void	ft_close(t_exec *exec, t_type type);
 void	free_exec(t_exec *exec, int status, char *str, char *str2);
+t_exec *free_exec_list(t_exec *exec, char *str, char *str2);
 void	open_infile(t_exec *exec, char *infile);
 int	open_infile_exec(t_exec *exec, char *infile);
 void	open_outfile(t_exec *exec, char *outfile, int mode);

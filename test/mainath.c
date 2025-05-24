@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 20:47:28 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/24 11:38:27 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/24 12:10:26 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static t_token	*add_token(t_token **head, t_token **tail, t_token_type type,
 	return (node);
 }
 
-static void	print_exec_list(t_pipex_input *cur)
+static void	print_exec_list(t_exec *cur)
 {
 	int	i;
 	int j;
@@ -71,25 +71,25 @@ static void	print_exec_list(t_pipex_input *cur)
 	{
 		printf("Groupe %d : ", i);
 		j = 0;
-		while (cur->cmd_argv && cur->cmd_argv[j])
+		while (cur->group && cur->group[j])
 		{
-			printf("\"%s\" ", cur->cmd_argv[j]);
+			printf("\"%s\" ", cur->group[j]);
 			j++;
 		}
 		printf("\n");
 		printf("  infile: \"%s\"\n",
-			cur->config_node->infile_name ? cur->config_node->infile_name : "(none)");
+			cur->infile_name ? cur->infile_name : "(none)");
 		printf("  outfile: \"%s\"\n",
-			cur->config_node->outfile_name ? cur->config_node->outfile_name : "(none)");
-		cur->config_node = cur->config_node->next;
+			cur->outfile_name ? cur->outfile_name : "(none)");
+		cur = cur->next;
 		i++;
 	}
 }
 
 int	main(int ac, char **av, char **envp)
 {
-	t_pipex_input	head;
-	t_pipex_input	cur;
+	t_exec	*head;
+	t_exec	*cur;
 	t_token *tokens;
 	t_token *tail;
 	int j;
@@ -108,9 +108,9 @@ int	main(int ac, char **av, char **envp)
 	add_token(&tokens, &tail, T_REDIRECT_IN, "<");
 	add_token(&tokens, &tail, T_WORD, "Makefile");
 	add_token(&tokens, &tail, T_WORD, "cat");
-	head = prepare_pipeline_for_pipex(tokens);
+	head = split_pipeline_groups(tokens);
 	free_token(tokens, -1, NULL, NULL);
-	if (head.config_node)
+	if (!head->group)
 	{
 		fprintf(stderr, "Error: failed to split pipeline\n");
 		return (EXIT_FAILURE);
@@ -123,10 +123,10 @@ int	main(int ac, char **av, char **envp)
 		j = 0;
 		while (cur->group && cur->group[j])
 			j++;
-		if (cur.config_node->group)
-			pipex(cur.config_node, cur.cmd_argc, cur.cmd_argv, envp);
-		cur.config_node = cur.config_node->next;
+		if (cur->group)
+			pipex(cur, j, cur->group, envp);
+		cur = cur->next;
 	}
-	free_exec(head.config_node, -1, NULL, NULL);
+	free_exec(head, -1, NULL, NULL);
 	return (0);
 }

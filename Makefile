@@ -79,7 +79,6 @@ SRC_EXEC =	src/exec/child_process.c			\
 			src/exec/pipex_bonus.c				\
 			src/exec/exec_one.c					\
 			src/exec/split_pipeline_group.c		\
-			src/exec/pipeline_preparer.c
 
 SRC_PARSING =	src/parsing/convert_token_list.c	\
 				src/parsing/error.c					\
