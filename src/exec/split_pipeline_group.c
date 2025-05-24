@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 16:56:23 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/23 16:13:51 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/24 15:20:18 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,13 @@ static t_exec	*append_exec_node(t_exec **head)
 
 static int	finalize_group_node(t_exec *node, char **cmds, int ncmd)
 {
+	int	i;
+
+	i = 0;
 	node->group = ft_calloc(ncmd + 1, sizeof(*node->group));
 	if (!node->group)
 		return (-1);
-	for (int i = 0; i < ncmd; ++i)
+	while (i < ncmd)
 	{
 		node->group[i] = ft_strdup(cmds[i]);
 		if (!node->group[i])
@@ -73,6 +76,7 @@ static int	finalize_group_node(t_exec *node, char **cmds, int ncmd)
 			free(node->group);
 			return (-1);
 		}
+		i++;
 	}
 	node->group[ncmd] = NULL;
 	return (0);
@@ -137,13 +141,17 @@ t_exec	*split_pipeline_groups(t_token *tokens)
 		else if (tokens->type == T_PIPE)
 		{
 			tokens = tokens->next;
-			//ncmd++;
 		}
 		else
 		{
 			cmds[ncmd++] = tokens->value;
-			// cmds[ncmd++] = ft_strjoin_with_space(tokens->value);
 			tokens = tokens->next;
+			while (tokens->type == T_WORD)
+			{
+				cmds[ncmd - 1] = ft_strjoin_space(cmds[ncmd - 1],
+						tokens->value);
+				tokens = tokens->next;
+			}
 		}
 	}
 	if (ncmd > 0)
