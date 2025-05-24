@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:36:22 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/23 18:38:26 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/05/24 11:22:20 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,28 +129,15 @@ typedef struct s_exec
     struct s_exec   *prev;
 
 }               t_exec;
-
-typedef struct s_pipex_input
+typedef struct s_exec_list_builder_state
 {
-    t_exec	*config_node;
-    char	**cmd_argv;
-    int		cmd_argc;
-    int		status; // 1 for success, 0 for error
-}			t_pipex_input;
+	t_token		*current_token;
+	t_exec		*list_head;
+	t_exec		*current_exec_node;
+	t_list *temp_arg_list;
+	int build_status;
+}				t_exec_list_builder_state;
 
-// State for building pipex input
-typedef struct s_preparer_state
-{
-    t_token			*current_token;
-    t_str_builder	cmd_sb;          // For the current command string
-    t_list			*cmd_list_head;  // List of finalized command strings (char *)
-    char			*overall_infile; // Dup'd
-    int				overall_heredoc;
-    char			*overall_outfile; // Dup'd
-    int				overall_append;
-    int				is_first_segment; // To track if we are in the first command segment for infile
-    t_pipex_input	result;
-}					t_preparer_state;
 
 extern int g_exit_status; // For the shell's exit status
 extern volatile sig_atomic_t g_signal_received; // To flag if a signal was caught
