@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 20:47:28 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/23 16:05:13 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/24 11:15:00 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,7 @@ int	main(int ac, char **av, char **envp)
 	tokens = NULL;
 	tail = NULL;
 	add_token(&tokens, &tail, T_REDIRECT_IN, "<");
-	add_token(&tokens, &tail, T_WORD, "infile2");
-	add_token(&tokens, &tail, T_REDIRECT_IN, "<");
-	add_token(&tokens, &tail, T_WORD, "Makefe");
+	add_token(&tokens, &tail, T_WORD, "Makefile");
 	add_token(&tokens, &tail, T_WORD, "cat");
 	add_token(&tokens, &tail, T_REDIRECT_OUT, ">");
 	add_token(&tokens, &tail, T_WORD, "cat");
@@ -118,12 +116,6 @@ int	main(int ac, char **av, char **envp)
 		return (EXIT_FAILURE);
 	}
 	cur = head;
-	print_exec_list(cur);
-	cur = head;
-	while (cur)
-	{
-		j = 0;
-		while (cur->group && cur->group[j])
 			j++;
 		if (cur->group)
 			pipex(cur, j, cur->group, envp);
