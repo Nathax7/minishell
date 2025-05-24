@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 16:56:23 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/24 15:20:18 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/24 15:28:59 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ t_exec	*split_pipeline_groups(t_token *tokens)
 		{
 			cmds[ncmd++] = tokens->value;
 			tokens = tokens->next;
-			while (tokens->type == T_WORD)
+			if (tokens->type == T_WORD) // remplacer par un while
 			{
 				cmds[ncmd - 1] = ft_strjoin_space(cmds[ncmd - 1],
 						tokens->value);
