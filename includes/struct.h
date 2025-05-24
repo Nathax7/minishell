@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:36:22 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/23 09:55:17 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/24 11:22:20 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <limits.h>
+
 
 # define CHARSET "abcdefghijklmnopqrstuvwxyz"
 
@@ -127,6 +129,15 @@ typedef struct s_exec
     struct s_exec   *prev;
 
 }               t_exec;
+typedef struct s_exec_list_builder_state
+{
+	t_token		*current_token;
+	t_exec		*list_head;
+	t_exec		*current_exec_node;
+	t_list *temp_arg_list;
+	int build_status;
+}				t_exec_list_builder_state;
+
 
 extern int g_exit_status; // For the shell's exit status
 extern volatile sig_atomic_t g_signal_received; // To flag if a signal was caught
