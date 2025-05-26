@@ -91,7 +91,6 @@ SRC_PARSING =	src/parsing/convert_token_list.c	\
 
 SRC_UTILS =	src/utils/ft_close.c		\
 			src/utils/free_struct.c		\
-			src/utils/utils.c			\
 			src/utils/open.c			\
 			src/utils/find_last.c		\
 			src/utils/find_size.c		\
