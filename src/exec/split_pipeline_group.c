@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 16:56:23 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/26 14:57:44 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:53:33 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,8 @@ t_exec	*split_pipeline_groups(t_token *tokens)
 			current->outfile_name = ft_strdup(tokens->value);
 			open_outfile_exec(current, current->outfile_name, 0);
 			tokens = tokens->next;
-			if (!(tokens && (tokens->type == T_REDIRECT_OUT
-						|| tokens->type == T_APPEND)))
+			if (tokens && !(tokens->type == T_REDIRECT_OUT
+						|| tokens->type == T_APPEND))
 			{
 				if (finalize_group_node(current, cmds, ncmd) < 0)
 					break ;
@@ -140,22 +140,30 @@ t_exec	*split_pipeline_groups(t_token *tokens)
 		}
 		else if (tokens->type == T_PIPE)
 		{
+			ncmd++;
 			tokens = tokens->next;
 		}
 		else
 		{
-			cmds[ncmd++] = tokens->value;
-			tokens = tokens->next;
-			while (tokens && tokens->type == T_WORD) // remplacer par un while
+			while (tokens && tokens->type == T_WORD)
 			{
-				cmds[ncmd - 1] = ft_strjoin_space(cmds[ncmd - 1],
-						tokens->value);
-				tokens = tokens->next;
+				if (!cmds[ncmd])
+				{
+					cmds[ncmd] = strdup(tokens->value);
+					tokens = tokens->next;
+				}
+				else
+				{
+					cmds[ncmd] = ft_strjoin_space(cmds[ncmd],
+							tokens->value);
+					tokens = tokens->next;
+				}
 			}
 		}
 	}
-	if (ncmd > 0)
+	if (++ncmd > 0)
 		finalize_group_node(current, cmds, ncmd);
 	free(cmds);
 	return (head);
 }
+

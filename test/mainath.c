@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 20:47:28 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/26 15:00:48 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:56:02 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,13 +99,15 @@ int	main(int ac, char **av, char **envp)
 	tokens = NULL;
 	tail = NULL;
 	add_token(&tokens, &tail, T_WORD, "grep");
-	add_token(&tokens, &tail, T_WORD, "main");
+	add_token(&tokens, &tail, T_WORD, "pattern");
 	add_token(&tokens, &tail, T_REDIRECT_IN, "<");
-	add_token(&tokens, &tail, T_WORD, "test/main.c");
-	add_token(&tokens, &tail, T_WORD, "wc");
-	add_token(&tokens, &tail, T_WORD, "-l");
+	add_token(&tokens, &tail, T_WORD, "input.txt");
+	add_token(&tokens, &tail, T_PIPE, "|");
+	add_token(&tokens, &tail, T_WORD, "sort");
+	add_token(&tokens, &tail, T_PIPE, "|");
+	add_token(&tokens, &tail, T_WORD, "uniq");
 	add_token(&tokens, &tail, T_REDIRECT_OUT, ">");
-	add_token(&tokens, &tail, T_WORD, "result.txt");
+	add_token(&tokens, &tail, T_WORD, "output.txt");
 
 	head = split_pipeline_groups(tokens);
 	free_token(tokens, -1, NULL, NULL);
