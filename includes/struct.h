@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:36:22 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/24 12:08:44 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/27 16:20:55 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,12 @@ typedef struct s_exec
     struct s_exec   *prev;
 
 }               t_exec;
+
+typedef struct s_cmd {
+    char **cmds;
+    int ncmd;
+    int max;
+} t_cmd;
 
 extern int g_exit_status; // For the shell's exit status
 extern volatile sig_atomic_t g_signal_received; // To flag if a signal was caught

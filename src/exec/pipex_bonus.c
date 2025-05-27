@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:01:49 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/23 15:20:35 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:40:41 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,12 @@ int	usage(void)
 	ft_putstr_fd("\033[31mError: Bad argument\n\e[0m", 2);
 	ft_putstr_fd("Ex: ./pipex <file1> <cmd1> <cmd2> <...> <file2>\n", 1);
 	ft_putstr_fd("    ./pipex \"here_doc\" <LIMITER> <cmd> <cmd1>"
-					"<...> <file>\n",
-					1);
+		"<...> <file>\n", 1);
 	return (-1);
 }
 
 void	ft_parse(t_exec *exec)
 {
-	// if (ft_strncmp(av[0], "here_doc", 8) == 0)
-	// {
-	// 	if (ac < 5)
-	// 	{
-	// 		exec->exec->pipex.here_doc = 0;
-	// 		free_parent(exec, -1, NULL, NULL);
-	// 		usage();
-	// 	}
 	if (exec->append == 1)
 	{
 		if (exec->infile_name != NULL)

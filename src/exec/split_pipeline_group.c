@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 16:56:23 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/26 19:13:04 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:39:15 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,160 +40,172 @@ static t_exec	*append_exec_node(t_exec **head)
 	return (node);
 }
 
-// static void	free_exec_list(t_exec *head)
-// {
-// 	t_exec	*next;
-
-// 	while (head)
-// 	{
-// 		next = head->next;
-// 		if (head->group)
-// 		{
-// 			for (int i = 0; head->group[i]; ++i)
-// 				free(head->group[i]);
-// 			free(head->group);
-// 		}
-// 		free(head);
-// 		head = next;
-// 	}
-// }
-
-static int	finalize_group_node(t_exec *node, char **cmds, int ncmd)
+static void	free_cmd(t_cmd *cmd)
 {
 	int	i;
 
 	i = 0;
-	node->group = ft_calloc(ncmd + 1, sizeof(*node->group));
-	if (!node->group)
-		return (-1);
-	while (i < ncmd)
+	while (i < cmd->max)
 	{
-		node->group[i] = ft_strdup(cmds[i]);
-		if (!node->group[i])
+		if (cmd->cmds[i])
 		{
-			while (i-- > 0)
-				free(node->group[i]);
-			free(node->group);
-			return (-1);
+			free(cmd->cmds[i]);
+			cmd->cmds[i] = NULL;
 		}
 		i++;
 	}
-	node->group[ncmd] = NULL;
+	free(cmd->cmds);
+}
+
+static int	finalize_group_node(t_exec **node, char **cmds, int ncmd)
+{
+	int	i;
+
+	i = 0;
+	(*node)->group = ft_calloc(ncmd + 1, sizeof(*(*node)->group));
+	if (!(*node)->group)
+		return (1);
+	while (i < ncmd)
+	{
+		(*node)->group[i] = ft_strdup(cmds[i]);
+		if (!(*node)->group[i])
+		{
+			while (i-- > 0)
+				free((*node)->group[i]);
+			free((*node)->group);
+			return (1);
+		}
+		i++;
+	}
+	(*node)->group[ncmd] = NULL;
 	return (0);
 }
 
-static int add_to_cmds(char **cmds, int ncmd, const char *value)
+static int	add_to_cmds(char **cmds, int ncmd, const char *value)
 {
-	char *tmp;
+	char	*tmp;
 
 	if (!cmds[ncmd])
 	{
 		cmds[ncmd] = ft_strdup(value);
 		if (!cmds[ncmd])
-			return (-1);
+			return (1);
 	}
 	else
 	{
 		tmp = ft_strjoin_space(cmds[ncmd], value);
 		if (!tmp)
-			return (-1);
+			return (1);
 		free(cmds[ncmd]);
 		cmds[ncmd] = tmp;
 	}
 	return (0);
 }
 
+void	handle_input(t_token **tokens, t_exec **current)
+{
+	if ((*current)->infile_name)
+		free((*current)->infile_name);
+	(*current)->heredoc = ((*tokens)->type == T_HEREDOC);
+	(*tokens) = (*tokens)->next;
+	(*current)->infile_name = ft_strdup((*tokens)->value);
+	open_infile_exec(*current, (*current)->infile_name);
+	(*tokens) = (*tokens)->next;
+}
+
+void	handle_output(t_token **tokens, t_exec **current)
+{
+	if ((*current)->outfile_name)
+		free((*current)->outfile_name);
+	(*current)->append = ((*tokens)->type == T_APPEND);
+	(*tokens) = (*tokens)->next;
+	(*current)->outfile_name = ft_strdup((*tokens)->value);
+	open_outfile_exec(*current, (*current)->outfile_name, 0);
+	(*tokens) = (*tokens)->next;
+}
+
+int	handle_infile(t_token **tokens, t_exec **current, t_exec **head, t_cmd *cmd)
+{
+	if ((*current)->outfile_name)
+	{
+		if (finalize_group_node(current, cmd->cmds, cmd->ncmd + 1))
+			return (1);
+		(*current) = append_exec_node(head);
+		if (!(*current))
+			return (1);
+		cmd->ncmd = 0;
+		(*tokens) = (*tokens)->next;
+		while ((*tokens) && (*tokens)->type == T_WORD)
+		{
+			if (add_to_cmds(cmd->cmds, cmd->ncmd, (*tokens)->value))
+				return (1);
+			(*tokens) = (*tokens)->next;
+		}
+	}
+	return (0);
+}
+
+int	handle_word(t_token **tokens, t_cmd *cmd)
+{
+	while ((*tokens) && (*tokens)->type == T_WORD)
+	{
+		if (add_to_cmds(cmd->cmds, cmd->ncmd, (*tokens)->value))
+			return (1);
+		(*tokens) = (*tokens)->next;
+	}
+	return (0);
+}
+
+t_exec	*parse_loop(t_token **tokens, t_exec **current, t_exec **head,
+		t_cmd *cmd)
+{
+	while (*tokens)
+	{
+		if (((*tokens)->type == T_REDIRECT_IN || (*tokens)->type == T_HEREDOC)
+			&& (*tokens)->next)
+			handle_input(tokens, current);
+		else if (((*tokens)->type == T_REDIRECT_OUT
+				|| (*tokens)->type == T_APPEND) && (*tokens)->next)
+			handle_output(tokens, current);
+		else if ((*tokens)->type == T_PIPE)
+		{
+			if (handle_infile(tokens, current, head, cmd))
+				break ;
+			else
+			{
+				cmd->ncmd++;
+				(*tokens) = (*tokens)->next;
+			}
+		}
+		else if (handle_word(tokens, cmd))
+			break ;
+	}
+	if (++cmd->ncmd > 0)
+		finalize_group_node(current, cmd->cmds, cmd->ncmd);
+	return (*head);
+}
+
 t_exec	*split_pipeline_groups(t_token *tokens)
 {
-	int		max;
-	char	**cmds;
+	t_cmd	cmd;
 	t_exec	*head;
 	t_exec	*current;
-	int		ncmd;
 
-	max = find_size(tokens);
-	if (max <= 0)
+	cmd.max = find_size(tokens);
+	if (cmd.max <= 0)
 		return (NULL);
-	cmds = ft_calloc(max + 1, sizeof(*cmds));
-	if (!cmds)
+	cmd.cmds = ft_calloc(cmd.max + 1, sizeof(*cmd.cmds));
+	if (!cmd.cmds)
 		return (NULL);
 	head = NULL;
 	current = append_exec_node(&head);
 	if (!current)
 	{
-		free(cmds);
+		free(cmd.cmds);
 		return (NULL);
 	}
-	ncmd = 0;
-	while (tokens)
-	{
-		if ((tokens->type == T_REDIRECT_IN || tokens->type == T_HEREDOC)
-			&& tokens->next)
-		{
-			if (current->infile_name)
-				free(current->infile_name);
-			current->heredoc = (tokens->type == T_HEREDOC);
-			tokens = tokens->next;
-			current->infile_name = ft_strdup(tokens->value);
-			open_infile_exec(current, current->infile_name);
-			tokens = tokens->next;
-		}
-		else if ((tokens->type == T_REDIRECT_OUT || tokens->type == T_APPEND)
-			&& tokens->next)
-		{
-			if (current->outfile_name)
-				free(current->outfile_name);
-			current->append = (tokens->type == T_APPEND);
-			tokens = tokens->next;
-			current->outfile_name = ft_strdup(tokens->value);
-			open_outfile_exec(current, current->outfile_name, 0);
-			tokens = tokens->next;
-		}
-		else if (tokens->type == T_PIPE)
-		{
-			if (current->outfile_name)
-			{
-				if (finalize_group_node(current, cmds, ncmd + 1) < 0)
-					break ;
-				// while (i <= ncmd)
-				// {
-				//     if (cmds[i])
-				//     {
-				//         free(cmds[i]);
-				//         cmds[i] = NULL;
-				//     }
-				// 	i++;
-				// }
-				current = append_exec_node(&head);
-				if (!current)
-					break ;
-				ncmd = 0;
-				tokens = tokens->next;
-				while (tokens && tokens->type == T_WORD)
-				{
-					if (add_to_cmds(cmds, ncmd, tokens->value) < 0)
-						break;
-					tokens = tokens->next;
-				}
-			}
-			else
-			{
-				ncmd++;
-				tokens = tokens->next;
-			}
-		}
-		else
-		{
-			while (tokens && tokens->type == T_WORD)
-			{
-				if (add_to_cmds(cmds, ncmd, tokens->value) < 0)
-					break;
-				tokens = tokens->next;
-			}
-		}
-	}
-	if (++ncmd > 0)
-		finalize_group_node(current, cmds, ncmd);
-	free(cmds);
+	cmd.ncmd = 0;
+	head = parse_loop(&tokens, &current, &head, &cmd);
+	free_cmd(&cmd);
 	return (head);
 }

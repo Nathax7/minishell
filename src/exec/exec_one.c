@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 16:03:21 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/23 16:32:49 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:40:01 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,4 @@ void	exec_one(t_exec *exec, char *argv, char **envp)
 		close(exec->pipex.infile);
 		execute_bonus(exec, argv, envp);
 	}
-}	
+}
