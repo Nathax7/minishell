@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:01:49 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/27 19:40:41 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/27 21:36:41 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,16 @@ void	ft_parse(t_exec *exec)
 	}
 }
 
+void check_cmds(t_exec *exec, char *av)
+{
+	exec->pipex.cmd_args = ft_split(av, ' ');
+	if (exec->pipex.cmd_args[0] == NULL)
+		free_pipex(exec, 127, av, "Command not found");
+	find_path(exec, exec->pipex.cmd_args[0]);
+	if (!exec->pipex.cmd)
+		free_pipex(exec, 127, exec->pipex.cmd_args[0], "Command not found");
+}
+
 int	pipex(t_exec *exec, int ac, char **av, char **envp)
 {
 	if (ac < 1)
@@ -49,6 +59,10 @@ int	pipex(t_exec *exec, int ac, char **av, char **envp)
 	exec->pipex.pids = malloc(sizeof(pid_t) * ac);
 	if (!exec->pipex.pids)
 		free_pipex(exec, -1, "pipex: malloc: %s\n", strerror(errno));
+	if (ac > 1)
+		while (++exec->pipex.i < ac)
+			check_cmds(exec, av[exec->pipex.i]);
+	exec->pipex.i = -1;
 	if (ac > 1)
 		while (++exec->pipex.i < ac)
 			child_process(exec, av[exec->pipex.i], envp);

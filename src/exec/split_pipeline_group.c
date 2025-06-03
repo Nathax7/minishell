@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 16:56:23 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/27 19:39:15 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/28 16:56:47 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,12 +129,18 @@ int	handle_infile(t_token **tokens, t_exec **current, t_exec **head, t_cmd *cmd)
 	if ((*current)->outfile_name)
 	{
 		if (finalize_group_node(current, cmd->cmds, cmd->ncmd + 1))
-			return (1);
+		return (1);
 		(*current) = append_exec_node(head);
 		if (!(*current))
-			return (1);
+		return (1);
 		cmd->ncmd = 0;
 		(*tokens) = (*tokens)->next;
+		if (((*tokens)->type == T_REDIRECT_IN || (*tokens)->type == T_HEREDOC)
+			&& (*tokens)->next)
+			handle_input(tokens, current);
+		else if (((*tokens)->type == T_REDIRECT_OUT
+				|| (*tokens)->type == T_APPEND) && (*tokens)->next)
+			handle_output(tokens, current);
 		while ((*tokens) && (*tokens)->type == T_WORD)
 		{
 			if (add_to_cmds(cmd->cmds, cmd->ncmd, (*tokens)->value))

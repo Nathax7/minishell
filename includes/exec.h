@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 15:12:21 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/24 12:09:12 by nagaudey         ###   ########.fr       */
+/*   Created: 2025/05/27 21:46:37 by nagaudey          #+#    #+#             */
+/*   Updated: 2025/05/27 21:47:58 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_exec	*split_pipeline_groups(t_token *tokens);
 void	child_process(t_exec *exec, char *argv, char **envp);
 void	here_doc(t_exec *exec, char *limiter);
 void	pipex_init(t_exec *exec, char **envp);
+void	find_path(t_exec *exec, char *cmd);
 void	execute_bonus(t_exec *exec, char *argv, char **envp);
 int		pipex(t_exec *exec, int ac, char **av, char **envp);
 void	exec_one(t_exec *exec, char *argv, char **envp);

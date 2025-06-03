@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 20:47:28 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/27 19:03:23 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/28 16:55:56 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,20 +96,27 @@ int	main(int ac, char **av, char **envp)
 	t_token *tokens;
 	t_token *tail;
 	int j;
+	int status;
 
 	(void)ac;
 	(void)av;
 	tokens = NULL;
 	tail = NULL;
-    add_token(&tokens, &tail, T_REDIRECT_IN, "<");
-    add_token(&tokens, &tail, T_WORD, "test/mainath.c");
-    add_token(&tokens, &tail, T_WORD, "main");
-    add_token(&tokens, &tail, T_PIPE, "main");
-    add_token(&tokens, &tail, T_WORD, "wc");
-    add_token(&tokens, &tail, T_WORD, "-l");
-    add_token(&tokens, &tail, T_REDIRECT_OUT, ">");
-    add_token(&tokens, &tail, T_WORD, "result.txt");
 
+	add_token(&tokens, &tail, T_REDIRECT_IN, "<");
+	add_token(&tokens, &tail, T_WORD, "Makefile");
+    add_token(&tokens, &tail, T_WORD, "cat");
+    add_token(&tokens, &tail, T_PIPE, "|");
+    add_token(&tokens, &tail, T_WORD, "cat");
+	add_token(&tokens, &tail, T_REDIRECT_OUT, ">");
+    add_token(&tokens, &tail, T_WORD, "out2");
+	add_token(&tokens, &tail, T_REDIRECT_IN, "<");
+	add_token(&tokens, &tail, T_WORD, "Makefile");
+    add_token(&tokens, &tail, T_WORD, "cat");
+	add_token(&tokens, &tail, T_REDIRECT_OUT, ">");
+    add_token(&tokens, &tail, T_WORD, "out");
+
+	// // quand y'a | > bash skip tout ce qu'il y avait avant (mais pas toujours)
 
 	head = split_pipeline_groups(tokens);
 	free_token(tokens, -1, NULL, NULL);
@@ -125,11 +132,14 @@ int	main(int ac, char **av, char **envp)
 	{
 		j = 0;
 		while (cur->group && cur->group[j])
-			j++;
+		j++;
 		if (cur->group)
-			pipex(cur, j, cur->group, envp);
+		status = pipex(cur, j, cur->group, envp);
+		// verifier si les cmds sont not found dans chaque groupe et ne pas lancer le grp si c'est le cas
+		// if (status == 127)
+		// 	break;
 		cur = cur->next;
 	}
 	free_exec(head, -1, NULL, NULL);
-	return (0);
+	return (status);
 }
