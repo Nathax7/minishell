@@ -1,27 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstclear_bonus.c                                :+:      :+:    :+:   */
+/*   find_first.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/15 15:06:20 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/22 15:47:01 by almeekel         ###   ########.fr       */
+/*   Created: 2025/05/22 16:00:28 by almeekel          #+#    #+#             */
+/*   Updated: 2025/05/23 14:13:21 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "all.h"
+#include "../includes/utils.h"
 
-void	ft_lstclear(t_list **lst, void (*del)(void *))
+t_exec	*find_first(t_exec *lst)
 {
-	t_list	*temp;
-
-	while (*lst)
-	{
-		temp = (*lst)->next;
-		del((*lst)->content);
-		free (*lst);
-		(*lst) = temp;
-	}
-	*lst = NULL;
+	if (!lst)
+		return (NULL);
+	while (lst->prev != NULL)
+		lst = lst->prev;
+	return (lst);
 }

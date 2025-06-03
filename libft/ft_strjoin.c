@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 14:21:27 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/03/26 21:33:35 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/05/24 14:59:35 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 	if (!s1 || !s2)
 		return (NULL);
-	i = ft_strlen(s1);
-	j = ft_strlen(s2);
-	array = (char *)malloc(sizeof(char) * (i + j) + 1);
+	array = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)) + 1);
 	if (!array)
 		return (NULL);
 	j = 0;

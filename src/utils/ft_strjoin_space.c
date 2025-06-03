@@ -1,19 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_front_bonus.c                            :+:      :+:    :+:   */
+/*   ft_strjoin_space.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/14 15:27:02 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/02/06 17:47:23 by nagaudey         ###   ########.fr       */
+/*   Created: 2024/11/12 14:21:27 by nagaudey          #+#    #+#             */
+/*   Updated: 2025/05/24 14:55:19 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
 
-void	ft_lstadd_front(t_list **lst, t_list *new)
+char	*ft_strjoin_space(char const *s1, char const *s2)
 {
-	new->next = *lst;
-	*lst = new;
+	int		i;
+	int		j;
+	char	*array;
+
+	if (!s1 || !s2)
+		return (NULL);
+	array = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)) + 2);
+	if (!array)
+		return (NULL);
+	j = 0;
+	i = 0;
+	while (s1[i])
+	{
+		array[i] = s1[i];
+		i++;
+	}
+	array[i] = ' ';
+	i++;
+	while (s2[j])
+	{
+		array[i + j] = s2[j];
+		j++;
+	}
+	array[i + j] = '\0';
+	return (array);
 }

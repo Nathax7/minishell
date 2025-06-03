@@ -1,27 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstclear_bonus.c                                :+:      :+:    :+:   */
+/*   find_size.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/15 15:06:20 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/22 15:47:01 by almeekel         ###   ########.fr       */
+/*   Created: 2025/05/23 10:22:17 by nagaudey          #+#    #+#             */
+/*   Updated: 2025/05/23 14:13:25 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "all.h"
+#include "../../includes/utils.h"
 
-void	ft_lstclear(t_list **lst, void (*del)(void *))
+int	find_size(t_token *lst)
 {
-	t_list	*temp;
+	size_t	size;
 
-	while (*lst)
+	size = 0;
+	while (lst)
 	{
-		temp = (*lst)->next;
-		del((*lst)->content);
-		free (*lst);
-		(*lst) = temp;
+		lst = lst->next;
+		size++;
 	}
-	*lst = NULL;
+	return (size);
 }

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/20 20:29:01 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/09 16:42:41 by nagaudey         ###   ########.fr       */
+/*   Created: 2025/05/26 20:48:14 by nagaudey          #+#    #+#             */
+/*   Updated: 2025/05/26 20:48:20 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,3 @@ void ft_close(t_exec *exec, t_type type)
 	if (ret == -1)
 		free_pipex(exec, 1, NULL, "Error close");
 }
-
-

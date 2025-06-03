@@ -1,27 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstclear_bonus.c                                :+:      :+:    :+:   */
+/*   ft_lstlast_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/15 15:06:20 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/22 15:47:01 by almeekel         ###   ########.fr       */
+/*   Created: 2024/11/14 19:47:43 by nagaudey          #+#    #+#             */
+/*   Updated: 2025/02/06 17:47:23 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
 
-void	ft_lstclear(t_list **lst, void (*del)(void *))
+t_list	*ft_lstlast(t_list *lst)
 {
-	t_list	*temp;
-
-	while (*lst)
-	{
-		temp = (*lst)->next;
-		del((*lst)->content);
-		free (*lst);
-		(*lst) = temp;
-	}
-	*lst = NULL;
+	while (lst->next != NULL)
+		lst = lst->next;
+	return (lst);
 }

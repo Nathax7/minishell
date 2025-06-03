@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/21 18:36:22 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/15 20:40:50 by nagaudey         ###   ########.fr       */
+/*   Created: 2025/05/27 21:47:15 by nagaudey          #+#    #+#             */
+/*   Updated: 2025/05/27 21:47:25 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <limits.h>
+
 
 # define CHARSET "abcdefghijklmnopqrstuvwxyz"
 
@@ -103,8 +105,6 @@ typedef struct s_pipex
 	char			*path;
 	int				infile;
 	int				outfile;
-	char			*infile_name;
-	char			*outfile_name;
 	int				fd[2];
 	int				status;
 	int				here_doc;
@@ -117,16 +117,24 @@ typedef struct s_pipex
 
 typedef struct s_exec
 {
-    char            **group;        // NULL-terminated array of commands
-    char            *infile_name;   // input redirection (or NULL)
-    char            *outfile_name;  // output redirection (or NULL)
+    char            **group;
+    char            *infile_name;
+    char            *outfile_name;
 	int				infile;
 	int				outfile;
-    int             append;         // 1 if >>, 0 if >
+    int             append;
 	int				heredoc;
 	t_pipex			pipex;
-    struct s_exec   *next;          // next group node
+    struct s_exec   *next;
+    struct s_exec   *prev;
+
 }               t_exec;
+
+typedef struct s_cmd {
+    char **cmds;
+    int ncmd;
+    int max;
+} t_cmd;
 
 extern int g_exit_status; // For the shell's exit status
 extern volatile sig_atomic_t g_signal_received; // To flag if a signal was caught

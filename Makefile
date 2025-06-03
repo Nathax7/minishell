@@ -9,7 +9,7 @@
 # PARSING_DIR = src/parsing
 # TESTS_DIR = test
 
-# # Core parsing source files to be tested
+# # Core parsing s// ... inside main loop, after getting expanded_tokens ...
 # PARSING_CORE_FILES = \
 #     string_builder.c \
 #     lexer.c \
@@ -91,12 +91,15 @@ SRC_PARSING =	src/parsing/convert_token_list.c	\
 
 SRC_UTILS =	src/utils/ft_close.c		\
 			src/utils/free_struct.c		\
-			src/utils/utils.c			\
 			src/utils/open.c			\
+			src/utils/find_last.c		\
+			src/utils/find_size.c		\
+			src/utils/find_first.c		\
+			src/utils/ft_strjoin_space.c \
 
 
 
-SRC_ALL = $(SRC_EXEC) $(SRC_UTILS) $(SRC_PARSING) test/mainath.c
+SRC_ALL = $(SRC_EXEC) $(SRC_UTILS) test/mainath.c
 
 GREEN=\033[0;32m
 BLUE=\033[38;2;64;224;208m
