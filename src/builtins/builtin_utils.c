@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 16:10:01 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/04 14:50:18 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/05 17:02:15 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "../../includes/builtins.h"
 
 static int	is_valid_var_name(const char *name)
 {
@@ -69,7 +69,7 @@ char	*find_env_var(char **envp, const char *name)
 {
 	int		i;
 	size_t	name_len;
-
+	argv
 	if (!envp || !name)
 		return (NULL);
 	name_len = ft_strlen(name);
@@ -186,3 +186,4 @@ void	free_char_array(char **array)
 	}
 	free(array);
 }
+
