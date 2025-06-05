@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 16:10:01 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/05 17:02:15 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/05 17:56:41 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	*find_env_var(char **envp, const char *name)
 {
 	int		i;
 	size_t	name_len;
-	argv
+
 	if (!envp || !name)
 		return (NULL);
 	name_len = ft_strlen(name);
