@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:44:30 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/27 15:56:08 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/04 18:21:16 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,4 @@ int	handle_greater_operator(const char **line, t_token **head)
 	if (!op_val)
 		return (0);
 	return (create_and_append_token(head, op_val, type, Q_NONE));
-}
-
-int	cleanup_and_return_zero(t_token **head)
-{
-	free_token_list(*head);
-	*head = NULL;
-	return (0);
 }

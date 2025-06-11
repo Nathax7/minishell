@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:20:16 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/26 17:55:37 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/11 16:55:46 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,20 @@ static void	write_heredoc_line(int fd, char *line, int should_expand,
 	if (should_expand)
 	{
 		expanded = expand_variables_in_str(line, Q_DOUBLE, envp, exit_status);
-		ft_putendl_fd(expanded ? expanded : line, fd);
-		free(expanded);
+		if (expanded)
+		{
+			ft_putendl_fd(expanded, fd);
+			free(expanded);
+		}
+		else
+		{
+			ft_putendl_fd(line, fd);
+		}
 	}
 	else
+	{
 		ft_putendl_fd(line, fd);
+	}
 }
 
 static int	is_delimiter_quoted(t_token *delimiter)
@@ -57,23 +66,18 @@ char	*process_heredoc(t_token *delimiter, char **envp, int exit_status)
 	temp_file = create_temp_file();
 	if (!temp_file)
 		return (NULL);
-	fd = open(temp_file, O_WRONLY | O_TRUNC);
+	fd = open(temp_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
-		return (free(temp_file), NULL);
+		return (cleanup_and_return_char(NULL, -1, temp_file, 0));
 	should_expand = !is_delimiter_quoted(delimiter);
-	while ((line = secure_readline("heredoc> ")))
+	while ((line = readline("heredoc> ")))
 	{
+		if (g_signal_test == 130)
+			return (cleanup_and_return_char(line, fd, temp_file, 0));
 		if (ft_strcmp(line, delimiter->value) == 0)
-		{
-			free(line);
-			close(fd);
-			return (temp_file);
-		}
+			return (cleanup_and_return_char(line, fd, temp_file, 1));
 		write_heredoc_line(fd, line, should_expand, envp, exit_status);
 		free(line);
 	}
-	close(fd);
-	unlink(temp_file);
-	free(temp_file);
-	return (NULL);
+	return (cleanup_and_return_char(line, fd, temp_file, 1));
 }

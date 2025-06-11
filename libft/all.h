@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 17:37:52 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/22 16:08:14 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/08 20:36:41 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,19 +53,20 @@ void				*ft_memmove(void *dest, const void *src, size_t n);
 void				*ft_memchr(const void *s, int c, size_t n);
 int					ft_memcmp(const void *s1, const void *s2, size_t n);
 void				*ft_calloc(size_t nmemb, size_t size);
-char				*ft_strjoin_free_c(char *s1, char c);
-char				*ft_strjoin_free(char *s1, const char *s2);
+char				*ft_strjoin_free(char *s1, char *s2, int free_flag);
 
 // String Manipulation
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 void				ft_strmcpy(char *dest, char *src);
 char				*ft_strjoin(char const *s1, char const *s2);
 char				*ft_strtrim(char const *s1, char const *set);
+char				*ft_strjoin_space(char const *s1, char const *s2);
 char				**ft_split(char const *s, char c);
 char				*ft_itoa(int n);
 char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 void				ft_striteri(char *s, void (*f)(unsigned int, char *));
 char				**ft_freesplit(char **str);
+int					ft_freesplit_int(char **str, int return_val);
 
 // File Descriptor Writing
 void				ft_putchar_fd(char c, int fd);
@@ -90,8 +91,8 @@ void				ft_lstadd_back(t_list **lst, t_list *new);
 t_list				*ft_lstlast(t_list *lst);
 t_list				*ft_lstnew(char *content);
 
-	// ft_printf function
-	size_t ft_len_putaddress(void *ptr);
+// ft_printf function
+size_t				ft_len_putaddress(void *ptr);
 int					ft_len_putchar(unsigned char c);
 size_t				ft_len_putnbr_hex(unsigned int nbr, int flag);
 int					ft_len_putnbr(int nb);
@@ -110,6 +111,7 @@ size_t				len_uputnbr_error(unsigned int nb);
 int					ft_printf_error(int exit, const char *format, ...);
 int					iterative_count_error(unsigned int nbr);
 int					exit_error(int status);
+int					ft_isspace(int c);
 
 // get_next_line functions
 # ifndef BUFFER_SIZE

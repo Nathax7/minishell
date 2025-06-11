@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 21:39:08 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/29 16:55:04 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/04 18:28:23 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,9 @@ int	create_and_append_token(t_token **head, char *value, t_token_type type,
 	return (1);
 }
 
-int	is_whitespace(char c)
-{
-	return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f'
-		|| c == '\r');
-}
-
 int	is_word_char(char c)
 {
-	if (is_whitespace(c) || c == '|' || c == '<' || c == '>' || c == '\0')
+	if (ft_isspace(c) || is_operator_start(c) || c == '\0')
 		return (0);
 	return (1);
 }
@@ -88,4 +82,3 @@ int	is_operator_start(char c)
 {
 	return (c == '|' || c == '<' || c == '>');
 }
-

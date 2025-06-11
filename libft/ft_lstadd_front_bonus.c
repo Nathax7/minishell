@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstadd_front_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 15:27:02 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/02/06 17:47:23 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/04/20 18:40:09 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 18:11:15 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/29 16:33:25 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:09:51 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ static int	process_word_expansion(t_token *token, t_token **expanded_head,
 		if (!fields)
 			return (0);
 		if (!add_expanded_tokens(fields, expanded_head))
-			return (free_char_array(fields), 0);
-		free_char_array(fields);
+			return (ft_freesplit_int(fields, 0));
+		ft_freesplit(fields);
 	}
 	else
 	{

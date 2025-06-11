@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:36:09 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/27 20:04:15 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/11 16:55:46 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	process_quoted_section(const char **line, char quote_char)
 
 int	has_unclosed_quotes(const char *line)
 {
-	while (*line)
+	while (line && *line)
 	{
 		if (*line == '\'' || *line == '"')
 		{
@@ -71,13 +71,20 @@ int	handle_quote_continuation(char **line)
 	char	*new_line;
 	char	*updated_line;
 
-	new_line = secure_readline(get_continuation_prompt(PROMPT_QUOTE));
-	if (!new_line)
+	new_line = readline(get_continuation_prompt(PROMPT_QUOTE));
+	if (!new_line || g_signal_test == 130)
+	{
+		if (new_line)
+			free(new_line);
+		free(*line);
+		*line = NULL;
 		return (0);
-	updated_line = accumulate_input(*line, new_line);
+	}
+	updated_line = ft_strjoin_space(*line, new_line);
 	free(new_line);
 	if (!updated_line)
 		return (0);
+	free(*line);
 	*line = updated_line;
 	return (1);
 }

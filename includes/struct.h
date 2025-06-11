@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/27 21:47:15 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/27 21:47:25 by nagaudey         ###   ########.fr       */
+/*   Created: 2025/04/21 18:36:22 by almeekel          #+#    #+#             */
+/*   Updated: 2025/06/11 16:55:46 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,52 @@
 # include "../libft/all.h"
 # include <errno.h>
 # include <fcntl.h>
+# include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <string.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <limits.h>
-
 
 # define CHARSET "abcdefghijklmnopqrstuvwxyz"
 
-// struct to build a string in the second phase of parsing
+typedef enum e_parse_status
+{
+	PARSE_OK,
+	PARSE_SYNTAX_ERROR,
+	PARSE_INCOMPLETE_PIPE,
+	PARSE_INCOMPLETE_REDIR,
+	PARSE_INCOMPLETE_HEREDOC,
+	PARSE_INCOMPLETE_QUOTE,
+	PARSE_MEMORY_ERROR
+}					t_parse_status;
+
+typedef enum e_parse_result
+{
+	PARSE_ERROR = -1,
+	PARSE_CONTINUE = 0,
+	PARSE_SUCCESS = 1
+}					t_parse_result;
+
+typedef enum e_prompt_type
+{
+	PROMPT_MAIN,
+	PROMPT_PIPE,
+	PROMPT_QUOTE,
+	PROMPT_REDIR,
+	PROMPT_HEREDOC
+}					t_prompt_type;
+typedef enum e_parser_state
+{
+	STATE_START,
+	STATE_EXPECT_COMMAND,
+	STATE_EXPECT_ARG,
+	STATE_EXPECT_FILENAME
+}					e_parser_state;
+
 typedef struct s_str_builder
 {
 	char			*str;
@@ -36,7 +69,6 @@ typedef struct s_str_builder
 	size_t			capacity;
 }					t_str_builder;
 
-//tokenization struct
 typedef enum e_token_type
 {
 	T_WORD,
@@ -47,7 +79,29 @@ typedef enum e_token_type
 	T_HEREDOC
 }					t_token_type;
 
-//typing struct
+typedef enum e_quote
+{
+	Q_NONE,
+	Q_SINGLE,
+	Q_DOUBLE,
+	Q_MIXED
+}					t_quote;
+
+typedef struct s_token
+{
+	char			*value;
+	t_token_type	type;
+	t_quote			quote;
+	struct s_token	*next;
+}					t_token;
+typedef struct s_syntax_result
+{
+	t_parse_status	status;
+	t_prompt_type	next_prompt;
+	char			*error_token;
+	t_token			*tokens;
+}					t_syntax_result;
+
 typedef enum e_type
 {
 	CMD,
@@ -59,37 +113,6 @@ typedef enum e_type
 	FD1
 }					t_type;
 
-//quote-typing struct
-typedef enum e_quote
-{
-	Q_NONE,
-	Q_SINGLE,
-	Q_DOUBLE
-}					t_quote;
-
-// NEW: Structure for a segment within a T_WORD token
-// This structure will hold parts of a word, like 'abc' or "def" or $VAR
-// from an input like abc"def"$VAR
-typedef struct s_word_segment
-{
-	char					*value;     // Literal value of this segment (content *within* quotes, or unquoted part)
-	t_quote					quote_type; // Original quoting style of this segment (Q_NONE, Q_SINGLE, Q_DOUBLE)
-	struct s_word_segment	*next;
-}							t_word_segment;
-
-// list used during tokenization
-typedef struct s_token
-{
-	char			*value;          // For operators, or for T_WORD *after* expansion and segment concatenation
-	t_token_type	type;
-	t_quote			quote;           // For operators (Q_NONE). For T_WORD *after* expansion (Q_NONE).
-                                     // This field is less relevant for raw T_WORD tokens from the lexer.
-	t_word_segment	*segments;       // For T_WORD tokens from the lexer: a list of its constituent parts.
-                                     // Set to NULL for operators, or for T_WORD after expansion.
-	struct s_token	*next;
-}					t_token;
-
-// enum to indicate the presence of an env
 typedef enum e_env
 {
 	NO_ENV,
@@ -117,26 +140,35 @@ typedef struct s_pipex
 
 typedef struct s_exec
 {
-    char            **group;
-    char            *infile_name;
-    char            *outfile_name;
+	char			**group;
+	char			*infile_name;
+	char			*outfile_name;
 	int				infile;
 	int				outfile;
-    int             append;
+	int				append;
 	int				heredoc;
 	t_pipex			pipex;
-    struct s_exec   *next;
-    struct s_exec   *prev;
+	struct s_exec	*next;
+	struct s_exec	*prev;
 
-}               t_exec;
+}					t_exec;
 
-typedef struct s_cmd {
-    char **cmds;
-    int ncmd;
-    int max;
-} t_cmd;
+typedef struct s_cmd
+{
+	char			**cmds;
+	int				ncmd;
+	int				max;
+}					t_cmd;
 
-extern int g_exit_status; // For the shell's exit status
-extern volatile sig_atomic_t g_signal_received; // To flag if a signal was caught
+typedef struct s_exec_list_builder_state
+{
+	t_token			*current_token;
+	t_exec			*list_head;
+	t_exec			*current_exec_node;
+	t_list			*temp_arg_list;
+	int				build_status;
+}					t_exec_list_builder_state;
+
+extern int			g_signal_test;
 
 #endif

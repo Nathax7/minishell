@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 18:20:29 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/28 16:14:29 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/05 17:21:01 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	has_content(const char *line)
 {
 	while (*line)
 	{
-		if (!is_whitespace(*line))
+		if (!ft_isspace(*line))
 			return (1);
 		line++;
 	}
@@ -101,7 +101,7 @@ t_token	*lexer(const char *line)
 	head = NULL;
 	while (*line)
 	{
-		while (is_whitespace(*line))
+		while (ft_isspace(*line))
 			line++;
 		if (!*line)
 			break ;
@@ -111,7 +111,7 @@ t_token	*lexer(const char *line)
 			status = process_word(&line, &head);
 		if (!status)
 		{
-			cleanup_and_return_zero(&head);
+			free_token_list(head);
 			return (NULL);
 		}
 	}

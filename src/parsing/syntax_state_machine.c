@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 15:38:32 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/03 10:58:15 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/09 20:49:04 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	validate_pipe_sequence(t_token *tokens, char **error_token)
 				return (0);
 			}
 			if (!current->next)
-				return (2); // Incomplete
+				return (2);
 			has_command = 0;
 		}
 		current = current->next;
@@ -75,13 +75,14 @@ t_syntax_result	analyze_syntax(t_token *tokens)
 
 	result.tokens = tokens;
 	result.error_token = NULL;
+	result.status = PARSE_OK;
+	result.next_prompt = PROMPT_MAIN;
 	error_token = NULL;
 	pipe_status = validate_pipe_sequence(tokens, &error_token);
 	if (pipe_status == 0)
 	{
 		result.status = PARSE_SYNTAX_ERROR;
 		result.error_token = error_token;
-		result.next_prompt = PROMPT_MAIN;
 		return (result);
 	}
 	else if (pipe_status == 2)
@@ -95,10 +96,7 @@ t_syntax_result	analyze_syntax(t_token *tokens)
 	{
 		result.status = PARSE_SYNTAX_ERROR;
 		result.error_token = error_token;
-		result.next_prompt = PROMPT_MAIN;
 		return (result);
 	}
-	result.status = PARSE_OK;
-	result.next_prompt = PROMPT_MAIN;
 	return (result);
 }

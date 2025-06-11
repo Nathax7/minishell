@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:01:49 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/27 21:36:41 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/11 17:11:40 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	pipex(t_exec *exec, int ac, char **av, char **envp)
 			exec_one(exec, av[exec->pipex.i], envp);
 	while (++exec->pipex.i_wait < ac)
 		waitpid(exec->pipex.pids[exec->pipex.i_wait], &exec->pipex.status, 0);
-	free_pipex_core(exec);
+	//free_pipex_core(exec);
 	if (WIFEXITED(exec->pipex.status))
 		return (WEXITSTATUS(exec->pipex.status));
 	return (exec->pipex.status);

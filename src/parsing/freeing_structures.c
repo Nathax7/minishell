@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 18:38:02 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/27 18:39:37 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/04 18:28:18 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,3 @@ int	safe_cleanup_and_return_null(char **line, t_token **tokens,
 	return (0);
 }
 
-char	*safe_strdup_or_cleanup(const char *src, char **line, t_token **tokens)
-{
-	char *result;
-
-	result = ft_strdup(src);
-	if (!result)
-	{
-		cleanup_parsing_context(line, tokens, NULL);
-		return (NULL);
-	}
-	return (result);
-}

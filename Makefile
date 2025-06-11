@@ -1,68 +1,3 @@
-# NAME = parser_core_test
-# CC = gcc
-# # Add -g for debugging, -fsanitize=address for memory errors
-# CFLAGS = -Wall -Wextra -Werror -Iincludes -Ilibft # -g -fsanitize=address
-# LDFLAGS = -Llibft -lft -lreadline
-# RM = rm -f
-
-# # Source directories
-# PARSING_DIR = src/parsing
-# TESTS_DIR = test
-
-# # Core parsing s// ... inside main loop, after getting expanded_tokens ...
-# PARSING_CORE_FILES = \
-#     string_builder.c \
-#     lexer.c \
-#     lexer_utils.c \
-#     convert_token_list.c \
-#     error.c \
-#     expand_variable.c \
-#     expander_utils.c \
-#     expander.c
-
-# # Test main source file
-# TEST_MAIN_FILE = main.c
-
-# # Combine paths with filenames
-# SRCS = $(addprefix $(PARSING_DIR)/, $(PARSING_CORE_FILES)) \
-# 		$(addprefix $(TESTS_DIR)/, $(TEST_MAIN_FILE))
-
-# OBJS = $(SRCS:.c=.o)
-
-# # Libft
-# LIBFT_DIR = libft
-# LIBFT_A = $(LIBFT_DIR)/libft.a
-
-# all: $(NAME)
-
-# $(LIBFT_A):
-# 	@$(MAKE) -C $(LIBFT_DIR) all
-
-# $(NAME): $(LIBFT_A) $(OBJS)
-# 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LDFLAGS)
-# 	@echo "$(NAME) compiled!"
-
-# %.o: %.c
-# 	$(CC) $(CFLAGS) -c $< -o $@
-
-# clean:
-# 	@$(MAKE) -C $(LIBFT_DIR) clean
-# 	$(RM) $(OBJS)
-# 	@echo "Core parser test object files cleaned."
-
-# fclean: clean
-# 	@$(MAKE) -C $(LIBFT_DIR) fclean
-# 	$(RM) $(NAME)
-# 	@echo "$(NAME) and libft cleaned."
-
-# re: fclean all
-
-# .PHONY: all clean fclean re
-
-
-
-
-
 NAME = minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g3
@@ -74,32 +9,52 @@ DEPS = $(OBJ:.o=.d)
 
 SRC_EXEC =	src/exec/child_process.c			\
 			src/exec/exec_bonus.c				\
-			src/exec/here_doc.c					\
 			src/exec/utils_bonus.c				\
 			src/exec/pipex_bonus.c				\
 			src/exec/exec_one.c					\
 			src/exec/split_pipeline_group.c		\
 
-SRC_PARSING =	src/parsing/convert_token_list.c	\
-				src/parsing/error.c					\
-				src/parsing/expand_variable.c		\
-				src/parsing/expander_utils.c		\
+SRC_PARSING =	src/parsing/expand_variable.c		\
 				src/parsing/expander.c				\
+				src/parsing/field_splitting.c		\
+				src/parsing/freeing_structures.c	\
+				src/parsing/heredoc_handler.c		\
 				src/parsing/lexer_utils.c			\
 				src/parsing/lexer.c					\
-				src/parsing/string_builder.c		\
+				src/parsing/main_parsing.c			\
+				src/parsing/main_parsing_core.c		\
+				src/parsing/operator_handling.c		\
+				src/parsing/quote_extracter.c		\
+				src/parsing/secure_utils.c			\
+				src/parsing/syntax_state_machine.c	\
+
 
 SRC_UTILS =	src/utils/ft_close.c		\
-			src/utils/free_struct.c		\
 			src/utils/open.c			\
 			src/utils/find_last.c		\
 			src/utils/find_size.c		\
 			src/utils/find_first.c		\
-			src/utils/ft_strjoin_space.c \
+			src/utils/expander_utils.c	\
+			src/utils/string_builder_annex.c\
+			src/utils/string_builder.c		\
+			src/utils/builtin_utils.c		\
+			src/utils/token_utils.c			\
+			src/utils/error_utils.c			\
+			src/utils/free_struct.c			\
+
+# SRC_BUILTINS =	src/builtins/export.c				\
+# 				src/builtins/cd.c					\
+# 				src/builtins/pwd.c					\
+# 				src/builtins/echo.c					\
+# 				src/builtins/env.c					\
+# 				src/builtins/exit.c					\
+# 				src/builtins/unset.c				\
+# 				src/builtins/builtins.c				\
 
 
+# SRC_SIGNALS = src/signal/signal_handler.c		\
 
-SRC_ALL = $(SRC_EXEC) $(SRC_UTILS) test/mainath.c
+SRC_ALL = $(SRC_EXEC) $(SRC_UTILS) $(SRC_PARSING) $(SRC_SIGNALS) $(SRC_BUILTINS) main.c
 
 GREEN=\033[0;32m
 BLUE=\033[38;2;64;224;208m
