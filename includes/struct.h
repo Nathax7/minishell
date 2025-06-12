@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:36:22 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/11 16:55:46 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/12 19:06:48 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,12 @@ typedef enum e_parse_status
 {
 	PARSE_OK,
 	PARSE_SYNTAX_ERROR,
-	PARSE_INCOMPLETE_PIPE,
-	PARSE_INCOMPLETE_REDIR,
-	PARSE_INCOMPLETE_HEREDOC,
-	PARSE_INCOMPLETE_QUOTE,
 	PARSE_MEMORY_ERROR
 }					t_parse_status;
 
 typedef enum e_parse_result
 {
 	PARSE_ERROR = -1,
-	PARSE_CONTINUE = 0,
 	PARSE_SUCCESS = 1
 }					t_parse_result;
 
@@ -97,7 +92,6 @@ typedef struct s_token
 typedef struct s_syntax_result
 {
 	t_parse_status	status;
-	t_prompt_type	next_prompt;
 	char			*error_token;
 	t_token			*tokens;
 }					t_syntax_result;

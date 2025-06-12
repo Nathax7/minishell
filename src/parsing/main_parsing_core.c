@@ -6,22 +6,11 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 21:35:07 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/04 16:02:52 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/12 18:58:03 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
-
-t_parse_result	handle_quote_incomplete(char **line, char ***accumulated_input)
-{
-	if (!handle_quote_continuation(line))
-	{
-		free(*line);
-		**accumulated_input = NULL;
-		return (PARSE_ERROR);
-	}
-	return (PARSE_CONTINUE);
-}
 
 t_parse_result	handle_lexer_failure(char **line, char ***accumulated_input)
 {
@@ -50,19 +39,3 @@ t_parse_result	handle_syntax_error_case(char **line, char ***accumulated_input,
 	return (PARSE_ERROR);
 }
 
-t_parse_result	handle_incomplete_case(char **line, char ***accumulated_input,
-		t_syntax_result *result, t_token *tokens)
-{
-	if (!handle_incomplete_input(line, result))
-	{
-		**accumulated_input = NULL;
-		return (PARSE_ERROR);
-	}
-	free_token_list(tokens);
-	if (result->error_token)
-	{
-		free(result->error_token);
-		result->error_token = NULL;
-	}
-	return (PARSE_CONTINUE);
-}

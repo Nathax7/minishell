@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 15:38:32 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/09 20:49:04 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/12 19:03:31 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ t_syntax_result	analyze_syntax(t_token *tokens)
 	result.tokens = tokens;
 	result.error_token = NULL;
 	result.status = PARSE_OK;
-	result.next_prompt = PROMPT_MAIN;
 	error_token = NULL;
 	pipe_status = validate_pipe_sequence(tokens, &error_token);
 	if (pipe_status == 0)
@@ -87,8 +86,8 @@ t_syntax_result	analyze_syntax(t_token *tokens)
 	}
 	else if (pipe_status == 2)
 	{
-		result.status = PARSE_INCOMPLETE_PIPE;
-		result.next_prompt = PROMPT_PIPE;
+		result.status = PARSE_SYNTAX_ERROR;
+		result.error_token = ft_strdup("newline");
 		return (result);
 	}
 	redirect_status = validate_redirections(tokens, &error_token);

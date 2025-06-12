@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 23:08:05 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/06 18:04:56 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/11 19:07:30 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,9 +123,11 @@ char	*expand_variables_in_str(const char *input_str, t_quote quote_type,
 {
 	t_str_builder	sb;
 	const char		*ip;
+	char			*result;
 
 	if (!input_str)
 		return (NULL);
+		
 	sb_init(&sb);
 	ip = input_str;
 	while (*ip)
@@ -141,5 +143,7 @@ char	*expand_variables_in_str(const char *input_str, t_quote quote_type,
 				return (sb_free_and_return_null(&sb));
 		}
 	}
-	return (sb_to_string_and_free(&sb)); 
+	
+	result = sb_to_string_and_free(&sb);
+	return (result);
 }

@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 20:30:28 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/06 18:07:20 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/11 18:04:37 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,3 +96,4 @@ char	**perform_field_splitting(const char *str, const char *sep_val)
 	fields[index] = NULL;
 	return (fields);
 }
+

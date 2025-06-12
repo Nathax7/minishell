@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 18:11:15 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/06 18:09:51 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/11 18:24:02 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,7 @@ static int	process_word_expansion(t_token *token, t_token **expanded_head,
 	char	*expanded_value;
 	char	**fields;
 
-	expanded_value = expand_token_value(token->value, token->quote, envp,
-			exit_status);
+	expanded_value = expand_token_value(token->value, token->quote, envp, exit_status);
 	if (!expanded_value)
 		return (0);
 	if (should_field_split(token->quote) && *expanded_value)
