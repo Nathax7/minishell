@@ -18,7 +18,6 @@ SRC_PARSING =	src/parsing/expand_variable.c		\
 				src/parsing/expander.c				\
 				src/parsing/field_splitting.c		\
 				src/parsing/freeing_structures.c	\
-				src/parsing/heredoc_handler.c		\
 				src/parsing/lexer_utils.c			\
 				src/parsing/lexer.c					\
 				src/parsing/main_parsing.c			\
@@ -27,6 +26,7 @@ SRC_PARSING =	src/parsing/expand_variable.c		\
 				src/parsing/quote_extracter.c		\
 				src/parsing/secure_utils.c			\
 				src/parsing/syntax_state_machine.c	\
+				src/parsing/print_tokens.c 			\
 
 
 SRC_UTILS =	src/utils/ft_close.c		\
@@ -39,20 +39,20 @@ SRC_UTILS =	src/utils/ft_close.c		\
 			src/utils/string_builder.c		\
 			src/utils/builtin_utils.c		\
 			src/utils/token_utils.c			\
-			src/utils/error_utils.c			\
+			src/utils/parsing_error_utils.c			\
 			src/utils/free_struct.c			\
 
-# SRC_BUILTINS =	src/builtins/export.c				\
-# 				src/builtins/cd.c					\
-# 				src/builtins/pwd.c					\
-# 				src/builtins/echo.c					\
-# 				src/builtins/env.c					\
-# 				src/builtins/exit.c					\
-# 				src/builtins/unset.c				\
-# 				src/builtins/builtins.c				\
+SRC_BUILTINS =	src/builtins/export.c				\
+				src/builtins/cd.c					\
+				src/builtins/pwd.c					\
+				src/builtins/echo.c					\
+				src/builtins/env.c					\
+				src/builtins/exit.c					\
+				src/builtins/unset.c				\
+				src/builtins/builtins.c				\
 
 
-# SRC_SIGNALS = src/signal/signal_handler.c		\
+SRC_SIGNALS = src/signal/signal_handler.c		\
 
 SRC_ALL = $(SRC_EXEC) $(SRC_UTILS) $(SRC_PARSING) $(SRC_SIGNALS) $(SRC_BUILTINS) main.c
 

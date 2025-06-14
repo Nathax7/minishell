@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 18:11:15 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/11 18:24:02 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/14 18:59:45 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,23 +55,25 @@ static int	process_word_expansion(t_token *token, t_token **expanded_head,
 	expanded_value = expand_token_value(token->value, token->quote, envp, exit_status);
 	if (!expanded_value)
 		return (0);
-	if (should_field_split(token->quote) && *expanded_value)
+	if (!should_field_split(token->quote))
 	{
-		fields = perform_field_splitting(expanded_value, NULL);
-		free(expanded_value);
-		if (!fields)
+		if (!create_and_append_token(expanded_head, expanded_value, T_WORD, Q_NONE))
+		{
+			free(expanded_value);
 			return (0);
-		if (!add_expanded_tokens(fields, expanded_head))
-			return (ft_freesplit_int(fields, 0));
+		}
+		return (1);
+	}
+	fields = perform_field_splitting(expanded_value, NULL);
+	free(expanded_value);	
+	if (!fields)
+		return (0);
+	if (!fields[0])
+	{
 		ft_freesplit(fields);
+		return (create_and_append_token(expanded_head, ft_strdup(""), T_WORD, Q_NONE));
 	}
-	else
-	{
-		if (!create_and_append_token(expanded_head, expanded_value, T_WORD,
-				Q_NONE))
-			return (0);
-	}
-	return (1);
+	return (add_expanded_tokens(fields, expanded_head));
 }
 
 t_token	*expand_tokens(t_token *tokens, char **envp, int exit_status)
