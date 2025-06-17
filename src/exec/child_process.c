@@ -3,62 +3,93 @@
 /*                                                        :::      ::::::::   */
 /*   child_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 22:58:16 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/11 17:11:05 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/17 19:17:16 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 
-void	setup_redirections(t_exec *exec)
+void	setup_redirections(t_exec *exec, int cmd_index)
 {
-	if (exec->pipex.i == 0 && exec->infile_name != NULL)
+	if (cmd_index == 0)
 	{
-		if (dup2(exec->pipex.infile, STDIN_FILENO) == -1)
-			free_pipex(exec, 1, "dup2", strerror(errno));
-		if (dup2(exec->pipex.fd[1], STDOUT_FILENO) == -1)
-			free_pipex(exec, 1, "dup2", strerror(errno));
-		close(exec->pipex.infile);
-		close(exec->pipex.outfile);
+		if (exec->cmd_list->fd_input != -1)
+		{
+			if (dup2(exec->cmd_list->fd_input, STDIN_FILENO) == -1)
+				free_child(exec, 1, "dup2", strerror(errno));
+		}
+		if (exec->cmd_list->fd_output != -1)
+		{
+			if (dup2(exec->cmd_list->fd_output, STDOUT_FILENO) == -1)
+				free_child(exec, 1, "dup2", strerror(errno));
+		}
+		else
+		{
+			if (dup2(exec->pipes[0][1], STDOUT_FILENO) == -1)
+				free_child(exec, 1, "dup2", strerror(errno));
+		}
 	}
-	else if (exec->pipex.i == exec->pipex.cmd_nbr - 1
-		&& exec->outfile_name != NULL)
+	else if (cmd_index == exec->cmd_count - 1)
 	{
-		if (dup2(exec->pipex.outfile, STDOUT_FILENO) == -1)
-			free_pipex(exec, 1, "dup2", strerror(errno));
-		close(exec->pipex.outfile);
-		close(exec->pipex.infile);
+		if (exec->cmd_list->fd_input != -1)
+		{
+			if (dup2(exec->cmd_list->fd_input, STDIN_FILENO) == -1)
+				free_child(exec, 1, "dup2", strerror(errno));
+		}
+		else
+		{
+			if (dup2(exec->pipes[cmd_index - 1][0], STDIN_FILENO) == -1)
+				free_child(exec, 1, "dup2", strerror(errno));
+		}
+		if (exec->cmd_list->fd_output != -1)
+		{
+			if (dup2(exec->cmd_list->fd_output, STDOUT_FILENO) == -1)
+				free_child(exec, 1, "dup2", strerror(errno));
+		}
 	}
-	else if (exec->pipex.i != exec->pipex.cmd_nbr - 1)
+	else if (cmd_index != exec->cmd_count - 1)
 	{
-		if (dup2(exec->pipex.fd[1], STDOUT_FILENO) == -1)
-			free_pipex(exec, 1, "dup2", strerror(errno));
-		close(exec->pipex.outfile);
-		close(exec->pipex.infile);
+		if (exec->cmd_list->fd_input != -1)
+		{
+			if (dup2(exec->cmd_list->fd_input, STDIN_FILENO) == -1)
+				free_child(exec, 1, "dup2", strerror(errno));
+		}
+		else
+		{
+			if (dup2(exec->pipes[cmd_index - 1][0], STDIN_FILENO) == -1)
+				free_child(exec, 1, "dup2", strerror(errno));
+		}
+		if (exec->cmd_list->fd_output != -1)
+		{
+			if (dup2(exec->cmd_list->fd_output, STDOUT_FILENO) == -1)
+				free_child(exec, 1, "dup2", strerror(errno));
+		}
+		else
+		{
+			if (dup2(exec->pipes[cmd_index][1], STDOUT_FILENO) == -1)
+				free_child(exec, 1, "dup2", strerror(errno));
+		}
 	}
-	close(exec->pipex.fd[1]);
 }
 
-void	execute_child(t_exec *exec, char *argv, char **envp)
+
+void	execute_child(t_exec *exec, int cmd_index, char **envp)
 {
-	close(exec->pipex.fd[0]);
-	setup_redirections(exec);
-	execute_bonus(exec, argv, envp);
+	struct_open_infile(exec);
+	struct_open_outfile(exec);
+	setup_redirections(exec, cmd_index);
+	execute_bonus(exec, envp);
 }
 
-void	child_process(t_exec *exec, char *argv, char **envp)
+void	child_process(t_exec *exec, int cmd_index, char **envp)
 {
-	if (pipe(exec->pipex.fd) == -1)
-		free_pipex(exec, 1, "pipe", strerror(errno));
-	exec->pipex.pids[exec->pipex.i] = fork();
-	if (exec->pipex.pids[exec->pipex.i] == -1)
-		free_pipex(exec, 1, "pid", strerror(errno));
-	if (exec->pipex.pids[exec->pipex.i] == 0)
-		execute_child(exec, argv, envp);
-	close(exec->pipex.fd[1]);
-	if (dup2(exec->pipex.fd[0], STDIN_FILENO) == -1)
-		free_pipex(exec, 1, "dup2", strerror(errno));
-	close(exec->pipex.fd[0]);
+	exec->cmd_list->files = find_first_files(exec->cmd_list->files);
+	exec->pids[cmd_index] = fork();
+	if (exec->pids[cmd_index] == -1)
+		free_child(exec, 1, "pid", strerror(errno));
+	if (exec->pids[cmd_index] == 0)
+		execute_child(exec, cmd_index, envp);
 }

@@ -1,38 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_bonus.c                                      :+:      :+:    :+:   */
+/*   parsing_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/26 20:46:14 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/27 19:39:32 by nagaudey         ###   ########.fr       */
+/*   Created: 2025/06/13 19:39:17 by nagaudey          #+#    #+#             */
+/*   Updated: 2025/06/16 19:44:58 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 
-void	pipex_init(t_exec *exec, char **envp)
+void	exec_init(t_exec *exec, char **envp)
 {
 	size_t	i;
 
-	exec->pipex = (t_pipex){0};
-	exec->pipex.infile = -1;
-	exec->pipex.outfile = -1;
-	exec->pipex.here_doc = 1;
-	exec->pipex.i = -1;
-	exec->pipex.i_wait = -1;
-	exec->pipex.envp = 1;
+	ft_memset(exec, 0, sizeof(t_exec));
+	exec->envp = envp;
+	exec->envp_exists = 1;
+	exec->stdin_backup = dup(STDIN_FILENO);
+	exec->stdout_backup = dup(STDOUT_FILENO);
 	i = 0;
 	while (envp && envp[i] && ft_strnstr(envp[i], "PATH", 4) == 0)
 		i++;
 	if (!envp || !envp[i])
 	{
-		exec->pipex.envp = 0;
+		exec->envp_exists = 0;
 		return ;
 	}
-	exec->pipex.paths = ft_split(envp[i] + 5, ':');
-	if (!exec->pipex.paths)
-		if (errno == ENOMEM)
-			free_pipex(exec, -1, "malloc", strerror(errno));
+	exec->paths = ft_split(envp[i] + 5, ':');
+	if (!exec->paths)
+		free_parent(exec, 1, "minishell: malloc: %s\n", strerror(errno));
+}
+
+void parsing_exec(t_token *tokens, t_exec *exec)
+{
+	if (!tokens || !exec)
+		return ;
+	exec->cmd_list = parsing_cmd(tokens);
+	if (!exec->cmd_list)
+		return ;
 }

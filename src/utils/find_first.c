@@ -6,13 +6,31 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 16:00:28 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/23 14:13:21 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/17 22:40:50 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/utils.h"
 
-t_exec	*find_first(t_exec *lst)
+t_cmd	*find_first_cmd(t_cmd *lst)
+{
+	if (!lst)
+		return (NULL);
+	while (lst->prev != NULL)
+		lst = lst->prev;
+	return (lst);
+}
+
+t_args	*find_first_args(t_args *lst)
+{
+	if (!lst)
+		return (NULL);
+	while (lst->prev != NULL)
+		lst = lst->prev;
+	return (lst);
+}
+
+t_files	*find_first_files(t_files *lst)
 {
 	if (!lst)
 		return (NULL);
