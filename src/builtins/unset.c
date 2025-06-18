@@ -1,0 +1,76 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/08 18:55:14 by almeekel          #+#    #+#             */
+/*   Updated: 2025/06/14 20:40:31 by almeekel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/builtins.h"
+
+static int	remove_env_var(char ***env_ptr, char *name)
+{
+	char	**new_env;
+	int		index;
+	int		count;
+	int		i;
+	int		j;
+
+	index = find_env_index(*env_ptr, name);
+	if (index == -1)
+		return (0);
+	count = count_env_vars(*env_ptr);
+	new_env = malloc(sizeof(char *) * count);
+	if (!new_env)
+		return (1);
+	i = 0;
+	j = 0;
+	while (i < count)
+	{
+		if (i != index)
+		{
+			new_env[j] = (*env_ptr)[i];
+			j++;
+		}
+		else
+			free((*env_ptr)[i]);
+		i++;
+	}
+	new_env[j] = NULL;
+	free(*env_ptr);
+	*env_ptr = new_env;
+	return (0);
+}
+
+int	builtin_unset(char **args, char ***env_ptr)
+{
+	int i;
+	int exit_status;
+
+	if (!args[1])
+		return (0);
+
+	exit_status = 0;
+	i = 1;
+	while (args[i])
+	{
+		if (!is_valid_var_name(args[i]))
+		{
+			ft_putstr_fd("unset: `", STDERR_FILENO);
+			ft_putstr_fd(args[i], STDERR_FILENO);
+			ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
+			exit_status = 1;
+		}
+		else
+		{
+			if (remove_env_var(env_ptr, args[i]) != 0)
+				exit_status = 1;
+		}
+		i++;
+	}
+	return (exit_status);
+}
