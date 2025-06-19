@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 20:47:43 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/19 16:01:52 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/19 16:38:50 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	execute_bonus(t_exec *exec, char **envp)
 			"Command not found");
 	if (is_directory(exec) == 1)
 		return ;
-	if (is_builtin(exec) == 0)
+	if (is_builtin(exec, envp) == 0)
 	{
 		find_path(exec, exec->cmd_list->args->cmd_args);
 		if (!exec->cmd_list->cmd_path)

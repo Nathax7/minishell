@@ -17,6 +17,15 @@ SRC_EXEC =	src/exec/child_process.c	\
 			src/exec/pipex.c			\
 			src/exec/utils_cmd.c		\
 
+
+SRC_BUILTINS =	src/builtins/builtin_cd.c	\
+				src/builtins/builtin_echo.c	\
+				src/builtins/builtin_env.c	\
+				src/builtins/builtin_exit.c	\
+				src/builtins/builtin_export.c	\
+				src/builtins/builtin_pwd.c	\
+				src/builtins/builtin_unset.c	\
+
 # SRC_PARSING =	src/parsing/convert_token_list.c	\
 # 				src/parsing/error.c					\
 # 				src/parsing/expand_variable.c		\
@@ -30,10 +39,12 @@ SRC_UTILS = src/utils/free_struct.c		\
 			src/utils/find_last.c		\
 			src/utils/find_size.c		\
 			src/utils/find_first.c		\
+			src/utils/expander_utils.c	\
+			src/utils/builtin_utils.c	\
 
 
 
-SRC_ALL = $(SRC_EXEC) $(SRC_UTILS) test/mainath.c
+SRC_ALL = $(SRC_EXEC) $(SRC_BUILTINS) $(SRC_UTILS) test/mainath.c
 
 GREEN=\033[0;32m
 BLUE=\033[38;2;64;224;208m

@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 16:06:23 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/19 16:06:35 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/19 16:47:54 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,9 +241,7 @@ int	main(int ac, char **av, char **envp)
 	tokens = NULL;
 	tail = NULL;
 
-    add_token(&tokens, &tail, T_WORD, "cat");
-    add_token(&tokens, &tail, T_REDIRECT_IN, "<");
-    add_token(&tokens, &tail, T_WORD, "Makefile");
+    add_token(&tokens, &tail, T_WORD, "pwd");
     add_token(&tokens, &tail, T_PIPE, "|");
     add_token(&tokens, &tail, T_WORD, "cat");
     add_token(&tokens, &tail, T_REDIRECT_OUT, ">");

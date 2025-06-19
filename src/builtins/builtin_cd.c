@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:40:19 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/08 20:31:24 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/19 16:33:23 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ static int	update_pwd_variables(char ***env_ptr, char *old_pwd)
 	return (0);
 }
 
-static char	*find_directory(char **args, char **env)
+static char	*find_directory(t_args *args, char **env)
 {
 	char	*target;
 
-	if (!args[1])
+	if (!args->next->cmd_args)
 	{
 		target = find_env_var(env, "HOME");
 		if (!target)
@@ -43,7 +43,7 @@ static char	*find_directory(char **args, char **env)
 		}
 		return (ft_strdup(target));
 	}
-	else if (ft_strcmp(args[1], "-") == 0)
+	else if (ft_strcmp(args->next->cmd_args, "-") == 0)
 	{
 		target = find_env_var(env, "OLDPWD");
 		if (!target)
@@ -56,16 +56,16 @@ static char	*find_directory(char **args, char **env)
 		return (ft_strdup(target));
 	}
 	else
-		return (ft_strdup(args[1]));
+		return (ft_strdup(args->next->cmd_args));
 }
 
-int	builtin_cd(char **args, char ***env_ptr)
+int	builtin_cd(t_args *args, char ***env_ptr)
 {
 	char	*target_dir;
 	char	*old_pwd;
 	int		result;
 
-	if (args[1] && args[2])
+	if (args->next->cmd_args && args->next->next->cmd_args)
 	{
 		ft_putstr_fd("cd: too many arguments\n", STDERR_FILENO);
 		return (1);

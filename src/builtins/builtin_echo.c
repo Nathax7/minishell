@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   builtin_echo.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:48:04 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/11 18:28:08 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/19 16:31:00 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,26 +30,24 @@ static int	is_valid_n_flag(const char *arg)
 	return (1);
 }
 
-int	builtin_echo(char **args)
+int	builtin_echo(t_args *args)
 {
-	int	i;
 	int	newline;
 
 	if (!args)
 		return (1);
 	newline = 1;
-	i = 1;
-	while (args[i] && is_valid_n_flag(args[i]))
+	while (args->cmd_args && is_valid_n_flag(args->cmd_args))
 	{
 		newline = 0;
-		i++;
+		args = args->next;
 	}
-	while (args[i])
+	while (args->cmd_args)
 	{
-		ft_putstr_fd(args[i], STDOUT_FILENO);
-		if (args[i + 1])
+		ft_putstr_fd(args->cmd_args, STDOUT_FILENO);
+		if (args->next->cmd_args)
 			ft_putchar_fd(' ', STDOUT_FILENO);
-		i++;
+		args = args->next;
 	}
 	if (newline)
 		ft_putchar_fd('\n', STDOUT_FILENO);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   builtin_unset.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 18:55:14 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/14 20:40:31 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/19 16:38:17 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,31 +46,30 @@ static int	remove_env_var(char ***env_ptr, char *name)
 	return (0);
 }
 
-int	builtin_unset(char **args, char ***env_ptr)
+int	builtin_unset(t_args *args, char ***env_ptr)
 {
-	int i;
 	int exit_status;
 
-	if (!args[1])
+	args = args->next;
+	if (!args->cmd_args)
 		return (0);
 
 	exit_status = 0;
-	i = 1;
-	while (args[i])
+	while (args->cmd_args)
 	{
-		if (!is_valid_var_name(args[i]))
+		if (!is_valid_var_name(args->cmd_args))
 		{
 			ft_putstr_fd("unset: `", STDERR_FILENO);
-			ft_putstr_fd(args[i], STDERR_FILENO);
+			ft_putstr_fd(args->cmd_args, STDERR_FILENO);
 			ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
 			exit_status = 1;
 		}
 		else
 		{
-			if (remove_env_var(env_ptr, args[i]) != 0)
+			if (remove_env_var(env_ptr, args->cmd_args) != 0)
 				exit_status = 1;
 		}
-		i++;
+		args = args->next;
 	}
 	return (exit_status);
 }

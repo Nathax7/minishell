@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 21:32:35 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/12 19:00:08 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/19 16:46:31 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,15 @@ int				extract_quoted_content(const char **line, char quote,
 					t_str_builder *sb);
 int				has_unclosed_quotes(const char *line);
 
-t_syntax_result	analyze_syntax(t_token *tokens);
+// t_syntax_result	analyze_syntax(t_token *tokens);
 
-t_parse_result	handle_lexer_failure(char **line, char ***accumulated_input);
-t_parse_result	handle_syntax_success(char **line, char ***accumulated_input,
-					t_syntax_result *result, char **envp, int exit_status,
-					t_token **tokens_out);
-t_parse_result	handle_syntax_error_case(char **line, char ***accumulated_input,
-					t_syntax_result *result);
-char			*get_continuation_prompt(t_prompt_type type);
+// t_parse_result	handle_lexer_failure(char **line, char ***accumulated_input);
+// t_parse_result	handle_syntax_success(char **line, char ***accumulated_input,
+// 					t_syntax_result *result, char **envp, int exit_status,
+// 					t_token **tokens_out);
+// t_parse_result	handle_syntax_error_case(char **line, char ***accumulated_input,
+// 					t_syntax_result *result);
+// char			*get_continuation_prompt(t_prompt_type type);
 
 t_token			*expand_tokens(t_token *tokens, char **envp, int exit_status);
 
@@ -58,9 +58,9 @@ char			**perform_field_splitting(const char *str, const char *sep_val);
 int				handle_glob_matches(char **glob_matches, t_token **head,
 					char **fields);
 
-t_token			*process_complete_syntax(t_syntax_result syntax_result,
-					char **envp, int exit_status);
-void			handle_syntax_error(t_syntax_result *result);
+// t_token			*process_complete_syntax(t_syntax_result syntax_result,
+// 					char **envp, int exit_status);
+// void			handle_syntax_error(t_syntax_result *result);
 t_token			*free_token_list_and_return_null(t_token *list);
 char			*cleanup_and_return_char(char *to_free, int to_close,
 					char *to_free_optional, int option_flag);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   builtin_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 18:56:30 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/18 18:18:02 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/19 16:34:35 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,27 +32,27 @@ static int	is_numeric_string(char *str)
 	return (1);
 }
 
-int	builtin_exit(char **args)
+int	builtin_exit(t_args *args)
 {
 	int exit_code;
 
 	ft_putstr_fd("exit\n", STDERR_FILENO);
 
-	if (!args[1])
+	if (!args->next->cmd_args)
 		exit(0);
-	if (!is_numeric_string(args[1]))
+	if (!is_numeric_string(args->next->cmd_args))
 	{
 		ft_putstr_fd("exit: ", STDERR_FILENO);
-		ft_putstr_fd(args[1], STDERR_FILENO);
+		ft_putstr_fd(args->next->cmd_args, STDERR_FILENO);
 		ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
 		exit(2);
 	}
-	if (args[2])
+	if (args->next->next->cmd_args)
 	{
 		ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
 		return (1);
 	}
-	exit_code = ft_atoi(args[1]);
+	exit_code = ft_atoi(args->next->cmd_args);
 	exit(exit_code & 255);
 
 }

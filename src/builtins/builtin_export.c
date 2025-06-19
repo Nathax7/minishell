@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:58:56 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/08 19:52:44 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/19 16:36:42 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,26 +97,25 @@ int	set_env_var(char ***env_ptr, char *name, char *value)
 	return (0);
 }
 
-int	builtin_export(char **args, char ***env_ptr)
+int	builtin_export(t_args *args, char ***env_ptr)
 {
 	char *name;
 	char *value;
-	int i;
 	int exit_status;
 
-	if (!args[1])
+	args = args->next;
+	if (!args->cmd_args)
 	{
 		print_export_format(*env_ptr);
 		return (0);
 	}
 	exit_status = 0;
-	i = 1;
-	while (args[i])
+	while (args->cmd_args)
 	{
-		if (!parse_export_arg(args[i], &name, &value))
+		if (!parse_export_arg(args->cmd_args, &name, &value))
 		{
 			ft_putstr_fd("export: `", STDERR_FILENO);
-			ft_putstr_fd(args[i], STDERR_FILENO);
+			ft_putstr_fd(args->cmd_args, STDERR_FILENO);
 			ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
 			exit_status = 1;
 		}
@@ -129,7 +128,7 @@ int	builtin_export(char **args, char ***env_ptr)
 			free(name);
 		if (value)
 			free(value);
-		i++;
+		args = args->next;
 	}
 	return (exit_status);
 }
