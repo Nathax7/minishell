@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 22:58:16 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/17 19:17:16 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/19 21:28:40 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ void	execute_child(t_exec *exec, int cmd_index, char **envp)
 	struct_open_infile(exec);
 	struct_open_outfile(exec);
 	setup_redirections(exec, cmd_index);
+	close_all_pipes(exec);
 	execute_bonus(exec, envp);
 }
 
