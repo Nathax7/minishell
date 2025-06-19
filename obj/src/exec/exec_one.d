@@ -1,7 +1,8 @@
 obj/src/exec/exec_one.o: src/exec/exec_one.c \
   src/exec/../../includes/exec.h src/exec/../../includes/utils.h \
   src/exec/../../includes/struct.h \
-  src/exec/../../includes/../libft/all.h
+  src/exec/../../includes/../libft/all.h \
+  src/exec/../../includes/builtins.h
 
 src/exec/../../includes/exec.h:
 
@@ -10,3 +11,5 @@ src/exec/../../includes/utils.h:
 src/exec/../../includes/struct.h:
 
 src/exec/../../includes/../libft/all.h:
+
+src/exec/../../includes/builtins.h:

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 17:00:00 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/11 17:46:54 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/19 15:49:11 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,161 @@ int			g_signal_test = 0;
 // 		i++;
 // 	}
 // }
+void	print_files_detailed(t_files *files)
+{
+    t_files	*current;
+    int		file_index;
+
+    if (!files)
+    {
+        printf("    📁 FILES: None\n");
+        return;
+    }
+
+    current = files;
+    file_index = 0;
+    printf("    📁 FILES:\n");
+
+    while (current)
+    {
+        printf("    ┌─ File [%d] ──────────────────────────────────────────┐\n", file_index);
+        printf("    │ 📍 Address: %p                                     │\n", (void *)current);
+
+        if (current->infile_name)
+            printf("    │ 📥 Input: %-37s│\n", current->infile_name);
+        else
+            printf("    │ 📥 Input: (none)                                  │\n");
+
+        if (current->outfile_name)
+            printf("    │ 📤 Output: %-36s│\n", current->outfile_name);
+        else
+            printf("    │ 📤 Output: (none)                                 │\n");
+
+        printf("    │ 📜 Heredoc: %-34s│\n", current->heredoc ? "✅ YES" : "❌ NO");
+        printf("    │ ➕ Append: %-35s│\n", current->append ? "✅ YES" : "❌ NO");
+        printf("    └──────────────────────────────────────────────────────┘\n");
+
+        current = current->next;
+        file_index++;
+    }
+    printf("    📊 Total files: %d\n", file_index);
+}
+
+void	print_args_detailed(t_args *args)
+{
+    t_args	*current;
+    int		arg_index;
+
+    if (!args)
+    {
+        printf("    📝 ARGUMENTS: None\n");
+        return;
+    }
+
+    current = args;
+    arg_index = 0;
+    printf("    📝 ARGUMENTS:\n");
+
+    while (current)
+    {
+        printf("    ┌─ Arg [%d] ────────────────────────────────────────────┐\n", arg_index);
+        printf("    │ 📍 Address: %p                                    │\n", (void *)current);
+
+        if (current->cmd_args)
+            printf("    │ 📝 Value: \"%-35s\" │\n", current->cmd_args);
+        else
+            printf("    │ 📝 Value: (NULL)                                  │\n");
+
+        printf("    └───────────────────────────────────────────────────────┘\n");
+
+        current = current->next;
+        arg_index++;
+    }
+    printf("    📊 Total arguments: %d\n", arg_index);
+}
+
+void	print_single_cmd_detailed(t_cmd *cmd, int cmd_index)
+{
+    if (!cmd)
+    {
+        printf("🚫 Command [%d]: NULL\n", cmd_index);
+        return;
+    }
+
+    printf("╔════════════════════════════════════════════════════════════════╗\n");
+    printf("║                      COMMAND [%d] DETAILS                       ║\n", cmd_index);
+    printf("╠════════════════════════════════════════════════════════════════╣\n");
+    printf("║ 📍 Memory: %p                                            ║\n", (void *)cmd);
+    printf("╚════════════════════════════════════════════════════════════════╝\n");
+
+    /* Basic info */
+    printf("📂 Command path: %s\n", cmd->cmd_path ? cmd->cmd_path : "(not set)");
+
+    /* Flags */
+    printf("🔧 Builtin: %s\n", cmd->is_builtin ? "✅ YES" : "❌ NO");
+
+    /* Arguments */
+    printf("\n");
+    print_args_detailed(cmd->args);
+
+    /* Files */
+    printf("\n");
+    print_files_detailed(cmd->files);
+
+    /* Navigation */
+    printf("\n🔗 NAVIGATION:\n");
+    printf("    ⬅️  Previous: %p\n", (void *)cmd->prev);
+    printf("    ➡️  Next: %p\n", (void *)cmd->next);
+}
+
+void	print_cmd_list_detailed(t_cmd *cmd_list)
+{
+    t_cmd	*current;
+    int		cmd_count;
+    int		total_commands;
+
+    if (!cmd_list)
+    {
+        printf("🚫 Command list is empty (NULL)\n");
+        return;
+    }
+
+    /* Count total commands */
+    current = cmd_list;
+    total_commands = 0;
+    while (current)
+    {
+        total_commands++;
+        current = current->next;
+    }
+
+    /* Header */
+    printf("\n");
+    printf("╔══════════════════════════════════════════════════════════════╗\n");
+    printf("║                    COMMAND LIST ANALYSIS                    ║\n");
+    printf("║                   Total commands: %-3d                      ║\n", total_commands);
+    printf("╚══════════════════════════════════════════════════════════════╝\n");
+    printf("\n");
+
+    /* Print each command */
+    current = cmd_list;
+    cmd_count = 0;
+    while (current)
+    {
+        print_single_cmd_detailed(current, cmd_count);
+
+        if (current->next)
+        {
+            printf("\n🔄 PIPELINE: Command [%d] ──→ Command [%d]\n", cmd_count, cmd_count + 1);
+            printf("═══════════════════════════════════════════════════════════════\n");
+        }
+
+        current = current->next;
+        cmd_count++;
+    }
+
+    printf("\n╚═══════════════════ END OF ANALYSIS ═══════════════════════╝\n");
+}
 
 int	main_shell_loop(char **envp)
 {
@@ -88,25 +243,25 @@ int	main_shell_loop(char **envp)
     env_copy = copy_env_array(envp);
     if (!env_copy)
         return (EXIT_FAILURE);
-    
+
     while (1)
     {
         input = readline("\033[1;32mminishell$\033[0m ");
-        
+
         // Handle Ctrl+D (EOF) or readline error
         if (!input)
         {
             printf("exit\n");
             break;
         }
-        
+
         // Skip empty input
         if (*input == '\0')
         {
             free(input);
             continue;
         }
-        
+
         add_history(input);
         tokens = parse_complete_input(&input, env_copy, g_signal_test);
         if (!tokens)
@@ -114,50 +269,19 @@ int	main_shell_loop(char **envp)
             free(input);
             continue;
         }
-        
-        head = split_pipeline_groups(tokens);
         free_token_list(tokens);  // Fix: use free_token_list instead of free_token
-        
         if (!head)
         {
             free(input);
             continue;
         }
-        
+        pipex(tokens, envp);
         // print_exec_list(head);
-        
+
         // Execute each pipeline group
         cur = head;
-        while (cur)
-        {
-            if (cur->group && cur->group[0])
-            {
-                int j = 0;
-                while (cur->group[j])
-                    j++;
-                status = pipex(cur, j, cur->group, env_copy);
-                g_signal_test = status;
 
-                // Debug: Check if stdin is still valid
-                // if (isatty(STDIN_FILENO) == 0)
-                // {
-                //     fprintf(stderr, "ERROR: stdin is no longer a terminal after pipex!\n");
-                //     // Try to restore stdin
-                //     int new_stdin = open("/dev/tty", O_RDONLY);
-                //     if (new_stdin != -1)
-                //     {
-                //         dup2(new_stdin, STDIN_FILENO);
-                //         close(new_stdin);
-                //     }
-                // }
-            }
-            cur = cur->next;
-        }
-        
-        free_exec_core(head);  // Fix: use free_exec_core instead of free_exec
-        free(input);
     }
-    
     ft_freesplit(env_copy);
     return (g_signal_test);
 }

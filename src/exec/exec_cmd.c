@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 20:47:43 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/17 22:30:21 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/19 16:01:52 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,22 +35,6 @@ char	**struct_to_array(t_args *args)
 	}
 	array[i] = NULL;
 	return (array);
-}
-
-int	is_directory(t_exec *exec)
-{
-	if (ft_strchr(exec->cmd_list->args->cmd_args, '/'))
-	{
-		ft_message(exec->cmd_list->args->cmd_args, "Is a directory");
-		if (access(exec->cmd_list->args->cmd_args, F_OK) == -1)
-			free_child(exec, 127, "minishell: %s: No such file or directory\n",
-				exec->cmd_list->args->cmd_args);
-		if (access(exec->cmd_list->args->cmd_args, X_OK) == -1)
-			free_child(exec, 126, "minishell: %s: Permission denied\n",
-				exec->cmd_list->args->cmd_args);
-		return (1);
-	}
-	return (0);
 }
 
 void	check_exec_file(t_exec *exec, char *cmd)
@@ -107,18 +91,22 @@ void	execute_bonus(t_exec *exec, char **envp)
 			"Command not found");
 	if (is_directory(exec) == 1)
 		return ;
-	find_path(exec, exec->cmd_list->args->cmd_args);
-	if (!exec->cmd_list->cmd_path)
-		free_child(exec, 127, exec->cmd_list->args->cmd_args, "Command not found");
-	if (execve(exec->cmd_list->cmd_path, struct_to_array(exec->cmd_list->args),
-			envp) == -1)
+	if (is_builtin(exec) == 0)
 	{
-		if (errno == EACCES || errno == EISDIR)
-			free_child(exec, 126, "pipex: execve", strerror(errno));
-		if (errno == ENOENT || errno == EPERM)
-			free_child(exec, 127, "pipex: execve", strerror(errno));
-		if (errno == ENOTDIR)
-			free_child(exec, 127, "pipex: execve", strerror(errno));
-		free_child(exec, 1, "execve", strerror(errno));
+		find_path(exec, exec->cmd_list->args->cmd_args);
+		if (!exec->cmd_list->cmd_path)
+			free_child(exec, 127, exec->cmd_list->args->cmd_args,
+				"Command not found");
+		if (execve(exec->cmd_list->cmd_path,
+				struct_to_array(exec->cmd_list->args), envp) == -1)
+		{
+			if (errno == EACCES || errno == EISDIR)
+				free_child(exec, 126, "pipex: execve", strerror(errno));
+			if (errno == ENOENT || errno == EPERM)
+				free_child(exec, 127, "pipex: execve", strerror(errno));
+			if (errno == ENOTDIR)
+				free_child(exec, 127, "pipex: execve", strerror(errno));
+			free_child(exec, 1, "execve", strerror(errno));
+		}
 	}
 }

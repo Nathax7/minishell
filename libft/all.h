@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   all.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 17:37:52 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/08 20:36:41 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/19 16:04:03 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int					ft_toupper(int c);
 int					ft_tolower(int c);
 int					ft_atoi(const char *str);
 size_t				ft_strlen(const char *s);
+char				*ft_strcpy(char *dest, char *src);
 size_t				ft_strlcpy(char *dst, const char *src, size_t size);
 unsigned int		ft_strlcat(char *dst, char *src, size_t size);
 char				*ft_strchr(const char *s, int c);
