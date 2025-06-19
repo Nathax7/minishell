@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_struct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:11:14 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/17 22:39:56 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/19 18:51:31 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,51 @@ void	free_cmd_list(t_cmd *cmd_list, int is_parent)
 		free(current);
 		current = next;
 	}
+}
+
+void	free_parent_pipex(t_exec *exec, int status)
+{
+	if (!exec)
+		return ;
+	if (exec->cmd_list)
+	{
+		exec->cmd_list = find_first_cmd(exec->cmd_list);
+		free_cmd_list(exec->cmd_list, 1);
+		exec->cmd_list = NULL;
+	}
+	if (exec->paths)
+	{
+		free_split(exec->paths);
+		exec->paths = NULL;
+	}
+	if (exec->pids)
+	{
+		free(exec->pids);
+		exec->pids = NULL;
+	}
+	if (exec->pipes)
+	{
+		close_all_pipes(exec);
+		exec->pipes = NULL;
+	}
+	if (exec->stdin_backup != -1)
+	{
+		dup2(exec->stdin_backup, STDIN_FILENO);
+		close(exec->stdin_backup);
+		exec->stdin_backup = -1;
+	}
+	if (exec->stdout_backup != -1)
+	{
+		dup2(exec->stdout_backup, STDOUT_FILENO);
+		close(exec->stdout_backup);
+		exec->stdout_backup = -1;
+	}
+	exec->envp = NULL;
+	exec->cmd_count = 0;
+	exec->exit_status = 0;
+	exec->envp_exists = 0;
+	if (status != -1)
+		exit(status);
 }
 
 void	free_parent(t_exec *exec, int status, char *str, char *str2)

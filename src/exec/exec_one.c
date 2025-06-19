@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 16:03:21 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/16 18:51:35 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/19 19:04:12 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	exec_one(t_exec *exec, char **envp)
 		free_child(exec, 1, "pid", strerror(errno));
 	if (exec->pids[0] == 0)
 	{
+		
 		struct_open_infile(exec);
 		struct_open_outfile(exec);
 		if (exec->cmd_list->fd_input != -1)

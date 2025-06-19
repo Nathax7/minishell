@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:01:49 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/19 18:13:21 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/19 18:51:57 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +101,9 @@ int	pipex(t_token *tokens, char **envp)
 	else
 		exec_one(&exec, envp);
 	i = -1;
-	// while (++i < exec.cmd_count - 1)
-	// 	waitpid(exec.pids[i], &exec.exit_status, 0);
-	free_parent(&exec, -1, NULL, NULL);
+	while (++i < exec.cmd_count)
+		waitpid(exec.pids[i], &exec.exit_status, 0);
+	free_parent_pipex(&exec, -1);
 	if (WIFEXITED(exec.exit_status))
 		return (WEXITSTATUS(exec.exit_status));
 	return (exec.exit_status);
