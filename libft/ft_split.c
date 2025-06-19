@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:30:41 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/08 19:57:04 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/19 18:14:34 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,18 @@ char	**ft_freesplit(char **str)
 	}
 	free(str);
 	return (NULL);
+}
+void	free_split(char **str)
+{
+	size_t	i;
+
+	i = 0;
+	while (str && str[i])
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str);
 }
 
 int		ft_freesplit_int(char **str, int return_val)

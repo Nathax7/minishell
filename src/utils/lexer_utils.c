@@ -6,11 +6,11 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 21:39:08 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/04 18:28:23 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/19 18:27:18 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "../../includes/utils.h"
 
 void	free_token_list(t_token *list)
 {

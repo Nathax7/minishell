@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:07:53 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/19 15:58:05 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/19 18:29:04 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int		is_valid_var_char(char c);
 
 // error management utils
 // void	handle_syntax_error(t_syntax_result *result);
-void	report_syntax_error(const char *near_token);
 
 // clean string building util
 void	sb_init(t_str_builder *sb);
@@ -78,5 +77,17 @@ int		set_env_var(char ***env_ptr, char *name, char *value);
 char	*get_env_var_value(const char *var_name, char **envp,
 			int last_exit_status);
 int		is_valid_var_char(char c);
+
+void	*cleanup_parsing_and_return_null(char **line, char ***accumulated_input,
+			t_token **tokens, char *error_msg);
+void	report_syntax_error(char *near_token);
+void	handle_syntax_error(t_syntax_result *result);
+
+int		create_and_append_token(t_token **head, char *value, t_token_type type,
+			t_quote quote_status);
+int		is_word_char(char c);
+int		is_operator_start(char c);
+void	free_token_list(t_token *list);
+
 
 #endif

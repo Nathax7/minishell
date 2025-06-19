@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 21:46:37 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/19 16:39:05 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/19 18:13:15 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	exec_init(t_exec *exec, char **envp);
 void	free_child(t_exec *exec, int status, char *str, char *str2);
 void	free_parent(t_exec *exec, int status, char *str, char *str2);
 void	free_cmd_list(t_cmd *cmd_list, int is_parent);
-void	print_cmd_list_detailed(t_cmd *cmd_list);
+// void	print_cmd_list_detailed(t_cmd *cmd_list);
 int		is_builtin(t_exec *exec, char **envp);
 int		is_directory(t_exec *exec);
 

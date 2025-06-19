@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:01:49 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/17 19:34:27 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/19 18:13:21 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	pipex(t_token *tokens, char **envp)
 
 	exec_init(&exec, envp);
 	parsing_exec(tokens, &exec);
-	print_cmd_list_detailed(exec.cmd_list);
+	// print_cmd_list_detailed(exec.cmd_list);
 	if (!exec.cmd_list)
 	{
 		free_parent(&exec, 1, "Error: No commands parsed", NULL);
