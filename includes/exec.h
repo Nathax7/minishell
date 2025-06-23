@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 21:46:37 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/19 18:51:46 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/23 18:28:41 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*here_doc(t_files *files, char *limiter);
 void	find_path(t_exec *exec, char *cmd);
 void	execute_bonus(t_exec *exec, char **envp);
 int		pipex(t_token *tokens, char **envp);
-void	exec_one(t_exec *exec, char **envp);
+int		exec_one(t_exec *exec, char **envp);
 void	open_infile(t_exec *exec, int previous_fd);
 void	open_outfile(t_exec *exec, int previous_fd);
 int		open_here_doc(t_files *files);

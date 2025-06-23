@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:23:18 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/17 19:02:57 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/23 18:38:27 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	open_infile(t_exec *exec, int previous_fd)
 	if (access(exec->cmd_list->files->infile_name, F_OK) == -1)
 	{
 		fprintf(stderr, "%s", exec->cmd_list->files->infile_name);
-		free_child(exec, 1, "No such file or directory caca",
+		free_child(exec, 1, "No such file or directory",
 			exec->cmd_list->files->infile_name);
 	}
 	if (access(exec->cmd_list->files->infile_name, R_OK) == -1)
@@ -55,24 +55,24 @@ void	open_infile(t_exec *exec, int previous_fd)
 
 void	open_outfile(t_exec *exec, int previous_fd)
 {
-	if (access(exec->cmd_list->files->outfile_name, F_OK) == 0)
-	{
-		if (access(exec->cmd_list->files->outfile_name, W_OK) == -1)
-			free_child(exec, 1, "permission denied <child>",
-				exec->cmd_list->files->outfile_name);
-	}
-	if (exec->cmd_list->files->append == 1)
-		exec->cmd_list->fd_output = open(exec->cmd_list->files->outfile_name,
-				O_WRONLY | O_CREAT | O_APPEND, 0644);
-	else
-		exec->cmd_list->fd_output = open(exec->cmd_list->files->outfile_name,
-				O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (exec->cmd_list->fd_output == -1)
-	{
-		if (previous_fd != -1)
-			close(previous_fd);
-		free_child(exec, 1, "<open_outfile child>", strerror(errno));
-	}
+    if (previous_fd != -1)
+        close(previous_fd);
+    if (access(exec->cmd_list->files->outfile_name, F_OK) == 0)
+    {
+        if (access(exec->cmd_list->files->outfile_name, W_OK) == -1)
+            free_child(exec, 1, "permission denied <child>",
+                exec->cmd_list->files->outfile_name);
+    }
+    if (exec->cmd_list->files->append == 1)
+        exec->cmd_list->fd_output = open(exec->cmd_list->files->outfile_name,
+                O_WRONLY | O_CREAT | O_APPEND, 0644);
+    else
+        exec->cmd_list->fd_output = open(exec->cmd_list->files->outfile_name,
+                O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (exec->cmd_list->fd_output == -1)
+    {
+        free_child(exec, 1, "<open_outfile child>", strerror(errno));
+    }
 }
 
 void	struct_open_infile(t_exec *exec)

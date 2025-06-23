@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:01:49 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/19 18:51:57 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/23 18:29:09 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,9 @@ int	pipex(t_token *tokens, char **envp)
 {
 	t_exec	exec;
 	int		i;
+	int		fork;
 
+	fork = 1;
 	exec_init(&exec, envp);
 	parsing_exec(tokens, &exec);
 	// print_cmd_list_detailed(exec.cmd_list);
@@ -99,9 +101,9 @@ int	pipex(t_token *tokens, char **envp)
 			exec.cmd_list = exec.cmd_list->next;
 		}
 	else
-		exec_one(&exec, envp);
+		fork = exec_one(&exec, envp);
 	i = -1;
-	while (++i < exec.cmd_count)
+	while (++i < exec.cmd_count && fork)
 		waitpid(exec.pids[i], &exec.exit_status, 0);
 	free_parent_pipex(&exec, -1);
 	if (WIFEXITED(exec.exit_status))
