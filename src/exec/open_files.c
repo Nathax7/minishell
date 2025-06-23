@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   open_files.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:23:18 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/23 18:38:27 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/23 19:06:24 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	open_infile(t_exec *exec, int previous_fd)
 		close(previous_fd);
 	if (access(exec->cmd_list->files->infile_name, F_OK) == -1)
 	{
-		fprintf(stderr, "%s", exec->cmd_list->files->infile_name);
+		// fprintf(stderr, "%s", exec->cmd_list->files->infile_name);
 		free_child(exec, 1, "No such file or directory",
 			exec->cmd_list->files->infile_name);
 	}

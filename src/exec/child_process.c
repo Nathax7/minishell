@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 22:58:16 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/23 18:47:04 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/23 19:16:54 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	setup_redirections(t_exec *exec, int cmd_index)
 			if (dup2(exec->cmd_list->fd_output, STDOUT_FILENO) == -1)
 				free_child(exec, 1, "dup22", strerror(errno));
 		}
-		else
+		else if (exec->cmd_count > 1)
 		{
 			if (dup2(exec->pipes[0][1], STDOUT_FILENO) == -1)
 				free_child(exec, 1, "dup23", strerror(errno));

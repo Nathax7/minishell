@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:01:49 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/23 18:29:09 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/23 19:16:33 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	usage(void)
 
 static void	free_pipes(t_exec *exec, int failed_index)
 {
-	int j;
+	int	j;
 
 	j = 0;
 	while (j < failed_index)
@@ -94,14 +94,11 @@ int	pipex(t_token *tokens, char **envp)
 		free_parent(&exec, 1, "malloc", strerror(errno));
 	create_pipes(&exec);
 	i = -1;
-	if (exec.cmd_count > 1)
-		while (++i < exec.cmd_count)
-		{
-			child_process(&exec, i, envp);
-			exec.cmd_list = exec.cmd_list->next;
-		}
-	else
-		fork = exec_one(&exec, envp);
+	while (++i < exec.cmd_count)
+	{
+		child_process(&exec, i, envp);
+		exec.cmd_list = exec.cmd_list->next;
+	}
 	i = -1;
 	while (++i < exec.cmd_count && fork)
 		waitpid(exec.pids[i], &exec.exit_status, 0);
