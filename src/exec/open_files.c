@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:23:18 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/25 22:29:19 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/26 19:56:15 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	open_outfile(t_exec *exec, int previous_fd)
     if (access(exec->cmd_list->files->outfile_name, F_OK) == 0)
     {
         if (access(exec->cmd_list->files->outfile_name, W_OK) == -1)
-            free_child(exec, 1, "permission denied <child>",
+            free_child(exec, 1, "Permission denied",
                 exec->cmd_list->files->outfile_name);
     }
     if (exec->cmd_list->files->append == 1)
@@ -70,7 +70,15 @@ void	open_outfile(t_exec *exec, int previous_fd)
                 O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (exec->cmd_list->fd_output == -1)
     {
-        free_child(exec, 1, "<open_outfile child>", strerror(errno));
+        if (errno == EACCES)
+            free_child(exec, 1, "Permission denied",
+                exec->cmd_list->files->outfile_name);
+        else if (errno == ENOENT)
+            free_child(exec, 1, "No such file or directory",
+                exec->cmd_list->files->outfile_name);
+        else
+            free_child(exec, 1, strerror(errno),
+                exec->cmd_list->files->outfile_name);
     }
 }
 
