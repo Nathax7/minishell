@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main_parsing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 15:31:48 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/19 18:21:22 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:37:51 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "parsing.h"
 
 t_token	*process_complete_syntax(t_syntax_result syntax_result, char **envp,
 		int exit_status)
@@ -59,7 +59,7 @@ t_token	*parse_complete_input(char **accumulated_input, char **envp,
 	else
 	{
 		handle_syntax_error(&syntax_result);
-		return (cleanup_parsing_and_return_null(&line, &accumulated_input, 
+		return (cleanup_parsing_and_return_null(&line, &accumulated_input,
 				&tokens, NULL));
 	}
 }

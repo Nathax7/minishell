@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   signal_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 14:41:55 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/11 16:55:46 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:38:27 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/signals.h"
+#include "signals.h"
 
 static void	handle_sigint_interactive(int sig)
 {

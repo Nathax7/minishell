@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 18:20:29 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/05 17:21:01 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:37:42 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "parsing.h"
 
 static t_quote	determine_quote_type(int has_single, int has_double,
 		int has_unquoted)

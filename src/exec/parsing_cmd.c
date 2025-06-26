@@ -6,11 +6,11 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 17:27:37 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/17 18:50:22 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/25 19:58:01 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/exec.h"
+#include "exec.h"
 
 t_cmd	*append_cmd_node(t_cmd *node)
 {
@@ -23,6 +23,8 @@ t_cmd	*append_cmd_node(t_cmd *node)
 	new_node->cmd_path = NULL;
 	new_node->files = NULL;
 	new_node->is_builtin = 0;
+	new_node->fd_input = -1;
+	new_node->fd_output = -1;
 	new_node->next = NULL;
 	new_node->prev = NULL;
 	if (!node)
@@ -237,12 +239,6 @@ t_cmd	*parsing_cmd(t_token *tokens)
 		if (tokens && tokens->type == T_PIPE)
 		{
 			tokens = tokens->next;
-			// if (!tokens)
-			// {
-			// 	printf("minishell: syntax error near unexpected token '|'\n");
-			//     //free_cmd(head);
-			//     return (NULL);
-			// }
 			cmd = append_cmd_node(cmd);
 			if (!cmd)
 			{

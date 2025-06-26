@@ -6,11 +6,11 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 20:48:14 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/19 16:04:53 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:39:17 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/utils.h"
+#include "utils.h"
 
 // void ft_close(t_exec *exec, t_type type)
 // {

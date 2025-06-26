@@ -6,13 +6,11 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:43:04 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/17 18:03:59 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/25 21:22:30 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/exec.h"
-
-
+#include "exec.h"
 
 int	random_filename(t_files *files)
 {
@@ -22,10 +20,10 @@ int	random_filename(t_files *files)
 
 	if (!files)
 		return (1);
-	files->infile_name = malloc(sizeof(char) * 13);
+	files->infile_name = malloc(sizeof(char) * 22);
 	if (!files->infile_name)
 		return (1);
-	ft_strcpy(files->infile_name, "/tmp/");
+	ft_strcpy(files->infile_name, "/tmp/.heredoc_");
 	urandom_fd = open("/dev/urandom", O_RDONLY);
 	if (urandom_fd < 0)
 	{
@@ -33,8 +31,8 @@ int	random_filename(t_files *files)
 		files->infile_name = NULL;
 		return (1);
 	}
-	i = 5;
-	while (i < 13)
+	i = 14;
+	while (i < 22)
 	{
 		if (read(urandom_fd, &random, 1) < 0)
 		{
@@ -46,7 +44,7 @@ int	random_filename(t_files *files)
 		files->infile_name[i] = CHARSET[random % (sizeof(CHARSET) - 1)];
 		i++;
 	}
-	files->infile_name[13 - 1] = '\0';
+	files->infile_name[22 - 1] = '\0';
 	close(urandom_fd);
 	return (0);
 }
@@ -54,7 +52,7 @@ int	random_filename(t_files *files)
 char	*here_doc(t_files *files, char *limiter)
 {
 	char	*temp;
-	int	fd;
+	int		fd;
 
 	if (random_filename(files) == 1)
 		return (NULL);
@@ -82,3 +80,4 @@ char	*here_doc(t_files *files, char *limiter)
 	close(fd);
 	return (files->infile_name);
 }
+

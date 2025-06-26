@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   quote_extracter.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:36:09 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/12 18:58:31 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:38:11 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "parsing.h"
 
 int	extract_quoted_content(const char **line, char quote_char, t_str_builder *sb)
 {

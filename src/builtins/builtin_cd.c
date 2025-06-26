@@ -6,11 +6,11 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:40:19 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/19 16:33:23 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:35:43 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/builtins.h"
+#include "builtins.h"
 
 static int	update_pwd_variables(char ***env_ptr, char *old_pwd)
 {

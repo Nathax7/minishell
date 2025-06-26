@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   string_builder_annex.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 21:33:14 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/09 20:55:29 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:39:41 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "parsing.h"
 
 char	*sb_free_and_return_null(t_str_builder *sb)
 {

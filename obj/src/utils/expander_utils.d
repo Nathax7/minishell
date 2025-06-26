@@ -1,17 +1,15 @@
 obj/src/utils/expander_utils.o: src/utils/expander_utils.c \
-  src/utils/../../includes/builtins.h src/utils/../../includes/utils.h \
-  src/utils/../../includes/struct.h \
-  src/utils/../../includes/../libft/all.h \
-  src/utils/../../includes/parsing.h src/utils/../../includes/signals.h
+  includes/builtins.h includes/utils.h includes/struct.h \
+  includes/../libft/all.h includes/parsing.h includes/signals.h
 
-src/utils/../../includes/builtins.h:
+includes/builtins.h:
 
-src/utils/../../includes/utils.h:
+includes/utils.h:
 
-src/utils/../../includes/struct.h:
+includes/struct.h:
 
-src/utils/../../includes/../libft/all.h:
+includes/../libft/all.h:
 
-src/utils/../../includes/parsing.h:
+includes/parsing.h:
 
-src/utils/../../includes/signals.h:
+includes/signals.h:

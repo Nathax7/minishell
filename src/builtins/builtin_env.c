@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   builtin_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:58:59 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/06 16:17:41 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:35:56 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/builtins.h"
+#include "builtins.h"
 
 int	builtin_env(char ***env_ptr)
 {
 	char	**envp;
 	int i;
-	
+
 	envp = *env_ptr;
 	if (!envp || !*envp)
 		return (0);

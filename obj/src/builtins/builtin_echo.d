@@ -1,13 +1,11 @@
 obj/src/builtins/builtin_echo.o: src/builtins/builtin_echo.c \
-  src/builtins/../../includes/builtins.h \
-  src/builtins/../../includes/utils.h \
-  src/builtins/../../includes/struct.h \
-  src/builtins/../../includes/../libft/all.h
+  includes/builtins.h includes/utils.h includes/struct.h \
+  includes/../libft/all.h
 
-src/builtins/../../includes/builtins.h:
+includes/builtins.h:
 
-src/builtins/../../includes/utils.h:
+includes/utils.h:
 
-src/builtins/../../includes/struct.h:
+includes/struct.h:
 
-src/builtins/../../includes/../libft/all.h:
+includes/../libft/all.h:

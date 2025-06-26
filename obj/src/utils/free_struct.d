@@ -1,9 +1,13 @@
-obj/src/utils/free_struct.o: src/utils/free_struct.c \
-  src/utils/../../includes/utils.h src/utils/../../includes/struct.h \
-  src/utils/../../includes/../libft/all.h
+obj/src/utils/free_struct.o: src/utils/free_struct.c includes/exec.h \
+  includes/builtins.h includes/utils.h includes/struct.h \
+  includes/../libft/all.h
 
-src/utils/../../includes/utils.h:
+includes/exec.h:
 
-src/utils/../../includes/struct.h:
+includes/builtins.h:
 
-src/utils/../../includes/../libft/all.h:
+includes/utils.h:
+
+includes/struct.h:
+
+includes/../libft/all.h:

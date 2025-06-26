@@ -1,9 +1,8 @@
-obj/src/utils/find_first.o: src/utils/find_first.c \
-  libft/../includes/utils.h libft/../includes/struct.h \
-  libft/../includes/../libft/all.h
+obj/src/utils/find_first.o: src/utils/find_first.c includes/utils.h \
+  includes/struct.h includes/../libft/all.h
 
-libft/../includes/utils.h:
+includes/utils.h:
 
-libft/../includes/struct.h:
+includes/struct.h:
 
-libft/../includes/../libft/all.h:
+includes/../libft/all.h:

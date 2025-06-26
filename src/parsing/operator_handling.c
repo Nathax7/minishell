@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   operator_handling.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:44:30 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/04 18:21:16 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:37:55 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "parsing.h"
 
 int	handle_pipe_operator(const char **line, t_token **head)
 {

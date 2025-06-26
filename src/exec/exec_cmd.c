@@ -6,11 +6,11 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 20:47:43 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/19 16:38:50 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:51:53 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/exec.h"
+#include "exec.h"
 
 char	**struct_to_array(t_args *args)
 {
@@ -85,18 +85,19 @@ void	find_path(t_exec *exec, char *cmd)
 
 void	execute_bonus(t_exec *exec, char **envp)
 {
+	if (!exec || !exec->cmd_list)
+		free_child(exec, 1, "execute_bonus", "Invalid structure");
 	exec->cmd_list->args = find_first_args(exec->cmd_list->args);
 	if (exec->cmd_list->args->cmd_args == NULL)
 		free_child(exec, 127, exec->cmd_list->args->cmd_args,
-			"Command not found");
-	if (is_directory(exec) == 1)
-		return ;
+			"command not found");
+	check_path(exec);
 	if (is_builtin(exec, envp) == 0)
 	{
 		find_path(exec, exec->cmd_list->args->cmd_args);
 		if (!exec->cmd_list->cmd_path)
 			free_child(exec, 127, exec->cmd_list->args->cmd_args,
-				"Command not found");
+				"command not found");
 		if (execve(exec->cmd_list->cmd_path,
 				struct_to_array(exec->cmd_list->args), envp) == -1)
 		{

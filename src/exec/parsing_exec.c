@@ -6,11 +6,11 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 19:39:17 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/16 19:44:58 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/25 19:56:37 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/exec.h"
+#include "exec.h"
 
 void	exec_init(t_exec *exec, char **envp)
 {

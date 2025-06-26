@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   string_builder.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 21:59:05 by almeekel          #+#    #+#             */
-/*   Updated: 2025/05/28 16:34:20 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:39:49 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "parsing.h"
 
 void	sb_init(t_str_builder *sb)
 {

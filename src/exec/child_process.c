@@ -3,17 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   child_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 22:58:16 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/23 19:16:54 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:46:13 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/exec.h"
+#include "exec.h"
 
 void	setup_redirections(t_exec *exec, int cmd_index)
 {
+	if (!exec || !exec->cmd_list)
+	{
+		free_child(exec, 1, "setup_redirections", "Invalid exec structure");
+		return ;
+	}
+	if (cmd_index > 0 && (!exec->pipes || !exec->pipes[cmd_index - 1]))
+	{
+		free_child(exec, 1, "setup_redirections", "Invalid pipe structure");
+		return ;
+	}
 	if (cmd_index == 0)
 	{
 		if (exec->cmd_list->fd_input != -1)
@@ -41,8 +51,11 @@ void	setup_redirections(t_exec *exec, int cmd_index)
 		}
 		else
 		{
-			if (dup2(exec->pipes[cmd_index - 1][0], STDIN_FILENO) == -1)
-				free_child(exec, 1, "dup25", strerror(errno));
+			if (cmd_index > 0 && exec->pipes[cmd_index - 1][0] != -1)
+			{
+				if (dup2(exec->pipes[cmd_index - 1][0], STDIN_FILENO) == -1)
+					free_child(exec, 1, "dup25", strerror(errno));
+			}
 		}
 		if (exec->cmd_list->fd_output != -1)
 		{
@@ -59,8 +72,11 @@ void	setup_redirections(t_exec *exec, int cmd_index)
 		}
 		else
 		{
-			if (dup2(exec->pipes[cmd_index - 1][0], STDIN_FILENO) == -1)
-				free_child(exec, 1, "dup28", strerror(errno));
+			if (cmd_index > 0 && exec->pipes[cmd_index - 1][0] != -1)
+			{
+				if (dup2(exec->pipes[cmd_index - 1][0], STDIN_FILENO) == -1)
+					free_child(exec, 1, "dup28", strerror(errno));
+			}
 		}
 		if (exec->cmd_list->fd_output != -1)
 		{
@@ -69,35 +85,54 @@ void	setup_redirections(t_exec *exec, int cmd_index)
 		}
 		else
 		{
-			if (dup2(exec->pipes[cmd_index][1], STDOUT_FILENO) == -1)
-				free_child(exec, 1, "dup211", strerror(errno));
+			if (cmd_index < exec->cmd_count - 1 && exec->pipes[cmd_index][1] !=
+				-1)
+			{
+				if (dup2(exec->pipes[cmd_index][1], STDOUT_FILENO) == -1)
+					free_child(exec, 1, "dup211", strerror(errno));
+			}
 		}
 	}
 }
 
-void	close_child_pipes(t_exec *exec)
+void	close_child_pipes(t_exec *exec, int cmd_index)
 {
-    int i;
+	int i;
 
-    i = 0;
-    while (i < exec->cmd_count - 1)
-    {
-        close(exec->pipes[i][0]);
-        close(exec->pipes[i][1]);
-        i++;
-    }
+	if (!exec->pipes)
+		return;
+
+	i = 0;
+	while (i < exec->cmd_count - 1)
+	{
+		if (!(i == cmd_index - 1 && exec->cmd_list->fd_input == -1) &&
+			exec->pipes[i][0] != -1)
+		{
+			close(exec->pipes[i][0]);
+			exec->pipes[i][0] = -1;
+		}
+		if (!(i == cmd_index && exec->cmd_list->fd_output == -1) &&
+			exec->pipes[i][1] != -1)
+		{
+			close(exec->pipes[i][1]);
+			exec->pipes[i][1] = -1;
+		}
+		i++;
+	}
 }
 
 void	close_parent_pipes(t_exec *exec, int cmd_index)
 {
-    if (cmd_index == 0 && exec->cmd_count > 1)
-        close(exec->pipes[0][1]);
-    else if (cmd_index > 0)
-    {
-        close(exec->pipes[cmd_index - 1][0]);
-        if (cmd_index < exec->cmd_count - 1)
-            close(exec->pipes[cmd_index][1]);
-    }
+	if (cmd_index > 0 && exec->pipes[cmd_index - 1][0] != -1)
+	{
+		close(exec->pipes[cmd_index - 1][0]);
+		exec->pipes[cmd_index - 1][0] = -1;
+	}
+	if (cmd_index < exec->cmd_count - 1 && exec->pipes[cmd_index][1] != -1)
+	{
+		close(exec->pipes[cmd_index][1]);
+		exec->pipes[cmd_index][1] = -1;
+	}
 }
 
 void	execute_child(t_exec *exec, int cmd_index, char **envp)
@@ -105,17 +140,21 @@ void	execute_child(t_exec *exec, int cmd_index, char **envp)
 	struct_open_infile(exec);
 	struct_open_outfile(exec);
 	setup_redirections(exec, cmd_index);
-	close_child_pipes(exec);
+	close_child_pipes(exec, cmd_index);
 	execute_bonus(exec, envp);
 }
 
 void	child_process(t_exec *exec, int cmd_index, char **envp)
 {
+	if (!exec || !exec->cmd_list)
+	{
+		free_child(exec, 1, "child_process", "Invalid exec structure");
+		return ;
+	}
 	exec->cmd_list->files = find_first_files(exec->cmd_list->files);
 	exec->pids[cmd_index] = fork();
 	if (exec->pids[cmd_index] == -1)
 		free_child(exec, 1, "pid", strerror(errno));
 	if (exec->pids[cmd_index] == 0)
 		execute_child(exec, cmd_index, envp);
-	close_parent_pipes(exec, cmd_index);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:36:22 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/19 17:50:22 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/25 21:39:28 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,11 @@
 # include <stdbool.h>
 # include <stdio.h>
 # include <string.h>
+# include <dirent.h>
 # include <sys/wait.h>
 # include <unistd.h>
-
-# define CHARSET "abcdefghijklmnopqrstuvwxyz"
+#include <sys/stat.h>
+# define CHARSET "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 typedef enum e_parse_status
 {

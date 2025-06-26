@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   secure_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 18:53:40 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/12 18:58:45 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:38:18 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "parsing.h"
 
 char	*cleanup_and_return_char(char *to_free, int to_close,
 		char *to_free_optional, int option_flag)

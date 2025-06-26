@@ -6,11 +6,11 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:11:14 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/23 18:18:46 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:30:22 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/utils.h"
+#include "exec.h"
 
 void	free_token(t_token *token, int status, char *str, char *str2)
 {
@@ -52,10 +52,13 @@ void	ft_message(char *str, char *str2)
 	}
 }
 
-static void	free_args_list(t_args *args)
+void	free_args_list(t_args *args)
 {
 	t_args	*current;
 	t_args	*next;
+
+	if (!args)
+		return;
 
 	current = args;
 	while (current)
@@ -95,104 +98,80 @@ static void	free_files_list(t_files *files)
 	}
 }
 
-int unlink_heredoc(t_files *files)
+int	unlink_heredoc(t_files *files)
 {
 	t_files	*current;
+	int		unlinked_count;
 
 	if (!files)
 		return (0);
 	current = files;
+	unlinked_count = 0;
 	while (current)
 	{
-		if (current->heredoc)
-		{
-			if (access(files->outfile_name, F_OK) == -1)
-			{
-				ft_message("error in unlink", NULL);
-				return (1);
-			}
-
-			if (ft_strchr(files->infile_name, '/'))
-			{
-				ft_message("Error in unlink", NULL);
-				return (1);
-			}
-			unlink(files->infile_name);
-		}
+		if (current->heredoc && current->infile_name)
+			unlink(current->infile_name);
 		current = current->next;
 	}
-	return (0);
+	return (unlinked_count);
 }
 
-void	free_cmd_list(t_cmd *cmd_list, int is_parent)
+void free_cmd_list(t_cmd *cmd_list, int is_parent)
 {
-	t_cmd	*current;
-	t_cmd	*next;
+    t_cmd *current;
+    t_cmd *next;
 
-	current = cmd_list;
-	while (current)
-	{
-		next = current->next;
-		if (current->args)
-		{
-			current->args = find_first_args(current->args);
-			free_args_list(current->args);
-			current->args = NULL;
-		}
-		if (!is_parent && current->cmd_path)
-		{
-			free(current->cmd_path);
-			current->cmd_path = NULL;
-		}
-		if (current->files)
-		{
-			current->files = find_first_files(current->files);
-			unlink_heredoc(current->files);
-			free_files_list(current->files);
-			current->files = NULL;
-		}
-		if (!is_parent)
-		{
-			if (current->fd_input != -1)
-			{
-				close(current->fd_input);
-				current->fd_input = -1;
-			}
-			if (current->fd_output != -1)
-			{
-				close(current->fd_output);
-				current->fd_output = -1;
-			}
-		}
-		free(current);
-		current = next;
-	}
+    if (!cmd_list)
+        return;
+
+    current = cmd_list;
+    while (current)
+    {
+        next = current->next;
+        if (current->args)
+        {
+            current->args = find_first_args(current->args);
+            free_args_list(current->args);
+            current->args = NULL;
+        }
+        if (!is_parent && current->cmd_path)
+        {
+            free(current->cmd_path);
+            current->cmd_path = NULL;
+        }
+        if (current->files)
+        {
+            current->files = find_first_files(current->files);
+            if (is_parent)
+                unlink_heredoc(current->files);
+            free_files_list(current->files);
+            current->files = NULL;
+        }
+        if (!is_parent)
+        {
+            if (current->fd_input != -1)
+            {
+                close(current->fd_input);
+                current->fd_input = -1;
+            }
+            if (current->fd_output != -1)
+            {
+                close(current->fd_output);
+                current->fd_output = -1;
+            }
+        }
+        free(current);
+        current = next;
+    }
 }
 
 void	free_parent_pipex(t_exec *exec, int status)
 {
 	if (!exec)
-		return ;
-	if (exec->cmd_list)
 	{
-		exec->cmd_list = find_first_cmd(exec->cmd_list);
-		free_cmd_list(exec->cmd_list, 1);
-		exec->cmd_list = NULL;
-	}
-	if (exec->paths)
-	{
-		free_split(exec->paths);
-		exec->paths = NULL;
-	}
-	if (exec->pids)
-	{
-		free(exec->pids);
-		exec->pids = NULL;
-	}
-	if (exec->pipes)
-	{
-		close_all_pipes(exec);
-		exec->pipes = NULL;
+		if (status != -1)
+			exit(status);
+		return;
 	}
 	if (exec->stdin_backup != -1)
 	{
@@ -205,6 +184,26 @@ void	free_parent_pipex(t_exec *exec, int status)
 		dup2(exec->stdout_backup, STDOUT_FILENO);
 		close(exec->stdout_backup);
 		exec->stdout_backup = -1;
+	}
+	if (exec->pipes)
+	{
+		close_all_pipes(exec);
+	}
+	exec->cmd_list = find_first_cmd(exec->cmd_list);
+	if (exec->cmd_list)
+	{
+		free_cmd_list(exec->cmd_list, 1);
+		exec->cmd_list = NULL;
+	}
+	if (exec->paths)
+	{
+		free_split(exec->paths);
+		exec->paths = NULL;
+	}
+	if (exec->pids)
+	{
+		free(exec->pids);
+		exec->pids = NULL;
 	}
 	exec->envp = NULL;
 	exec->cmd_count = 0;
@@ -216,29 +215,13 @@ void	free_parent_pipex(t_exec *exec, int status)
 
 void	free_parent(t_exec *exec, int status, char *str, char *str2)
 {
-	ft_message(str, str2);
+	if (str || str2)
+		ft_message(str, str2);
 	if (!exec)
+	{
+		if (status != -1)
+			exit(status);
 		return ;
-	if (exec->cmd_list)
-	{
-		exec->cmd_list = find_first_cmd(exec->cmd_list);
-		free_cmd_list(exec->cmd_list, 1);
-		exec->cmd_list = NULL;
-	}
-	if (exec->paths)
-	{
-		free_split(exec->paths);
-		exec->paths = NULL;
-	}
-	if (exec->pids)
-	{
-		free(exec->pids);
-		exec->pids = NULL;
-	}
-	if (exec->pipes)
-	{
-		close_all_pipes(exec);
-		exec->pipes = NULL;
 	}
 	if (exec->stdin_backup != -1)
 	{
@@ -252,43 +235,11 @@ void	free_parent(t_exec *exec, int status, char *str, char *str2)
 		close(exec->stdout_backup);
 		exec->stdout_backup = -1;
 	}
-	exec->envp = NULL;
-	exec->cmd_count = 0;
-	exec->exit_status = 0;
-	exec->envp_exists = 0;
-	if (status != -1)
-		exit(status);
-}
-
-void	close_all_pipes(t_exec *exec)
-{
-	int	i;
-
-	i = 0;
-	if (!exec->pipes)
-		return ;
-	while (i < exec->cmd_count - 1)
-	{
-		if (exec->pipes[i])
-		{
-			if (exec->pipes[i][0] >= 0)
-				close(exec->pipes[i][0]);
-			if (exec->pipes[i][1] >= 0)
-				close(exec->pipes[i][1]);
-		}
-		i++;
-	}
-}
-
-void	free_child(t_exec *exec, int status, char *str, char *str2)
-{
-	ft_message(str, str2);
-	if (!exec)
-		return ;
+	if (exec->pipes)
+		close_all_pipes(exec);
 	if (exec->cmd_list)
 	{
-		exec->cmd_list = find_first_cmd(exec->cmd_list);
-		free_cmd_list(exec->cmd_list, 0);
+		free_cmd_list(exec->cmd_list, 1);
 		exec->cmd_list = NULL;
 	}
 	if (exec->paths)
@@ -301,26 +252,104 @@ void	free_child(t_exec *exec, int status, char *str, char *str2)
 		free(exec->pids);
 		exec->pids = NULL;
 	}
-	if (exec->pipes)
-	{
-		close_all_pipes(exec);
-		exec->pipes = NULL;
-	}
-	if (exec->stdin_backup != -1)
-	{
-		close(exec->stdin_backup);
-		exec->stdin_backup = -1;
-	}
-
-	if (exec->stdout_backup != -1)
-	{
-		close(exec->stdout_backup);
-		exec->stdout_backup = -1;
-	}
 	exec->envp = NULL;
 	exec->cmd_count = 0;
 	exec->exit_status = 0;
 	exec->envp_exists = 0;
 	if (status != -1)
 		exit(status);
+}
+
+void close_all_pipes(t_exec *exec)
+{
+    int i;
+
+    if (!exec || !exec->pipes)
+        return;
+
+    i = 0;
+    while (i < exec->cmd_count - 1)
+    {
+        if (exec->pipes[i])
+        {
+            if (exec->pipes[i][0] > 2)
+            {
+                close(exec->pipes[i][0]);
+                exec->pipes[i][0] = -1;
+            }
+            if (exec->pipes[i][1] > 2)
+            {
+                close(exec->pipes[i][1]);
+                exec->pipes[i][1] = -1;
+            }
+            free(exec->pipes[i]);
+            exec->pipes[i] = NULL;
+        }
+        i++;
+    }
+    free(exec->pipes);
+    exec->pipes = NULL;
+}
+
+void free_child(t_exec *exec, int status, char *str, char *str2)
+{
+    if (str || str2)
+        ft_message(str, str2);
+
+    if (!exec)
+    {
+        exit(status);
+        return;
+    }
+    if (exec->cmd_list)
+    {
+        if (exec->cmd_list->fd_input > 2)
+        {
+            close(exec->cmd_list->fd_input);
+            exec->cmd_list->fd_input = -1;
+        }
+        if (exec->cmd_list->fd_output > 2)
+        {
+            close(exec->cmd_list->fd_output);
+            exec->cmd_list->fd_output = -1;
+        }
+
+        if (exec->cmd_list->cmd_path)
+        {
+            free(exec->cmd_list->cmd_path);
+            exec->cmd_list->cmd_path = NULL;
+        }
+    }
+    if (exec->pipes)
+    {
+        int i = 0;
+        while (i < exec->cmd_count - 1)
+        {
+            if (exec->pipes[i])
+            {
+                if (exec->pipes[i][0] > 2)
+                {
+                    close(exec->pipes[i][0]);
+                    exec->pipes[i][0] = -1;
+                }
+                if (exec->pipes[i][1] > 2)
+                {
+                    close(exec->pipes[i][1]);
+                    exec->pipes[i][1] = -1;
+                }
+            }
+            i++;
+        }
+    }
+    if (exec->stdin_backup > 2)
+    {
+        close(exec->stdin_backup);
+        exec->stdin_backup = -1;
+    }
+    if (exec->stdout_backup > 2)
+    {
+        close(exec->stdout_backup);
+        exec->stdout_backup = -1;
+    }
+    exit(status);
 }

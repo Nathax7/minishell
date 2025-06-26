@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   open_files.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:23:18 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/23 19:06:24 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:29:19 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/exec.h"
+#include "exec.h"
 
 int	open_here_doc(t_files *files)
 {
@@ -36,7 +36,6 @@ void	open_infile(t_exec *exec, int previous_fd)
 		close(previous_fd);
 	if (access(exec->cmd_list->files->infile_name, F_OK) == -1)
 	{
-		// fprintf(stderr, "%s", exec->cmd_list->files->infile_name);
 		free_child(exec, 1, "No such file or directory",
 			exec->cmd_list->files->infile_name);
 	}
@@ -118,43 +117,3 @@ void	struct_open_outfile(t_exec *exec)
 		current = current->next;
 	}
 }
-
-// int	open_infile_cmd(t_cmd *cmd, char *infile)
-// {
-// 	if (access(infile, F_OK) == -1)
-// 	{
-// 		ft_message("No such file or directory", infile);
-// 		return (1);
-// 	}
-// 	if (access(infile, R_OK) == -1)
-// 	{
-// 		ft_message("permission denied", infile);
-// 		return (1);
-// 	}
-// 	cmd->input_fd = open(infile, O_RDONLY);
-// 	if (cmd->input_fd == -1)
-// 		return (1);
-// 	close(cmd->input_fd);
-// 	return (0);
-// }
-
-// int	open_outfile_cmd(t_cmd *cmd, char *outfile, int mode)
-// {
-// 	if (access(outfile, F_OK) == 0)
-// 	{
-// 		if (access(outfile, W_OK) == -1)
-// 			ft_message("permission denied", outfile);
-// 		return (1);
-// 	}
-// 	if (mode == 0)
-// 		cmd->output_fd = open(outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
-// 	else if (mode == 1)
-// 		cmd->output_fd = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-// 	if (cmd->output_fd == -1)
-// 	{
-// 		ft_message("<open_outfile>", strerror(errno));
-// 		return (1);
-// 	}
-// 	close(cmd->output_fd);
-// 	return (0);
-// }

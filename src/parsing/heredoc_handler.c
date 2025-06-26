@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_handler.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:20:16 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/11 19:54:31 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:49:28 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "../../includes/parsing.h"
+// #include "parsing.h"
 
 // static char	*create_temp_file(void)
 // {

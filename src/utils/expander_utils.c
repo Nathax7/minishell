@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 20:15:31 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/11 16:20:34 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:38:43 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/builtins.h"
-#include "../../includes/parsing.h"
+#include "builtins.h"
+#include "parsing.h"
 
 char	*get_env_var_value(const char *var_name, char **envp,
 		int last_exit_status)

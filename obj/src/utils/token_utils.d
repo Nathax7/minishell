@@ -1,15 +1,13 @@
-obj/src/utils/token_utils.o: src/utils/token_utils.c \
-  src/utils/../../includes/parsing.h src/utils/../../includes/signals.h \
-  src/utils/../../includes/struct.h \
-  src/utils/../../includes/../libft/all.h \
-  src/utils/../../includes/utils.h
+obj/src/utils/token_utils.o: src/utils/token_utils.c includes/parsing.h \
+  includes/signals.h includes/struct.h includes/../libft/all.h \
+  includes/utils.h
 
-src/utils/../../includes/parsing.h:
+includes/parsing.h:
 
-src/utils/../../includes/signals.h:
+includes/signals.h:
 
-src/utils/../../includes/struct.h:
+includes/struct.h:
 
-src/utils/../../includes/../libft/all.h:
+includes/../libft/all.h:
 
-src/utils/../../includes/utils.h:
+includes/utils.h:

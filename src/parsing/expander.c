@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 18:11:15 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/14 18:59:45 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:37:23 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "parsing.h"
 
 static char	*expand_token_value(const char *value, t_quote quote_type,
 		char **envp, int exit_status)
@@ -65,7 +65,7 @@ static int	process_word_expansion(t_token *token, t_token **expanded_head,
 		return (1);
 	}
 	fields = perform_field_splitting(expanded_value, NULL);
-	free(expanded_value);	
+	free(expanded_value);
 	if (!fields)
 		return (0);
 	if (!fields[0])

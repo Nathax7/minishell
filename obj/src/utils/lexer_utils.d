@@ -1,9 +1,8 @@
-obj/src/utils/lexer_utils.o: src/utils/lexer_utils.c \
-  src/utils/../../includes/utils.h src/utils/../../includes/struct.h \
-  src/utils/../../includes/../libft/all.h
+obj/src/utils/lexer_utils.o: src/utils/lexer_utils.c includes/utils.h \
+  includes/struct.h includes/../libft/all.h
 
-src/utils/../../includes/utils.h:
+includes/utils.h:
 
-src/utils/../../includes/struct.h:
+includes/struct.h:
 
-src/utils/../../includes/../libft/all.h:
+includes/../libft/all.h:

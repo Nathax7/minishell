@@ -6,24 +6,24 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 21:46:37 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/23 18:28:41 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/25 21:50:58 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXEC_H
 # define EXEC_H
 
-# include "utils.h"
 # include "builtins.h"
+# include "utils.h"
 
 void	ft_message(char *str, char *str2);
 void	free_triple(char ***triple);
 void	child_process(t_exec *exec, int cmd_index, char **envp);
 char	*here_doc(t_files *files, char *limiter);
+void	check_path(t_exec *exec);
 void	find_path(t_exec *exec, char *cmd);
 void	execute_bonus(t_exec *exec, char **envp);
 int		pipex(t_token *tokens, char **envp);
-int		exec_one(t_exec *exec, char **envp);
 void	open_infile(t_exec *exec, int previous_fd);
 void	open_outfile(t_exec *exec, int previous_fd);
 int		open_here_doc(t_files *files);
@@ -39,6 +39,5 @@ void	free_parent_pipex(t_exec *exec, int status);
 void	free_cmd_list(t_cmd *cmd_list, int is_parent);
 // void	print_cmd_list_detailed(t_cmd *cmd_list);
 int		is_builtin(t_exec *exec, char **envp);
-int		is_directory(t_exec *exec);
 
 #endif

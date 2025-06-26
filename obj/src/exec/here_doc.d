@@ -1,15 +1,13 @@
-obj/src/exec/here_doc.o: src/exec/here_doc.c \
-  src/exec/../../includes/exec.h src/exec/../../includes/utils.h \
-  src/exec/../../includes/struct.h \
-  src/exec/../../includes/../libft/all.h \
-  src/exec/../../includes/builtins.h
+obj/src/exec/here_doc.o: src/exec/here_doc.c includes/exec.h \
+  includes/builtins.h includes/utils.h includes/struct.h \
+  includes/../libft/all.h
 
-src/exec/../../includes/exec.h:
+includes/exec.h:
 
-src/exec/../../includes/utils.h:
+includes/builtins.h:
 
-src/exec/../../includes/struct.h:
+includes/utils.h:
 
-src/exec/../../includes/../libft/all.h:
+includes/struct.h:
 
-src/exec/../../includes/builtins.h:
+includes/../libft/all.h:

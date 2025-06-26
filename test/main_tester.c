@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main_tester.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 17:00:00 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/23 18:54:35 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:40:05 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/exec.h"
-#include "../includes/parsing.h"
-#include "../includes/signals.h"
+#include "exec.h"
+#include "parsing.h"
+#include "signals.h"
 
 int			g_signal_test = 0;
 

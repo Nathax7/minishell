@@ -6,26 +6,40 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 17:57:50 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/23 17:26:31 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:16:12 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/exec.h"
+#include "exec.h"
 
-int	is_directory(t_exec *exec)
+int	is_directory(const char *path)
 {
-	if (ft_strchr(exec->cmd_list->args->cmd_args, '/'))
-	{
-		ft_message(exec->cmd_list->args->cmd_args, "Is a directory");
-		if (access(exec->cmd_list->args->cmd_args, F_OK) == -1)
-			free_child(exec, 127, "minishell: %s: No such file or directory\n",
-				exec->cmd_list->args->cmd_args);
-		if (access(exec->cmd_list->args->cmd_args, X_OK) == -1)
-			free_child(exec, 126, "minishell: %s: Permission denied\n",
-				exec->cmd_list->args->cmd_args);
-		return (1);
-	}
-	return (0);
+	struct stat	statbuf;
+
+	if (stat(path, &statbuf) != 0)
+		return (0);
+	return (S_ISDIR(statbuf.st_mode));
+}
+
+int	has_path_component(const char *cmd)
+{
+	return (ft_strchr(cmd, '/') != NULL);
+}
+
+void	check_path(t_exec *exec)
+{
+	char	*cmd;
+
+	cmd = exec->cmd_list->args->cmd_args;
+	if (!has_path_component(cmd))
+		return ;
+	if (access(cmd, F_OK) == -1)
+		free_child(exec, 127, cmd, "No such file or directory");
+	if (is_directory(cmd))
+		free_child(exec, 126, cmd, "Is a directory");
+	if (access(cmd, X_OK) == -1)
+		free_child(exec, 126, cmd, "Permission denied");
+	return ;
 }
 
 int	is_builtin(t_exec *exec, char **envp)
