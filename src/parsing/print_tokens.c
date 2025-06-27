@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   print_tokens.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 19:21:49 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/25 18:38:02 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/14 19:21:53 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "../../includes/parsing.h"
 
 static const char	*token_type_to_string(t_token_type type)
 {

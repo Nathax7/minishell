@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   freeing_structures.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 18:38:02 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/25 18:37:36 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/04 18:28:18 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "../../includes/parsing.h"
 
 void	cleanup_syntax_result(t_syntax_result *result)
 {

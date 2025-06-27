@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main_parsing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 15:31:48 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/25 18:37:51 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/23 20:45:30 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "../../includes/parsing.h"
 
 t_token	*process_complete_syntax(t_syntax_result syntax_result, char **envp,
 		int exit_status)
@@ -41,15 +41,13 @@ t_token	*parse_complete_input(char **accumulated_input, char **envp,
 
 	line = *accumulated_input;
 	if (check_signal_interruption())
-		return (cleanup_parsing_and_return_null(&line, &accumulated_input, NULL,
-				NULL));
+		return (cleanup_parsing_and_return_null(&line, &accumulated_input, NULL, NULL));
 	if (has_unclosed_quotes(line))
 		return (cleanup_parsing_and_return_null(&line, &accumulated_input, NULL,
 				"minishell: syntax error: unclosed quotes\n"));
 	tokens = lexer(line);
 	if (!tokens)
-		return (cleanup_parsing_and_return_null(&line, &accumulated_input, NULL,
-				NULL));
+		return (cleanup_parsing_and_return_null(&line, &accumulated_input, NULL, NULL));
 	syntax_result = analyze_syntax(tokens);
 	if (syntax_result.status == PARSE_OK)
 	{
@@ -59,7 +57,7 @@ t_token	*parse_complete_input(char **accumulated_input, char **envp,
 	else
 	{
 		handle_syntax_error(&syntax_result);
-		return (cleanup_parsing_and_return_null(&line, &accumulated_input,
+		return (cleanup_parsing_and_return_null(&line, &accumulated_input, 
 				&tokens, NULL));
 	}
 }

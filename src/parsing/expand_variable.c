@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expand_variable.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 23:08:05 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/25 18:37:20 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/11 19:07:30 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "../../includes/parsing.h"
 
 static char	*process_question_mark_expansion(const char **str_ptr, char **envp,
 		int last_exit_status)
@@ -127,7 +127,7 @@ char	*expand_variables_in_str(const char *input_str, t_quote quote_type,
 
 	if (!input_str)
 		return (NULL);
-
+		
 	sb_init(&sb);
 	ip = input_str;
 	while (*ip)
@@ -143,7 +143,7 @@ char	*expand_variables_in_str(const char *input_str, t_quote quote_type,
 				return (sb_free_and_return_null(&sb));
 		}
 	}
-
+	
 	result = sb_to_string_and_free(&sb);
 	return (result);
 }

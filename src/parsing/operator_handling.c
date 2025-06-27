@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   operator_handling.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:44:30 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/25 18:37:55 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/27 11:12:51 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "../../includes/parsing.h"
 
 int	handle_pipe_operator(const char **line, t_token **head)
 {
@@ -66,3 +66,4 @@ int	handle_greater_operator(const char **line, t_token **head)
 		return (0);
 	return (create_and_append_token(head, op_val, type, Q_NONE));
 }
+

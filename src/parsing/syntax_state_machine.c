@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_state_machine.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 15:38:32 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/25 18:38:22 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/27 11:13:29 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "../../includes/parsing.h"
 
 static int	validate_pipe_sequence(t_token *tokens, char **error_token)
 {

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main_parsing_core.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 21:35:07 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/25 18:37:47 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/12 18:58:03 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "../../includes/parsing.h"
 
 t_parse_result	handle_lexer_failure(char **line, char ***accumulated_input)
 {

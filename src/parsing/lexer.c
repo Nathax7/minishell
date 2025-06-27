@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 18:20:29 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/26 19:26:50 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/27 14:30:20 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "../../includes/parsing.h"
 
 static t_quote	determine_quote_type(int has_single, int has_double,
 		int has_unquoted)
@@ -39,6 +39,7 @@ static int	process_word(const char **line, t_token **head)
 	has_single = 0;
 	has_double = 0;
 	has_unquoted = 0;
+	
 	while (**line && is_word_char(**line) && !is_operator_start(**line))
 	{
 		if (**line == '\'')
@@ -117,3 +118,4 @@ t_token	*lexer(const char *line)
 	}
 	return (head);
 }
+
