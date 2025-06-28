@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:40:19 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/25 18:35:43 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/28 19:31:01 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	update_pwd_variables(char ***env_ptr, char *old_pwd)
 	new_pwd = getcwd(NULL, 0);
 	if (!new_pwd)
 	{
-		perror("cd: getcwd");
+		ft_message("cd: getcwd", strerror(errno));
 		return (1);
 	}
 	if (old_pwd)
@@ -33,12 +33,12 @@ static char	*find_directory(t_args *args, char **env)
 {
 	char	*target;
 
-	if (!args->next->cmd_args)
+	if (!args->next || !args->next->cmd_args)
 	{
 		target = find_env_var(env, "HOME");
 		if (!target)
 		{
-			ft_putstr_fd("cd: HOME not set\n", STDERR_FILENO);
+			ft_message("cd", "HOME not set");
 			return (NULL);
 		}
 		return (ft_strdup(target));
@@ -48,7 +48,7 @@ static char	*find_directory(t_args *args, char **env)
 		target = find_env_var(env, "OLDPWD");
 		if (!target)
 		{
-			ft_putstr_fd("cd: OLDPWD not set\n", STDERR_FILENO);
+			ft_message("cd", "OLDPWD not set");
 			return (NULL);
 		}
 		ft_putstr_fd(target, STDOUT_FILENO);
@@ -65,11 +65,15 @@ int	builtin_cd(t_args *args, char ***env_ptr)
 	char	*old_pwd;
 	int		result;
 
-	if (args->next->cmd_args && args->next->next->cmd_args)
+	if (!args || !env_ptr)
+		return (1);
+	if (args->next && args->next->cmd_args && args->next->next
+		&& args->next->next->cmd_args)
 	{
-		ft_putstr_fd("cd: too many arguments\n", STDERR_FILENO);
+		ft_message("cd", "too many arguments");
 		return (1);
 	}
+
 	old_pwd = getcwd(NULL, 0);
 	target_dir = find_directory(args, *env_ptr);
 	if (!target_dir)

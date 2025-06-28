@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 17:57:50 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/26 18:34:44 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/28 19:57:29 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,27 +42,30 @@ void	check_path(t_exec *exec)
 	return ;
 }
 
-int	is_builtin(t_exec *exec, char **envp)
+void	is_builtin(t_exec *exec, char **envp)
 {
-    if (!exec)
-        return (0);
-    if (ft_strcmp(exec->cmd_list->args->cmd_args, "echo") == 0)
-        exec->exit_status = builtin_echo(exec->cmd_list->args);
-    else if (ft_strcmp(exec->cmd_list->args->cmd_args, "cd") == 0)
-        exec->exit_status = builtin_cd(exec->cmd_list->args, &envp);
-    else if (ft_strcmp(exec->cmd_list->args->cmd_args, "pwd") == 0)
-        exec->exit_status = builtin_pwd();
-    else if (ft_strcmp(exec->cmd_list->args->cmd_args, "export") == 0)
-        exec->exit_status = builtin_export(exec->cmd_list->args, &envp);
-    else if (ft_strcmp(exec->cmd_list->args->cmd_args, "unset") == 0)
-        exec->exit_status = builtin_unset(exec->cmd_list->args, &envp);
-    else if (ft_strcmp(exec->cmd_list->args->cmd_args, "env") == 0)
-        exec->exit_status = builtin_env(&envp);
-    else if (ft_strcmp(exec->cmd_list->args->cmd_args, "exit") == 0)
-        exec->exit_status = builtin_exit(exec->cmd_list->args);
-    else
-        return (0);
-    if (exec->cmd_count > 1)
-        exit(exec->exit_status);
-    return (1);
+	char	*cmd;
+
+	if (!exec || !exec->cmd_list || !exec->cmd_list->args
+		|| !exec->cmd_list->args->cmd_args)
+		return ;
+	cmd = exec->cmd_list->args->cmd_args;
+	if (ft_strcmp(cmd, "echo") == 0)
+		exec->exit_status = builtin_echo(exec->cmd_list->args);
+	else if (ft_strcmp(cmd, "cd") == 0)
+		exec->exit_status = builtin_cd(exec->cmd_list->args, &envp);
+	else if (ft_strcmp(cmd, "pwd") == 0)
+		exec->exit_status = builtin_pwd();
+	else if (ft_strcmp(cmd, "export") == 0)
+		exec->exit_status = builtin_export(exec->cmd_list->args, &envp);
+	else if (ft_strcmp(cmd, "unset") == 0)
+		exec->exit_status = builtin_unset(exec->cmd_list->args, &envp);
+	else if (ft_strcmp(cmd, "env") == 0)
+		exec->exit_status = builtin_env(&envp);
+	else if (ft_strcmp(cmd, "exit") == 0)
+		exec->exit_status = builtin_exit(exec->cmd_list->args);
+	else
+		return ;
+	if (exec->cmd_count > 1)
+		free_child(exec, exec->exit_status, NULL, NULL);
 }

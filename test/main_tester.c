@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 17:00:00 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/25 18:40:05 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/28 19:35:39 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,14 @@ int	main(int argc, char **argv, char **envp)
 {
 	char **env_copy;
 	int exit_status;
-
+	char *current_dir = getcwd(NULL, 0);
+	if (current_dir)
+	{
+		setenv("PWD", current_dir, 1);
+		free(current_dir);
+	}
+	setenv("SHLVL", "1", 1);
+	setenv("_", "/usr/bin/minishell", 1);
 	env_copy = copy_env_array(envp);
 	if (!env_copy)
 		return (EXIT_FAILURE);

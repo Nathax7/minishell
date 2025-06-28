@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_state_machine.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 15:38:32 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/27 11:13:29 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/28 17:54:40 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

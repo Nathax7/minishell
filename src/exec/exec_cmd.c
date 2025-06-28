@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 20:47:43 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/26 18:40:46 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/28 19:56:06 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,14 @@ char	**struct_to_array(t_args *args)
 	i = 0;
 	while (current && i < size)
 	{
-		array[i] = current->cmd_args;
+		array[i] = ft_strdup(current->cmd_args);
+		if (!array[i])
+		{
+			while (--i >= 0)
+				free(array[i]);
+			free(array);
+			return (NULL);
+		}
 		current = current->next;
 		i++;
 	}
@@ -52,6 +59,7 @@ void	check_exec(t_exec *exec, char *cmd)
 		free_child(exec, 127, cmd, "command not found");
 	if (access(cmd, X_OK) == -1)
 		free_child(exec, 126, cmd, "Permission denied");
+	exec->cmd_list->cmd_path = cmd;
 }
 
 void	find_path(t_exec *exec, char *cmd)
@@ -92,22 +100,20 @@ void	execute_bonus(t_exec *exec, char **envp)
 		free_child(exec, 127, exec->cmd_list->args->cmd_args,
 			"command not found");
 	check_path(exec);
-	if (is_builtin(exec, envp) == 0)
+	is_builtin(exec, envp);
+	find_path(exec, exec->cmd_list->args->cmd_args);
+	if (!exec->cmd_list->cmd_path)
+		free_child(exec, 127, exec->cmd_list->args->cmd_args,
+			"command not found");
+	if (execve(exec->cmd_list->cmd_path, struct_to_array(exec->cmd_list->args),
+			envp) == -1)
 	{
-		find_path(exec, exec->cmd_list->args->cmd_args);
-		if (!exec->cmd_list->cmd_path)
-			free_child(exec, 127, exec->cmd_list->args->cmd_args,
-				"command not found");
-		if (execve(exec->cmd_list->cmd_path,
-				struct_to_array(exec->cmd_list->args), envp) == -1)
-		{
-			if (errno == EACCES || errno == EISDIR)
-				free_child(exec, 126, "pipex: execve", strerror(errno));
-			if (errno == ENOENT || errno == EPERM)
-				free_child(exec, 127, "pipex: execve", strerror(errno));
-			if (errno == ENOTDIR)
-				free_child(exec, 127, "pipex: execve", strerror(errno));
-			free_child(exec, 1, "execve", strerror(errno));
-		}
+		if (errno == EACCES || errno == EISDIR)
+			free_child(exec, 126, "pipex: execve", strerror(errno));
+		if (errno == ENOENT || errno == EPERM)
+			free_child(exec, 127, "pipex: execve", strerror(errno));
+		if (errno == ENOTDIR)
+			free_child(exec, 127, "pipex: execve", strerror(errno));
+		free_child(exec, 1, "execve", strerror(errno));
 	}
 }

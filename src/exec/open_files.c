@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:23:18 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/26 19:56:15 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/28 20:08:06 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,24 +32,24 @@ int	open_here_doc(t_files *files)
 
 void	open_infile(t_exec *exec, int previous_fd)
 {
-	if (previous_fd != -1)
-		close(previous_fd);
-	if (access(exec->cmd_list->files->infile_name, F_OK) == -1)
-	{
-		free_child(exec, 1, "No such file or directory",
-			exec->cmd_list->files->infile_name);
-	}
-	if (access(exec->cmd_list->files->infile_name, R_OK) == -1)
-	{
-		free_child(exec, 1, "permission denied",
-			exec->cmd_list->files->infile_name);
-	}
-	exec->cmd_list->fd_input = open(exec->cmd_list->files->infile_name,
-			O_RDONLY);
-	if (exec->cmd_list->fd_input == -1)
-	{
-		free_child(exec, 1, "<open_infile>", strerror(errno));
-	}
+    if (previous_fd != -1)
+        close(previous_fd);
+    if (access(exec->cmd_list->files->infile_name, F_OK) == -1)
+    {
+        free_child(exec, 1, exec->cmd_list->files->infile_name,
+            "No such file or directory");
+    }
+    if (access(exec->cmd_list->files->infile_name, R_OK) == -1)
+    {
+        free_child(exec, 1, exec->cmd_list->files->infile_name,
+            "Permission denied");
+    }
+    exec->cmd_list->fd_input = open(exec->cmd_list->files->infile_name,
+            O_RDONLY);
+    if (exec->cmd_list->fd_input == -1)
+    {
+        free_child(exec, 1, "<open_infile>", strerror(errno));
+    }
 }
 
 void	open_outfile(t_exec *exec, int previous_fd)
@@ -71,14 +71,14 @@ void	open_outfile(t_exec *exec, int previous_fd)
     if (exec->cmd_list->fd_output == -1)
     {
         if (errno == EACCES)
-            free_child(exec, 1, "Permission denied",
-                exec->cmd_list->files->outfile_name);
+            free_child(exec, 1, exec->cmd_list->files->outfile_name,
+                "Permission denied");
         else if (errno == ENOENT)
-            free_child(exec, 1, "No such file or directory",
-                exec->cmd_list->files->outfile_name);
+            free_child(exec, 1, exec->cmd_list->files->outfile_name,
+                "No such file or directory");
         else
-            free_child(exec, 1, strerror(errno),
-                exec->cmd_list->files->outfile_name);
+            free_child(exec, 1, exec->cmd_list->files->outfile_name,
+                strerror(errno));
     }
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_variable.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 23:08:05 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/11 19:07:30 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/28 17:55:45 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,9 @@ static int	should_expand_variable(char current_char, char next_char,
 	if (quote_type == Q_SINGLE)
 		return (0);
 	if (is_valid_var_char(next_char) || next_char == '?' || next_char == '{')
+	{
 		return (1);
+	}
 	return (0);
 }
 
@@ -127,7 +129,7 @@ char	*expand_variables_in_str(const char *input_str, t_quote quote_type,
 
 	if (!input_str)
 		return (NULL);
-		
+
 	sb_init(&sb);
 	ip = input_str;
 	while (*ip)
@@ -143,7 +145,7 @@ char	*expand_variables_in_str(const char *input_str, t_quote quote_type,
 				return (sb_free_and_return_null(&sb));
 		}
 	}
-	
+
 	result = sb_to_string_and_free(&sb);
 	return (result);
 }

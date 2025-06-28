@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 21:46:37 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/26 18:19:07 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/28 20:01:22 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ void	free_parent(t_exec *exec, int status, char *str, char *str2);
 void	free_parent_pipex(t_exec *exec, int status);
 void	free_cmd_list(t_cmd *cmd_list, int is_parent);
 // void	print_cmd_list_detailed(t_cmd *cmd_list);
-int		is_builtin(t_exec *exec, char **envp);
+void		is_builtin(t_exec *exec, char **envp);
+int	is_directory(const char *path);
+int	has_path_component(const char *cmd);
 
 #endif

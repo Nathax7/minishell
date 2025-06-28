@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 18:55:14 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/25 18:36:14 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/28 19:30:45 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,16 +50,19 @@ int	builtin_unset(t_args *args, char ***env_ptr)
 {
 	int exit_status;
 
+	if (!args || !env_ptr)
+		return (0);
+
 	args = args->next;
-	if (!args->cmd_args)
+	if (!args || !args->cmd_args)
 		return (0);
 
 	exit_status = 0;
-	while (args->cmd_args)
+	while (args && args->cmd_args)
 	{
 		if (!is_valid_var_name(args->cmd_args))
 		{
-			ft_putstr_fd("unset: `", STDERR_FILENO);
+			ft_putstr_fd("minishell: unset: `", STDERR_FILENO);
 			ft_putstr_fd(args->cmd_args, STDERR_FILENO);
 			ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
 			exit_status = 1;

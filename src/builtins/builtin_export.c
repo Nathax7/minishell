@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:58:56 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/25 18:36:04 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/28 19:35:00 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,36 +99,46 @@ int	set_env_var(char ***env_ptr, char *name, char *value)
 
 int	builtin_export(t_args *args, char ***env_ptr)
 {
-	char *name;
-	char *value;
-	int exit_status;
+    char *name;
+    char *value;
+    int exit_status;
 
-	args = args->next;
-	if (!args->cmd_args)
-	{
-		print_export_format(*env_ptr);
-		return (0);
-	}
-	exit_status = 0;
-	while (args->cmd_args)
-	{
-		if (!parse_export_arg(args->cmd_args, &name, &value))
-		{
-			ft_putstr_fd("export: `", STDERR_FILENO);
-			ft_putstr_fd(args->cmd_args, STDERR_FILENO);
-			ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
-			exit_status = 1;
-		}
-		else
-		{
-			if (set_env_var(env_ptr, name, value) != 0)
-				exit_status = 1;
-		}
-		if (name)
-			free(name);
-		if (value)
-			free(value);
-		args = args->next;
-	}
-	return (exit_status);
+    if (!args || !env_ptr)
+        return (0);
+
+    args = args->next;
+    if (!args || !args->cmd_args)
+    {
+        print_export_format(*env_ptr);
+        return (0);
+    }
+
+    exit_status = 0;
+    while (args && args->cmd_args)
+    {
+        if (!parse_export_arg(args->cmd_args, &name, &value))
+        {
+            ft_putstr_fd("minishell: export: `", STDERR_FILENO);
+            ft_putstr_fd(args->cmd_args, STDERR_FILENO);
+            ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
+            exit_status = 1;
+        }
+        else
+        {
+            if (set_env_var(env_ptr, name, value) != 0)
+                exit_status = 1;
+        }
+        if (name)
+        {
+            free(name);
+            name = NULL;
+        }
+        if (value)
+        {
+            free(value);
+            value = NULL;
+        }
+        args = args->next;
+    }
+    return (exit_status);
 }

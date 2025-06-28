@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:01:49 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/26 19:56:33 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/28 20:08:37 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,6 +197,8 @@ int	pipex(t_token *tokens, char **envp)
 	}
 	exec.cmd_list = head;
 	free_parent_pipex(&exec, -1);
+	// if (exec.cmd_count == 1 && exec.cmd_list->is_builtin)
+	// 	return (exec.exit_status);
 	if (WIFEXITED(exec.exit_status))
 		return (WEXITSTATUS(exec.exit_status));
 	return (exec.exit_status);
