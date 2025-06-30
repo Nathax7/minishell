@@ -1,6 +1,6 @@
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror -g3 -I includes
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
 OBJ_DIR = obj
@@ -84,8 +84,11 @@ $(OBJ_DIR):
 	@echo "$(WHITE) mkdir -p $(OBJ_DIR) $(NC)"
 	@mkdir -p $(OBJ_DIR)
 
-$(LIBFT):
+$(LIBFT): FORCE
 	make -C $(LIBFT_DIR)
+
+
+FORCE:
 
 libft:
 	make -C $(LIBFT_DIR)
@@ -106,4 +109,4 @@ re: fclean all
 
 re_bonus: fclean
 
-.PHONY: all clean fclean re libft
+.PHONY: all clean fclean re libft FORCE

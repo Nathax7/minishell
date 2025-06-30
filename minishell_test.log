@@ -1344,8 +1344,8 @@ minishell: export: `BONJOUR\&JESUIS=a': not a valid identifier$
 |---------------------------------------EXPECTED--------------------------------
 minishell: export: `BONJOUR|JESUIS=a': not a valid identifier$
 |---------------------------------------ACTUAL----------------------------------
-minishell: export: `BONJOUR\': not a valid identifier$
-minishell: JESUIS=a: command not found$
+minishell: export: `BONJOUR\': not a valid identifiemri$
+nishell: JESUIS=a: command not found$
 ================================================================================
 
 |> WITH export BONJOUR\;JESUIS=a\n
@@ -2417,8 +2417,8 @@ minishell: command not found$
 minishell: asdf: command not found$
 bonjour$
 |---------------------------------------ACTUAL----------------------------------
-bonjour$
-minishell: asdf: command not found$
+minishell: asdf: commbanodn jnooutr $
+found$
 ================================================================================
 
 |> WITH < ; a\n
@@ -2823,8 +2823,8 @@ minishell: \: command not found$
 |---------------------------------------EXPECTED--------------------------------
   jesuis||  charles$
 |---------------------------------------ACTUAL----------------------------------
-minishell: \: commmiannids hneoltl :f o\u:n dc$
-ommand not found$
+minishell: \: commamnidn insohte lflo:u n\d:$
+ command not found$
 ================================================================================
 
 |> WITH echo \ \ jesuis \|\| \ charles\n
@@ -2832,8 +2832,8 @@ ommand not found$
 |---------------------------------------EXPECTED--------------------------------
   jesuis ||  charles$
 |---------------------------------------ACTUAL----------------------------------
-minminishell: \: command niot found$
-shell: \: command not found$
+mminishell: \: command not found$
+inishell: \: command not found$
 ================================================================================
 
 |> WITH echo \ \ jesuis\; \ charles\n

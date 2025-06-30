@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main_tester.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 17:00:00 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/29 19:23:50 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:04:18 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/exec.h"
-#include "../includes/parsing.h"
-#include "../includes/signals.h"
+#include "exec.h"
+#include "parsing.h"
+#include "signals.h"
 
 int			g_signal_test = 0;
 
@@ -27,18 +27,18 @@ static int	check_semicolon_syntax(char *command)
     in_quotes = 0;
     quote_char = 0;
     last_was_semicolon = 0;
-    
+
     // Skip leading whitespace
     while (command[i] && ft_isspace(command[i]))
         i++;
-    
+
     // Check if starts with semicolon
     if (command[i] == ';')
     {
         ft_putstr_fd("minishell: syntax error near unexpected token `;'\n", STDERR_FILENO);
         return (2);
     }
-    
+
     // Check the rest of the string
     while (command[i])
     {
@@ -87,7 +87,7 @@ static int	execute_command_string(char *command, char **env_copy)
     commands = ft_split(command, ';');
     if (!commands)
         return (1);
-    
+
     exit_status = 0;
     i = 0;
     while (commands[i])
@@ -114,7 +114,7 @@ static int	execute_command_string(char *command, char **env_copy)
             }
         }
         // Remove the empty command error since trailing semicolons are allowed
-        
+
         if (trimmed)
             free(trimmed);
         i++;
@@ -142,11 +142,11 @@ static void	interactive_mode(char **env_copy)
             continue ;
         }
         add_history(input);
-        
+
         // Use the same semicolon handling as -c mode
         exit_status = execute_command_string(input, env_copy);
         g_signal_test = exit_status;
-        
+
         free(input);
     }
 }
