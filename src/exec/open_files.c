@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   open_files.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:23:18 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/29 18:34:19 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/30 19:35:29 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	struct_open_infile(t_exec *exec)
 			{
 				ft_message(NULL, current->infile_name, "Permission denied");
 				exec->cmd_list->fd_input = -2;
-					// ← CORRECTION: marquer l'erreur avec -2
 				return ;
 			}
 			exec->cmd_list->fd_input = open(current->infile_name, O_RDONLY);
@@ -62,7 +61,6 @@ void	struct_open_infile(t_exec *exec)
 			{
 				ft_message(current->infile_name, strerror(errno), NULL);
 				exec->cmd_list->fd_input = -2;
-					// ← CORRECTION: marquer l'erreur avec -2
 				return ;
 			}
 			previous_fd = exec->cmd_list->fd_input;
@@ -77,7 +75,6 @@ void	struct_open_outfile(t_exec *exec)
 	int		previous_fd;
 	int		flags;
 
-	// NE PAS ouvrir les fichiers de sortie si il y a une erreur d'input
 	if (exec->has_input_error)
 		return ;
 	exec->cmd_list->fd_output = -1;
@@ -91,12 +88,11 @@ void	struct_open_outfile(t_exec *exec)
 		{
 			if (previous_fd != -1)
 				close(previous_fd);
-			// Vérifier les permissions AVANT d'ouvrir
 			if (access(current->outfile_name, F_OK) == 0
 				&& access(current->outfile_name, W_OK) == -1)
 			{
 				ft_message(NULL, current->outfile_name, "Permission denied");
-				exec->cmd_list->fd_output = -2; // Marquer l'erreur
+				exec->cmd_list->fd_output = -2;
 				return ;
 			}
 			flags = O_WRONLY | O_CREAT;
@@ -109,7 +105,7 @@ void	struct_open_outfile(t_exec *exec)
 			if (exec->cmd_list->fd_output == -1)
 			{
 				ft_message(NULL, current->outfile_name, strerror(errno));
-				exec->cmd_list->fd_output = -2; // Marquer l'erreur
+				exec->cmd_list->fd_output = -2;
 				return ;
 			}
 			previous_fd = exec->cmd_list->fd_output;
@@ -118,89 +114,3 @@ void	struct_open_outfile(t_exec *exec)
 	}
 }
 
-void	struct_open_files_in_order(t_exec *exec)
-{
-	t_files	*current;
-	int		previous_input_fd;
-	int		previous_output_fd;
-	int		has_error;
-	int		flags;
-
-	previous_input_fd = -1;
-	previous_output_fd = -1;
-	has_error = 0;
-	exec->cmd_list->fd_input = -1;
-	exec->cmd_list->fd_output = -1;
-	if (!exec->cmd_list->files)
-		return ;
-	current = exec->cmd_list->files;
-	while (current && !has_error)
-	{
-		// TRAITER LES INPUTS
-		if (current->infile_name)
-		{
-			if (previous_input_fd != -1)
-				close(previous_input_fd);
-			if (access(current->infile_name, F_OK) == -1)
-			{
-				ft_message(current->infile_name, "No such file or directory", NULL);
-				exec->cmd_list->fd_input = -2;
-				has_error = 1;
-			}
-			else if (access(current->infile_name, R_OK) == -1)
-			{
-				ft_message(current->infile_name, "Permission denied", NULL);
-				exec->cmd_list->fd_input = -2;
-				has_error = 1;
-			}
-			else
-			{
-				exec->cmd_list->fd_input = open(current->infile_name, O_RDONLY);
-				if (exec->cmd_list->fd_input == -1)
-				{
-					ft_message(current->infile_name, strerror(errno), NULL);
-					exec->cmd_list->fd_input = -2;
-					has_error = 1;
-				}
-				else
-				{
-					previous_input_fd = exec->cmd_list->fd_input;
-				}
-			}
-		}
-		if (current->outfile_name && !has_error)
-		{
-			if (previous_output_fd != -1)
-				close(previous_output_fd);
-			// Vérifier les permissions AVANT d'ouvrir
-			if (access(current->outfile_name, F_OK) == 0
-				&& access(current->outfile_name, W_OK) == -1)
-			{
-				ft_message(NULL, current->outfile_name, "Permission denied");
-				exec->cmd_list->fd_output = -2;
-				has_error = 1;
-			}
-			else
-			{
-				flags = O_WRONLY | O_CREAT;
-				if (current->append)
-					flags |= O_APPEND;
-				else
-					flags |= O_TRUNC;
-				exec->cmd_list->fd_output = open(current->outfile_name, flags,
-						0644);
-				if (exec->cmd_list->fd_output == -1)
-				{
-					ft_message(NULL, current->outfile_name, strerror(errno));
-					exec->cmd_list->fd_output = -2;
-					has_error = 1;
-				}
-				else
-				{
-					previous_output_fd = exec->cmd_list->fd_output;
-				}
-			}
-		}
-		current = current->next;
-	}
-}

@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 22:58:16 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/30 18:05:05 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 19:31:55 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,41 +92,37 @@ void	process_redirections_in_order(t_exec *exec)
 	}
 }
 
-void	setup_pipe_redirections(t_exec *exec, int cmd_index)
+void secure_dup(int old_fd, int new_fd, t_exec *exec)
 {
-	if (cmd_index == 0)
-	{
-		if (exec->cmd_list->fd_input != -1)
-		{
-			dup2(exec->cmd_list->fd_input, STDIN_FILENO);
-		}
-		if (exec->cmd_list->fd_output != -1)
-		{
-			dup2(exec->cmd_list->fd_output, STDOUT_FILENO);
-		}
-		else if (exec->cmd_count > 1)
-		{
-			dup2(exec->pipes[0][1], STDOUT_FILENO);
-		}
-	}
-	else if (cmd_index == exec->cmd_count - 1)
-	{
-		if (exec->cmd_list->fd_input != -1)
-		{
-			dup2(exec->cmd_list->fd_input, STDIN_FILENO);
-		}
-		else
-		{
-			dup2(exec->pipes[cmd_index - 1][0], STDIN_FILENO);
-		}
-		if (exec->cmd_list->fd_output != -1)
-		{
-			dup2(exec->cmd_list->fd_output, STDOUT_FILENO);
-		}
-	}
-	else
-	{
-		dup2(exec->pipes[cmd_index - 1][0], STDIN_FILENO);
-		dup2(exec->pipes[cmd_index][1], STDOUT_FILENO);
-	}
+    if (dup2(old_fd, new_fd) == -1)
+    {
+        free_child(exec, 1, "dup2", strerror(errno));
+    }
+}
+
+void setup_pipe_redirections(t_exec *exec, int cmd_index)
+{
+    if (cmd_index == 0)
+    {
+        if (exec->cmd_list->fd_input != -1)
+            secure_dup(exec->cmd_list->fd_input, STDIN_FILENO, exec);
+        if (exec->cmd_list->fd_output != -1)
+            secure_dup(exec->cmd_list->fd_output, STDOUT_FILENO, exec);
+        else if (exec->cmd_count > 1)
+            secure_dup(exec->pipes[0][1], STDOUT_FILENO, exec);
+    }
+    else if (cmd_index == exec->cmd_count - 1)
+    {
+        if (exec->cmd_list->fd_input != -1)
+            secure_dup(exec->cmd_list->fd_input, STDIN_FILENO, exec);
+        else
+            secure_dup(exec->pipes[cmd_index - 1][0], STDIN_FILENO, exec);
+        if (exec->cmd_list->fd_output != -1)
+            secure_dup(exec->cmd_list->fd_output, STDOUT_FILENO, exec);
+    }
+    else
+    {
+        secure_dup(exec->pipes[cmd_index - 1][0], STDIN_FILENO, exec);
+        secure_dup(exec->pipes[cmd_index][1], STDOUT_FILENO, exec);
+    }
 }

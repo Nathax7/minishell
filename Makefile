@@ -9,7 +9,6 @@ DEPS = $(OBJ:.o=.d)
 
 SRC_EXEC =	src/exec/child_process.c	\
 			src/exec/exec_cmd.c			\
-			src/exec/exec_one.c			\
 			src/exec/here_doc.c			\
 			src/exec/open_files.c		\
 			src/exec/parsing_cmd.c		\
