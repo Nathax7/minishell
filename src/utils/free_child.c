@@ -6,18 +6,18 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 20:02:40 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/30 18:32:03 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 18:46:40 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/utils.h"
 
-static void	cleanup_child_cmd_list(t_exec *exec)
+void	cleanup_cmd_list(t_exec *exec, int parent)
 {
 	if (exec->cmd_list)
 	{
 		exec->cmd_list = find_first_cmd(exec->cmd_list);
-		free_cmd_list(exec->cmd_list, 0);
+		free_cmd_list(exec->cmd_list, parent);
 		exec->cmd_list = NULL;
 	}
 }
@@ -85,7 +85,7 @@ void	free_child(t_exec *exec, int status, char *str1, char *str2)
 		ft_putstr_fd(str2, 2);
 		ft_putstr_fd("\n", 2);
 	}
-	cleanup_child_cmd_list(exec);
+	cleanup_cmd_list(exec, 0);
 	cleanup_child_resources(exec);
 	cleanup_child_fds(exec);
 	reset_exec_state(exec);

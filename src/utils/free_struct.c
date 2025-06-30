@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:11:14 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/30 18:32:10 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 19:11:43 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,74 +81,68 @@ static void	free_files_list(t_files *files)
 int	unlink_heredoc(t_files *files)
 {
 	t_files	*current;
+	int		unlinked_count;
 
 	if (!files)
 		return (0);
 	current = files;
+	unlinked_count = 0;
 	while (current)
 	{
-		if (current->heredoc)
-		{
-			if (access(files->outfile_name, F_OK) == -1)
-			{
-				ft_message("error in unlink", NULL, NULL);
-				return (1);
-			}
-			if (ft_strchr(files->infile_name, '/'))
-			{
-				ft_message("Error in unlink", NULL, NULL);
-				return (1);
-			}
-			unlink(files->infile_name);
-		}
+		if (current->heredoc && current->infile_name)
+			unlink(current->infile_name);
 		current = current->next;
 	}
-	return (0);
+	return (unlinked_count);
 }
 
-void	free_cmd_list(t_cmd *cmd_list, int is_parent)
+void free_cmd_list(t_cmd *cmd_list, int is_parent)
 {
-	t_cmd	*current;
-	t_cmd	*next;
+    t_cmd *current;
+    t_cmd *next;
 
-	current = cmd_list;
-	while (current)
-	{
-		next = current->next;
-		if (current->args)
-		{
-			current->args = find_first_args(current->args);
-			free_args_list(current->args);
-			current->args = NULL;
-		}
-		if (!is_parent && current->cmd_path)
-		{
-			free(current->cmd_path);
-			current->cmd_path = NULL;
-		}
-		if (current->files)
-		{
-			current->files = find_first_files(current->files);
-			unlink_heredoc(current->files);
-			free_files_list(current->files);
-			current->files = NULL;
-		}
-		if (!is_parent)
-		{
-			if (current->fd_input > 0)
-			{
-				close(current->fd_input);
-				current->fd_input = -1;
-			}
-			if (current->fd_output > 0)
-			{
-				close(current->fd_output);
-				current->fd_output = -1;
-			}
-		}
-		free(current);
-		current = next;
-	}
+    if (!cmd_list)
+        return;
+
+    current = cmd_list;
+    while (current)
+    {
+        next = current->next;
+        if (current->args)
+        {
+            current->args = find_first_args(current->args);
+            free_args_list(current->args);
+            current->args = NULL;
+        }
+        if (!is_parent && current->cmd_path)
+        {
+            free(current->cmd_path);
+            current->cmd_path = NULL;
+        }
+        if (current->files)
+        {
+            current->files = find_first_files(current->files);
+            if (is_parent)
+                unlink_heredoc(current->files);
+            free_files_list(current->files);
+            current->files = NULL;
+        }
+        if (!is_parent)
+        {
+            if (current->fd_input != -1)
+            {
+                close(current->fd_input);
+                current->fd_input = -1;
+            }
+            if (current->fd_output != -1)
+            {
+                close(current->fd_output);
+                current->fd_output = -1;
+            }
+        }
+        free(current);
+        current = next;
+    }
 }
 
 void	close_all_pipes(t_exec *exec)

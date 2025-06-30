@@ -26,7 +26,6 @@ SRC_PARSING =	src/parsing/expand_variable.c		\
 				src/parsing/main_parsing_core.c		\
 				src/parsing/operator_handling.c		\
 				src/parsing/quote_extracter.c		\
-				src/parsing/secure_utils.c			\
 				src/parsing/syntax_state_machine.c	\
 				src/parsing/print_tokens.c 			\
 

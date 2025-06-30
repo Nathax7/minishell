@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:01:49 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/30 18:23:10 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 18:55:54 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ int	pipex(t_token *tokens, char **envp)
 		waitpid(exec.pids[i], &exec.exit_status, 0);
 	exec.cmd_list = head;
 	free(exec.pids);
+	unlink_heredoc(exec.cmd_list->files);
 	if (WIFEXITED(exec.exit_status))
 		return (WEXITSTATUS(exec.exit_status));
 	return (exec.exit_status);
