@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 21:32:35 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/27 11:13:05 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:39:41 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,6 @@ t_token			*process_complete_syntax(t_syntax_result syntax_result,
 					char **envp, int exit_status);
 void			handle_syntax_error(t_syntax_result *result);
 t_token			*free_token_list_and_return_null(t_token *list);
-char			*cleanup_and_return_char(char *to_free, int to_close,
-					char *to_free_optional, int option_flag);
 
 t_token			*parse_complete_input(char **accumulated_input, char **envp,
 					int exit_status);

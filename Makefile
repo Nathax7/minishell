@@ -15,6 +15,7 @@ SRC_EXEC =	src/exec/child_process.c	\
 			src/exec/parsing_exec.c		\
 			src/exec/pipex.c			\
 			src/exec/utils_cmd.c		\
+			src/exec/utils_cmd_struct.c	\
 
 SRC_PARSING =	src/parsing/expand_variable.c		\
 				src/parsing/expander.c				\

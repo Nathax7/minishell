@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:23:18 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/30 20:03:00 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:34:37 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ void	struct_open_infile(t_exec *exec)
 		{
 			if (access(current->infile_name, F_OK) == -1)
 			{
-				ft_message(NULL, current->infile_name, "No such file or directory");
+				ft_message(NULL, current->infile_name,
+					"No such file or directory");
 				exec->cmd_list->fd_input = -2;
 				exec->has_input_error = 1;
 				return ;
@@ -113,4 +114,3 @@ void	struct_open_outfile(t_exec *exec)
 		current = current->next;
 	}
 }
-

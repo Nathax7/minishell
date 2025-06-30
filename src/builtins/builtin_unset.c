@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 18:55:14 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/30 20:03:26 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:35:25 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,31 +48,25 @@ static int	remove_env_var(char ***env_ptr, char *name)
 
 int	builtin_unset(t_args *args, char ***env_ptr)
 {
-    int		exit_status;
-    t_args	*current;
+	int		exit_status;
+	t_args	*current;
 
-    if (!args || !env_ptr || !*env_ptr)
-        return (0);  // ✅ RETOURNER 0 même si pas d'args
-
-    exit_status = 0;
-    current = args->next; // Passer "unset"
-
-    while (current)
-    {
-        if (!is_valid_var_name(current->cmd_args))
-        {
-            ft_putstr_fd("minishell: unset: `", STDERR_FILENO);  // ✅ AJOUTER "minishell:"
-            ft_putstr_fd(current->cmd_args, STDERR_FILENO);
-            ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
-            exit_status = 1;
-        }
-        else
-        {
-            // ✅ UNSET réussit TOUJOURS, même pour des variables importantes
-            remove_env_var(env_ptr, current->cmd_args);
-            // Pas de vérification d'erreur - unset réussit toujours
-        }
-        current = current->next;
-    }
-    return (exit_status);
+	if (!args || !env_ptr || !*env_ptr)
+		return (0);
+	exit_status = 0;
+	current = args->next;
+	while (current)
+	{
+		if (!is_valid_var_name(current->cmd_args))
+		{
+			ft_putstr_fd("minishell: unset: `", STDERR_FILENO);
+			ft_putstr_fd(current->cmd_args, STDERR_FILENO);
+			ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
+			exit_status = 1;
+		}
+		else
+			remove_env_var(env_ptr, current->cmd_args);
+		current = current->next;
+	}
+	return (exit_status);
 }

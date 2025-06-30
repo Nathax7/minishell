@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:40:19 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/30 20:03:26 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:35:07 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ static char	*find_directory(t_args *args, char **env)
 	t_args	*first_arg;
 
 	first_arg = args->next;
-
 	if (!first_arg)
 	{
 		target = find_env_var(env, "HOME");
@@ -72,7 +71,6 @@ int	builtin_cd(t_args *args, char ***env_ptr)
 
 	first_arg = args->next;
 	second_arg = first_arg ? first_arg->next : NULL;
-
 	if (first_arg && second_arg)
 	{
 		ft_message("cd", NULL, "too many arguments");

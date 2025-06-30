@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 20:47:43 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/30 20:03:00 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:44:19 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,8 @@ void	execute_bonus(t_exec *exec, char **envp)
 		{
 			free_split(args_array);
 			if (errno == EISDIR)
-				free_child(exec, 126, exec->cmd_list->cmd_path, "Is a directory");
+				free_child(exec, 126, exec->cmd_list->cmd_path,
+					"Is a directory");
 			else if (errno == EACCES)
 				free_child(exec, 126, exec->cmd_list->cmd_path,
 					"Permission denied");
@@ -140,7 +141,7 @@ void	execute_bonus(t_exec *exec, char **envp)
 	}
 	if (exec->cmd_list->is_builtin)
 	{
-		exit_status = is_builtin(exec, envp);
+		exit_status = execute_builtin(exec, envp);
 		exit(exit_status);
 	}
 	find_path(exec, exec->cmd_list->args->cmd_args);
@@ -154,8 +155,7 @@ void	execute_bonus(t_exec *exec, char **envp)
 	{
 		free_split(args_array);
 		if (errno == EISDIR)
-			free_child(exec, 126, exec->cmd_list->cmd_path,
-				"Is a directory");
+			free_child(exec, 126, exec->cmd_list->cmd_path, "Is a directory");
 		else if (errno == EACCES)
 			free_child(exec, 126, exec->cmd_list->cmd_path,
 				"Permission denied");

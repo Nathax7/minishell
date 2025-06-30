@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 21:39:08 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/27 13:24:02 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:37:55 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	free_token_list(t_token *list)
 	t_token	*next_token;
 
 	if (!list)
-		return;
+		return ;
 	current_token = list;
 	while (current_token != NULL)
 	{

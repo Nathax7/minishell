@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 18:20:29 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/30 20:03:58 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:36:56 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ static int	process_word(const char **line, t_token **head)
 	has_single = 0;
 	has_double = 0;
 	has_unquoted = 0;
-
 	while (**line && is_word_char(**line) && !is_operator_start(**line))
 	{
 		if (**line == '\'')
@@ -118,4 +117,3 @@ t_token	*lexer(const char *line)
 	}
 	return (head);
 }
-

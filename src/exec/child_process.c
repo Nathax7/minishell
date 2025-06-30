@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 22:58:16 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/30 20:01:14 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:34:25 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,7 @@ void	child_process(t_exec *exec, int cmd_index, char **envp)
 	}
 }
 
-void	execute_child(t_exec *exec, int cmd_index, char **envp)
-{
-	process_redirections_in_order(exec);
-	if (exec->cmd_list->fd_input == -2 || exec->cmd_list->fd_output == -2)
-		exit(1);
-	setup_pipe_redirections(exec, cmd_index);
-	close_all_pipes(exec);
-	execute_bonus(exec, envp);
-}
-
-void	process_redirections_in_order(t_exec *exec)
+void	process_redirections(t_exec *exec)
 {
 	t_files	*current;
 	int		previous_input_fd;
@@ -57,7 +47,8 @@ void	process_redirections_in_order(t_exec *exec)
 				close(previous_input_fd);
 			if (access(current->infile_name, F_OK) == -1)
 			{
-				ft_message(NULL, current->infile_name, "No such file or directory");
+				ft_message(NULL, current->infile_name,
+					"No such file or directory");
 				exec->cmd_list->fd_input = -2;
 				return ;
 			}
@@ -79,7 +70,8 @@ void	process_redirections_in_order(t_exec *exec)
 				flags |= O_APPEND;
 			else
 				flags |= O_TRUNC;
-			exec->cmd_list->fd_output = open(current->outfile_name, flags, 0644);
+			exec->cmd_list->fd_output = open(current->outfile_name, flags,
+					0644);
 			if (exec->cmd_list->fd_output == -1)
 			{
 				ft_message(NULL, current->outfile_name, strerror(errno));
@@ -92,37 +84,47 @@ void	process_redirections_in_order(t_exec *exec)
 	}
 }
 
-void secure_dup(int old_fd, int new_fd, t_exec *exec)
+void	execute_child(t_exec *exec, int cmd_index, char **envp)
 {
-    if (dup2(old_fd, new_fd) == -1)
-    {
-        free_child(exec, 1, "dup2", strerror(errno));
-    }
+	process_redirections(exec);
+	if (exec->cmd_list->fd_input == -2 || exec->cmd_list->fd_output == -2)
+		exit(1);
+	setup_pipe_redirections(exec, cmd_index);
+	close_all_pipes(exec);
+	execute_bonus(exec, envp);
 }
 
-void setup_pipe_redirections(t_exec *exec, int cmd_index)
+void	secure_dup(int old_fd, int new_fd, t_exec *exec)
 {
-    if (cmd_index == 0)
-    {
-        if (exec->cmd_list->fd_input != -1)
-            secure_dup(exec->cmd_list->fd_input, STDIN_FILENO, exec);
-        if (exec->cmd_list->fd_output != -1)
-            secure_dup(exec->cmd_list->fd_output, STDOUT_FILENO, exec);
-        else if (exec->cmd_count > 1)
-            secure_dup(exec->pipes[0][1], STDOUT_FILENO, exec);
-    }
-    else if (cmd_index == exec->cmd_count - 1)
-    {
-        if (exec->cmd_list->fd_input != -1)
-            secure_dup(exec->cmd_list->fd_input, STDIN_FILENO, exec);
-        else
-            secure_dup(exec->pipes[cmd_index - 1][0], STDIN_FILENO, exec);
-        if (exec->cmd_list->fd_output != -1)
-            secure_dup(exec->cmd_list->fd_output, STDOUT_FILENO, exec);
-    }
-    else
-    {
-        secure_dup(exec->pipes[cmd_index - 1][0], STDIN_FILENO, exec);
-        secure_dup(exec->pipes[cmd_index][1], STDOUT_FILENO, exec);
-    }
+	if (dup2(old_fd, new_fd) == -1)
+	{
+		free_child(exec, 1, "dup2", strerror(errno));
+	}
+}
+
+void	setup_pipe_redirections(t_exec *exec, int cmd_index)
+{
+	if (cmd_index == 0)
+	{
+		if (exec->cmd_list->fd_input != -1)
+			secure_dup(exec->cmd_list->fd_input, STDIN_FILENO, exec);
+		if (exec->cmd_list->fd_output != -1)
+			secure_dup(exec->cmd_list->fd_output, STDOUT_FILENO, exec);
+		else if (exec->cmd_count > 1)
+			secure_dup(exec->pipes[0][1], STDOUT_FILENO, exec);
+	}
+	else if (cmd_index == exec->cmd_count - 1)
+	{
+		if (exec->cmd_list->fd_input != -1)
+			secure_dup(exec->cmd_list->fd_input, STDIN_FILENO, exec);
+		else
+			secure_dup(exec->pipes[cmd_index - 1][0], STDIN_FILENO, exec);
+		if (exec->cmd_list->fd_output != -1)
+			secure_dup(exec->cmd_list->fd_output, STDOUT_FILENO, exec);
+	}
+	else
+	{
+		secure_dup(exec->pipes[cmd_index - 1][0], STDIN_FILENO, exec);
+		secure_dup(exec->pipes[cmd_index][1], STDOUT_FILENO, exec);
+	}
 }

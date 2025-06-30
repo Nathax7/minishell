@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 17:00:00 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/30 20:04:24 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:33:18 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ int	main(int argc, char **argv, char **envp)
 		free_token_list(tokens);
 		free(input);
 	}
-	// Final cleanup
 	ft_freesplit(env_copy);
 	return (g_signal_test);
 }

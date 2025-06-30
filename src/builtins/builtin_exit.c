@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 18:56:30 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/30 20:03:26 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:35:16 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ int	builtin_exit(t_args *args)
 	{
 		if (!is_numeric_string(first_arg->cmd_args))
 		{
-			ft_message("exit", first_arg->cmd_args, "numeric argument required");
+			ft_message("exit", first_arg->cmd_args,
+				"numeric argument required");
 			exit(2);
 		}
 		ft_message("exit", NULL, "too many arguments");

@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:11:14 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/30 19:11:43 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:37:51 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,53 +96,52 @@ int	unlink_heredoc(t_files *files)
 	return (unlinked_count);
 }
 
-void free_cmd_list(t_cmd *cmd_list, int is_parent)
+void	free_cmd_list(t_cmd *cmd_list, int is_parent)
 {
-    t_cmd *current;
-    t_cmd *next;
+	t_cmd	*current;
+	t_cmd	*next;
 
-    if (!cmd_list)
-        return;
-
-    current = cmd_list;
-    while (current)
-    {
-        next = current->next;
-        if (current->args)
-        {
-            current->args = find_first_args(current->args);
-            free_args_list(current->args);
-            current->args = NULL;
-        }
-        if (!is_parent && current->cmd_path)
-        {
-            free(current->cmd_path);
-            current->cmd_path = NULL;
-        }
-        if (current->files)
-        {
-            current->files = find_first_files(current->files);
-            if (is_parent)
-                unlink_heredoc(current->files);
-            free_files_list(current->files);
-            current->files = NULL;
-        }
-        if (!is_parent)
-        {
-            if (current->fd_input != -1)
-            {
-                close(current->fd_input);
-                current->fd_input = -1;
-            }
-            if (current->fd_output != -1)
-            {
-                close(current->fd_output);
-                current->fd_output = -1;
-            }
-        }
-        free(current);
-        current = next;
-    }
+	if (!cmd_list)
+		return ;
+	current = cmd_list;
+	while (current)
+	{
+		next = current->next;
+		if (current->args)
+		{
+			current->args = find_first_args(current->args);
+			free_args_list(current->args);
+			current->args = NULL;
+		}
+		if (!is_parent && current->cmd_path)
+		{
+			free(current->cmd_path);
+			current->cmd_path = NULL;
+		}
+		if (current->files)
+		{
+			current->files = find_first_files(current->files);
+			if (is_parent)
+				unlink_heredoc(current->files);
+			free_files_list(current->files);
+			current->files = NULL;
+		}
+		if (!is_parent)
+		{
+			if (current->fd_input != -1)
+			{
+				close(current->fd_input);
+				current->fd_input = -1;
+			}
+			if (current->fd_output != -1)
+			{
+				close(current->fd_output);
+				current->fd_output = -1;
+			}
+		}
+		free(current);
+		current = next;
+	}
 }
 
 void	close_all_pipes(t_exec *exec)
@@ -164,5 +163,3 @@ void	close_all_pipes(t_exec *exec)
 		i++;
 	}
 }
-
-

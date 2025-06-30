@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:07:53 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/30 18:55:32 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:40:21 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	reset_exec_state(t_exec *exec);
 void	ft_message(char *command, char *arg, char *error);
 int		usage(void);
 void	free_split(char **arr);
-void	free_triple(char ***triple);
 int		find_size(t_token *lst);
 
 // structs
@@ -31,8 +30,6 @@ char	**safe_realloc_string_array(char **old_array, size_t new_size);
 // t_exec management 1!!!
 int		usage(void);
 void	free_split(char **arr);
-void	free_triple(char ***triple);
-void	ft_close(t_exec *exec, t_type type);
 t_cmd	*find_last_cmd(t_cmd *lst);
 t_args	*find_last_args(t_args *lst);
 t_files	*find_last_files(t_files *lst);
@@ -59,9 +56,6 @@ int		count_string_array(char **array);
 char	*get_env_var_value(const char *var_name, char **envp,
 			int last_exit_status);
 int		is_valid_var_char(char c);
-
-// error management utils
-// void	handle_syntax_error(t_syntax_result *result);
 
 // clean string building util
 void	sb_init(t_str_builder *sb);
@@ -94,7 +88,6 @@ int		is_word_char(char c);
 int		is_operator_start(char c);
 void	free_token_list(t_token *list);
 char	*find_env_value(char **envp, const char *name);
-int		add_env_var(char ***env_ptr, char *name, char *value);
 int		set_env_var(char ***env_ptr, char *name, char *value);
 
 #endif

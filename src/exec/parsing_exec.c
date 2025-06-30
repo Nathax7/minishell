@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 19:39:17 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/30 20:03:00 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:34:42 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	exec_init(t_exec *exec, char **envp)
 		free_parent(exec, 1, "malloc", strerror(errno));
 }
 
-void parsing_exec(t_token *tokens, t_exec *exec)
+void	parsing_exec(t_token *tokens, t_exec *exec)
 {
 	if (!tokens || !exec)
 		return ;

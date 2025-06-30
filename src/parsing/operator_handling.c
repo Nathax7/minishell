@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:44:30 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/30 20:03:58 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:37:05 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,3 @@ int	handle_greater_operator(const char **line, t_token **head)
 		return (0);
 	return (create_and_append_token(head, op_val, type, Q_NONE));
 }
-

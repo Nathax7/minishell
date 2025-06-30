@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 20:30:28 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/30 20:03:58 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:36:50 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,9 @@ char	**perform_field_splitting(const char *str, const char *sep_val)
 	while ((fields[index] = extract_one_field(&current_ptr, current_sep)))
 	{
 		if (!fields[index])
-			return(ft_freesplit(fields));
+			return (ft_freesplit(fields));
 		index++;
 	}
 	fields[index] = NULL;
 	return (fields);
 }
-

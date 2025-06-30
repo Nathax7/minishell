@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 17:57:50 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/30 20:03:00 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:53:51 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@ int	is_directory(t_exec *exec)
 	struct stat	st;
 	char		*cmd_path;
 
+	if (!exec || !exec->cmd_list || !exec->cmd_list->args
+		|| !exec->cmd_list->args->cmd_args)
+		return (0);
 	cmd_path = exec->cmd_list->args->cmd_args;
 	if (ft_strchr(cmd_path, '/'))
 	{
@@ -31,9 +34,9 @@ int	is_directory(t_exec *exec)
 	return (0);
 }
 
-int	is_builtin(t_exec *exec, char **envp)
+int	execute_builtin(t_exec *exec, char **envp)
 {
-	if (!exec)
+	if (!exec || !exec->cmd_list->args || !exec->cmd_list->args->cmd_args)
 		return (0);
 	if (ft_strcmp(exec->cmd_list->args->cmd_args, "echo") == 0)
 		return (builtin_echo(exec->cmd_list->args));
@@ -51,7 +54,27 @@ int	is_builtin(t_exec *exec, char **envp)
 		return (builtin_exit(exec->cmd_list->args));
 	else
 		return (0);
-	return (1);
+}
+
+int	is_builtin(t_args *cmd)
+{
+	if (!cmd || !cmd->cmd_args)
+		return (0);
+	if (ft_strcmp(cmd->cmd_args, "echo") == 0)
+		return (1);
+	if (ft_strcmp(cmd->cmd_args, "cd") == 0)
+		return (1);
+	if (ft_strcmp(cmd->cmd_args, "pwd") == 0)
+		return (1);
+	if (ft_strcmp(cmd->cmd_args, "export") == 0)
+		return (1);
+	if (ft_strcmp(cmd->cmd_args, "unset") == 0)
+		return (1);
+	if (ft_strcmp(cmd->cmd_args, "env") == 0)
+		return (1);
+	if (ft_strcmp(cmd->cmd_args, "exit") == 0)
+		return (1);
+	return (0);
 }
 
 int	execute_single_builtin_in_parent(t_exec *exec, char **envp)
@@ -62,13 +85,15 @@ int	execute_single_builtin_in_parent(t_exec *exec, char **envp)
 
 	saved_stdin = -1;
 	saved_stdout = -1;
+	if (!exec || !exec->cmd_list || !exec->cmd_list->args || !exec->cmd_list->args->cmd_args)
+    	return (0);
 	struct_open_infile(exec);
 	struct_open_outfile(exec);
 	if (exec->cmd_list->fd_input != -1)
 	{
 		saved_stdin = dup(STDIN_FILENO);
 		if (saved_stdin == -1)
-			free_parent(exec, 1, "dup stdin",  strerror(errno));
+			free_parent(exec, 1, "dup stdin", strerror(errno));
 		dup2(exec->cmd_list->fd_input, STDIN_FILENO);
 		close(exec->cmd_list->fd_input);
 	}
@@ -87,7 +112,7 @@ int	execute_single_builtin_in_parent(t_exec *exec, char **envp)
 		dup2(exec->cmd_list->fd_output, STDOUT_FILENO);
 		close(exec->cmd_list->fd_output);
 	}
-	exit_status = is_builtin(exec, envp);
+	exit_status = execute_builtin(exec, envp);
 	if (saved_stdin != -1)
 	{
 		dup2(saved_stdin, STDIN_FILENO);

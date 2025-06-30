@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 10:22:17 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/19 15:58:43 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:37:41 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	find_size_cmd(t_cmd *lst)
 
 int	find_size_args(t_args *lst)
 {
-	size_t	size;
+	size_t size;
 
 	size = 0;
 	while (lst)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:36:22 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/29 19:27:16 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:39:52 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-# define CHARSET "abcdefghijklmnopqrstuvwxyz"
+# define CHARSET "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 typedef enum e_parse_status
 {
@@ -111,6 +111,7 @@ typedef struct s_args
 	struct s_args	*next;
 	struct s_args	*prev;
 }					t_args;
+
 typedef struct s_files // Un seul fichier par node
 {
 	char *infile_name;

@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 18:11:15 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/30 20:03:58 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:36:47 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,14 @@ static int	process_word_expansion(t_token *token, t_token **expanded_head,
 	char	*expanded_value;
 	char	**fields;
 
-	expanded_value = expand_token_value(token->value, token->quote, envp, exit_status);
+	expanded_value = expand_token_value(token->value, token->quote, envp,
+			exit_status);
 	if (!expanded_value)
 		return (0);
 	if (!*expanded_value && token->quote != Q_NONE)
 	{
-		if (!create_and_append_token(expanded_head, expanded_value, T_WORD, Q_NONE))
+		if (!create_and_append_token(expanded_head, expanded_value, T_WORD,
+				Q_NONE))
 		{
 			free(expanded_value);
 			return (0);
@@ -71,7 +73,8 @@ static int	process_word_expansion(t_token *token, t_token **expanded_head,
 	}
 	if (!should_field_split(token->quote))
 	{
-		if (!create_and_append_token(expanded_head, expanded_value, T_WORD, Q_NONE))
+		if (!create_and_append_token(expanded_head, expanded_value, T_WORD,
+				Q_NONE))
 		{
 			free(expanded_value);
 			return (0);

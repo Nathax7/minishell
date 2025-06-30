@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 19:21:49 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/30 20:03:58 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:37:10 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ static const char	*quote_type_to_string(t_quote quote)
 
 void	print_token_list(t_token *tokens, const char *stage)
 {
-	t_token *current;
-	int i;
+	t_token	*current;
+	int		i;
 
 	printf("\n=== TOKENS AT STAGE: %s ===\n", stage);
 	if (!tokens)
@@ -61,7 +61,6 @@ void	print_token_list(t_token *tokens, const char *stage)
 		printf("No tokens (NULL)\n");
 		return ;
 	}
-
 	current = tokens;
 	i = 0;
 	while (current)

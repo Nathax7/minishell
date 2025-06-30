@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:48:04 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/30 20:03:26 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:35:10 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int	builtin_echo(t_args *args)
 
 	if (!args)
 		return (1);
-
 	newline = 1;
 	args = args->next;
 	while (args && args->cmd_args && is_valid_n_flag(args->cmd_args))

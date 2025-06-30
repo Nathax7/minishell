@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_handling.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 11:37:24 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/29 19:44:08 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:38:19 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	*find_env_value(char **envp, const char *name)
 }
 int	set_env_var(char ***env_ptr, char *name, char *value)
 {
-	int var_index;
+	int	var_index;
 
 	if (!env_ptr || !*env_ptr || !name)
 		return (1);

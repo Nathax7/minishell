@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 15:31:48 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/30 20:03:58 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:37:01 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,15 @@ t_token	*parse_complete_input(char **accumulated_input, char **envp,
 
 	line = *accumulated_input;
 	if (check_signal_interruption())
-		return (cleanup_parsing_and_return_null(&line, &accumulated_input, NULL, NULL));
+		return (cleanup_parsing_and_return_null(&line, &accumulated_input, NULL,
+				NULL));
 	if (has_unclosed_quotes(line))
 		return (cleanup_parsing_and_return_null(&line, &accumulated_input, NULL,
 				"minishell: syntax error: unclosed quotes\n"));
 	tokens = lexer(line);
 	if (!tokens)
-		return (cleanup_parsing_and_return_null(&line, &accumulated_input, NULL, NULL));
+		return (cleanup_parsing_and_return_null(&line, &accumulated_input, NULL,
+				NULL));
 	syntax_result = analyze_syntax(tokens);
 	if (syntax_result.status == PARSE_OK)
 	{
