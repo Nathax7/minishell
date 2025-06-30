@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:07:53 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/30 17:29:29 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/30 18:02:29 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # include "struct.h"
 
 void	cleanup_child_resources(t_exec *exec);
-void	free_child(t_exec *exec, int status);
-void	free_parent(t_exec *exec, int status);
+void	free_child(t_exec *exec, int status, char *str1, char *str2);
+void	free_parent(t_exec *exec, int status, char *str1, char *str2);
 void	reset_exec_state(t_exec *exec);
 void	ft_message(char *command, char *arg, char *error);
 int		usage(void);

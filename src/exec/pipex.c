@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:01:49 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/29 20:59:36 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/30 18:23:10 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,7 @@ void	create_pipes(t_exec *exec)
 		return ;
 	exec->pipes = ft_calloc(exec->cmd_count - 1, sizeof(int *));
 	if (!exec->pipes)
-	{
-		ft_message("minishell", NULL, "Error create_pipes");
-		free_parent(exec, 1);
-	}
+		free_parent(exec, 1, "Error create_pipes", NULL);
 	i = 0;
 	while (i < exec->cmd_count - 1)
 	{
@@ -62,15 +59,13 @@ void	create_pipes(t_exec *exec)
 		if (!exec->pipes[i])
 		{
 			free_pipes(exec, i);
-			ft_message("minishell", NULL, "Error create_pipes");
-			free_parent(exec, 1);
+			free_parent(exec, 1, "Error create_pipes", NULL);
 		}
 		if (pipe(exec->pipes[i]) == -1)
 		{
 			free(exec->pipes[i]);
 			free_pipes(exec, i);
-			ft_message("Error create_pipes", NULL, NULL);
-			free_parent(exec, 1);
+			free_parent(exec, 1, "Error create_pipes", NULL);
 		}
 		i++;
 	}
@@ -80,50 +75,39 @@ int	pipex(t_token *tokens, char **envp)
 {
 	t_exec	exec;
 	int		i;
-	t_cmd	*current_cmd;
-	t_cmd	*saved_head;
-	int		final_exit_status;
+	t_cmd	*head;
 
 	exec_init(&exec, envp);
 	parsing_exec(tokens, &exec);
 	if (!exec.cmd_list)
+	if (!exec.cmd_list)
 		return (1);
 	exec.cmd_count = find_size_cmd(exec.cmd_list);
+	head = exec.cmd_list;
 	if (exec.cmd_count < 1)
 		return (usage());
 	if (exec.cmd_count == 1 && exec.cmd_list->is_builtin)
 	{
-		final_exit_status = execute_single_builtin_in_parent(&exec, envp);
-		return (final_exit_status);
+		exec.exit_status = execute_single_builtin_in_parent(&exec, envp);
+		return (exec.exit_status);
 	}
 	exec.pids = malloc(sizeof(pid_t) * exec.cmd_count);
 	if (!exec.pids)
 		return (1);
 	create_pipes(&exec);
 	i = -1;
-	current_cmd = exec.cmd_list;
 	while (++i < exec.cmd_count)
 	{
-		saved_head = exec.cmd_list;
-		exec.cmd_list = current_cmd;
 		child_process(&exec, i, envp);
-		exec.cmd_list = saved_head;
-		current_cmd = current_cmd->next;
+		exec.cmd_list = exec.cmd_list->next;
 	}
 	close_all_pipes(&exec);
 	i = -1;
-	final_exit_status = 0;
 	while (++i < exec.cmd_count)
-	{
 		waitpid(exec.pids[i], &exec.exit_status, 0);
-		if (i == exec.cmd_count - 1)
-		{
-			if (WIFEXITED(exec.exit_status))
-				final_exit_status = WEXITSTATUS(exec.exit_status);
-			else
-				final_exit_status = exec.exit_status;
-		}
-	}
+	exec.cmd_list = head;
 	free(exec.pids);
-	return (final_exit_status);
+	if (WIFEXITED(exec.exit_status))
+		return (WEXITSTATUS(exec.exit_status));
+	return (exec.exit_status);
 }

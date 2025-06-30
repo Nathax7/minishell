@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 17:57:50 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/30 17:27:50 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/30 18:13:40 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,7 @@ int	execute_single_builtin_in_parent(t_exec *exec, char **envp)
 	{
 		saved_stdin = dup(STDIN_FILENO);
 		if (saved_stdin == -1)
-		{
-			ft_message("dup stdin", NULL, strerror(errno));
-			free_parent(exec, 1);
-			return (1);
-		}
+			free_parent(exec, 1, "dup stdin",  strerror(errno));
 		dup2(exec->cmd_list->fd_input, STDIN_FILENO);
 		close(exec->cmd_list->fd_input);
 	}
@@ -86,9 +82,7 @@ int	execute_single_builtin_in_parent(t_exec *exec, char **envp)
 				dup2(saved_stdin, STDIN_FILENO);
 				close(saved_stdin);
 			}
-			ft_message("dup stdout", NULL, strerror(errno));
-			free_parent(exec, 1);
-			return (1);
+			free_parent(exec, 1, "dup stdout", strerror(errno));
 		}
 		dup2(exec->cmd_list->fd_output, STDOUT_FILENO);
 		close(exec->cmd_list->fd_output);
@@ -104,6 +98,6 @@ int	execute_single_builtin_in_parent(t_exec *exec, char **envp)
 		dup2(saved_stdout, STDOUT_FILENO);
 		close(saved_stdout);
 	}
-	free_parent(exec, -1);
+	free_parent(exec, -1, NULL, NULL);
 	return (exit_status);
 }

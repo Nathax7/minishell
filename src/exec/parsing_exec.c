@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 19:39:17 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/29 20:53:21 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/30 18:03:45 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,7 @@ void	exec_init(t_exec *exec, char **envp)
 	}
 	exec->paths = ft_split(envp[i] + 5, ':');
 	if (!exec->paths)
-	{
-		ft_message("minishell", "malloc", strerror(errno));
-		free_parent(exec, 1);
-	}
+		free_parent(exec, 1, "malloc", strerror(errno));
 }
 
 void parsing_exec(t_token *tokens, t_exec *exec)

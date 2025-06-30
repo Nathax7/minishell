@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 20:47:43 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/29 20:51:09 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/30 18:09:38 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,11 @@ void	check_exec_file(t_exec *exec, char *cmd)
 	struct stat	st;
 
 	if (access(cmd, F_OK) == -1)
-		free_child(exec, 127);
+		free_child(exec, 127, NULL, NULL);
 	if (stat(cmd, &st) == 0 && S_ISDIR(st.st_mode))
-		free_child(exec, 126);
+		free_child(exec, 126, NULL, NULL);
 	if (access(cmd, X_OK) == -1)
-		free_child(exec, 126);
+		free_child(exec, 126, NULL, NULL);
 	exec->cmd_list->cmd_path = cmd;
 }
 
@@ -63,18 +63,15 @@ void	check_exec(t_exec *exec, char *cmd)
 
 	if (access(cmd, F_OK) == -1)
 	{
-		ft_message(NULL, cmd, "command not found");
-		free_child(exec, 127);
+		free_child(exec, 127, cmd, "command not found");
 	}
 	if (stat(cmd, &st) == 0 && S_ISDIR(st.st_mode))
 	{
-		ft_message(NULL, cmd, "Is a directory");
-		free_child(exec, 126);
+		free_child(exec, 126, cmd, "Is a directory");
 	}
 	if (access(cmd, X_OK) == -1)
 	{
-		ft_message(NULL, cmd, "Permission denied");
-		free_child(exec, 126);
+		free_child(exec, 126, cmd, "Permission denied");
 	}
 }
 
@@ -93,17 +90,11 @@ void	find_path(t_exec *exec, char *cmd)
 	{
 		tmp = ft_strjoin(exec->paths[i], "/");
 		if (!tmp)
-		{
-			ft_message(NULL, "malloc", strerror(errno));
-			free_child(exec, 1);
-		}
+			free_child(exec, 1, "malloc", strerror(errno));
 		exec->cmd_list->cmd_path = ft_strjoin(tmp, cmd);
 		free(tmp);
 		if (!exec->cmd_list->cmd_path)
-		{
-			ft_message(NULL, "malloc", strerror(errno));
-			free_child(exec, 1);
-		}
+			free_child(exec, 1, "malloc", strerror(errno));
 		if (access(exec->cmd_list->cmd_path, F_OK) == 0)
 			break ;
 		free(exec->cmd_list->cmd_path);
@@ -121,10 +112,7 @@ void	execute_bonus(t_exec *exec, char **envp)
 
 	exec->cmd_list->args = find_first_args(exec->cmd_list->args);
 	if (!exec->cmd_list->args || !exec->cmd_list->args->cmd_args)
-	{
-		ft_message(NULL, NULL, "command not found");
-		free_child(exec, 127);
-	}
+		free_child(exec, 127, "command not found", NULL);
 	if (exec->cmd_list->fd_input == -2 || exec->cmd_list->fd_output == -2)
 		exit(1);
 	dir_result = is_directory(exec);
@@ -140,22 +128,13 @@ void	execute_bonus(t_exec *exec, char **envp)
 		{
 			free_split(args_array);
 			if (errno == EISDIR)
-			{
-				ft_message(NULL, exec->cmd_list->cmd_path, "Is a directory");
-				free_child(exec, 126);
-			}
+				free_child(exec, 126, exec->cmd_list->cmd_path, "Is a directory");
 			else if (errno == EACCES)
-			{
-				ft_message(NULL, exec->cmd_list->cmd_path,
+				free_child(exec, 126, exec->cmd_list->cmd_path,
 					"Permission denied");
-				free_child(exec, 126);
-			}
 			else
-			{
-				ft_message(NULL, exec->cmd_list->cmd_path,
+				free_child(exec, 127, exec->cmd_list->cmd_path,
 					"No such file or directory");
-				free_child(exec, 127);
-			}
 		}
 		free_split(args_array);
 	}
@@ -166,11 +145,8 @@ void	execute_bonus(t_exec *exec, char **envp)
 	}
 	find_path(exec, exec->cmd_list->args->cmd_args);
 	if (!exec->cmd_list->cmd_path)
-	{
-		ft_message(NULL, exec->cmd_list->args->cmd_args,
+		free_child(exec, 127, exec->cmd_list->args->cmd_args,
 			"command not found");
-		free_child(exec, 127);
-	}
 	args_array = struct_to_array(exec->cmd_list->args);
 	if (!args_array)
 		exit(1);
@@ -178,23 +154,14 @@ void	execute_bonus(t_exec *exec, char **envp)
 	{
 		free_split(args_array);
 		if (errno == EISDIR)
-		{
-			ft_message(NULL, exec->cmd_list->cmd_path,
+			free_child(exec, 126, exec->cmd_list->cmd_path,
 				"Is a directory");
-			free_child(exec, 126);
-		}
 		else if (errno == EACCES)
-		{
-			ft_message(NULL, exec->cmd_list->cmd_path,
+			free_child(exec, 126, exec->cmd_list->cmd_path,
 				"Permission denied");
-			free_child(exec, 126);
-		}
 		else
-		{
-			ft_message(NULL, exec->cmd_list->cmd_path,
+			free_child(exec, 127, exec->cmd_list->cmd_path,
 				"No such file or directory");
-			free_child(exec, 127);
-		}
 	}
 	free_split(args_array);
 }

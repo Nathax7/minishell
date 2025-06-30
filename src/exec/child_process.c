@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 22:58:16 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/30 17:27:07 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/30 18:05:05 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@ void	child_process(t_exec *exec, int cmd_index, char **envp)
 	exec->pids[cmd_index] = fork();
 	if (exec->pids[cmd_index] == -1)
 	{
-		ft_message("fork", NULL, strerror(errno));
-		free_child(exec, 1);
+		free_child(exec, 1, "fork", strerror(errno));
 	}
 	if (exec->pids[cmd_index] == 0)
 	{

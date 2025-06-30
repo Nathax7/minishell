@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_child.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 20:02:40 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/30 17:28:30 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/30 18:32:03 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,27 @@ void	reset_exec_state(t_exec *exec)
 	exec->envp_exists = 0;
 }
 
-void	free_child(t_exec *exec, int status)
+void	free_child(t_exec *exec, int status, char *str1, char *str2)
 {
 	if (!exec)
 	{
 		if (status != -1)
 			exit(status);
 		return ;
+	}
+	if (str1)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(str1, 2);
+		if (str2)
+			ft_putstr_fd(": ", 2);
+		else
+			ft_putstr_fd("\n", 2);
+	}
+	if (str2)
+	{
+		ft_putstr_fd(str2, 2);
+		ft_putstr_fd("\n", 2);
 	}
 	cleanup_child_cmd_list(exec);
 	cleanup_child_resources(exec);

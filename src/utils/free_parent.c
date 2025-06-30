@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   free_parent.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 20:03:17 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/29 20:53:43 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/06/30 18:02:41 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/utils.h"
 
-static void cleanup_parent_cmd_path(t_exec *exec)
+static void	cleanup_parent_cmd_path(t_exec *exec)
 {
 	if (exec->cmd_list && exec->cmd_list->cmd_path)
 	{
@@ -21,7 +21,7 @@ static void cleanup_parent_cmd_path(t_exec *exec)
 	}
 }
 
-static void cleanup_parent_fds(t_exec *exec)
+static void	cleanup_parent_fds(t_exec *exec)
 {
 	if (exec->stdin_backup != -1)
 	{
@@ -36,10 +36,24 @@ static void cleanup_parent_fds(t_exec *exec)
 		exec->stdout_backup = -1;
 	}
 }
-void free_parent(t_exec *exec, int status)
+void	free_parent(t_exec *exec, int status, char *str1, char *str2)
 {
 	if (!exec)
-		return;
+		return ;
+	if (str1)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(str1, 2);
+		if (str2)
+			ft_putstr_fd(": ", 2);
+		else
+			ft_putstr_fd("\n", 2);
+	}
+	if (str2)
+	{
+		ft_putstr_fd(str2, 2);
+		ft_putstr_fd("\n", 2);
+	}
 	cleanup_parent_cmd_path(exec);
 	cleanup_child_resources(exec);
 	cleanup_parent_fds(exec);
