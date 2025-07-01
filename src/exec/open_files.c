@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:23:18 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/30 20:34:37 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/01 18:11:47 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	struct_open_infile(t_exec *exec)
 	int		previous_fd;
 
 	exec->cmd_list->fd_input = -1;
+	previous_fd = -1;
 	if (!exec->cmd_list->files)
 		return ;
 	current = exec->cmd_list->files;
@@ -43,6 +44,8 @@ void	struct_open_infile(t_exec *exec)
 	{
 		if (current->infile_name)
 		{
+			if (previous_fd != -1)
+				close(previous_fd);
 			if (access(current->infile_name, F_OK) == -1)
 			{
 				ft_message(NULL, current->infile_name,
