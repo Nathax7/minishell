@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:58:56 by almeekel          #+#    #+#             */
-/*   Updated: 2025/07/03 19:37:34 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/03 20:49:01 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,14 @@ static int	export_with_value(char *name, char *value, char *original_arg, char *
     return (1);
 }
 
-static int	export_without_value(char *name, char ***env_ptr)
+static int	export_without_value(char *name)
 {
-	if (!is_valid_var_name(name))
-	{
-		ft_message("export", name, "not a valid identifier");
-		return (0);
-	}
-	if (find_env_index(*env_ptr, name) == -1)
-	{
-		if (set_env_var(env_ptr, name, "") != 0)
-			return (0);
-	}
-	return (1);
+    if (!is_valid_var_name(name))
+    {
+        ft_message("export", name, "not a valid identifier");
+        return (0);
+    }
+    return (1);
 }
 
 static int	process_export_arg(char *arg, char ***env_ptr)
@@ -61,7 +56,7 @@ static int	process_export_arg(char *arg, char ***env_ptr)
     }
     else
     {
-        return (export_without_value(arg, env_ptr));
+        return (export_without_value(arg));
     }
 }
 
