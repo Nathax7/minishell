@@ -6,24 +6,25 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:58:56 by almeekel          #+#    #+#             */
-/*   Updated: 2025/07/03 19:12:22 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/03 19:37:34 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-static int	export_with_value(char *name, char *value, char *full_arg,
-		char ***env_ptr)
+static int	export_with_value(char *name, char *value, char *original_arg, char ***env_ptr)
 {
-	if (!is_valid_var_name(name))
-	{
-		ft_message("export", full_arg, "not a valid identifier");
-		return (0);
-	}
-	if (set_env_var(env_ptr, name, value) != 0)
-		return (0);
-	return (1);
+    if (!is_valid_var_name(name))
+    {
+        ft_message("export", original_arg, "not a valid identifier");
+        return (0);
+    }
+
+    if (set_env_var(env_ptr, name, value) != 0)
+        return (0);
+    return (1);
 }
+
 static int	export_without_value(char *name, char ***env_ptr)
 {
 	if (!is_valid_var_name(name))
@@ -38,26 +39,30 @@ static int	export_without_value(char *name, char ***env_ptr)
 	}
 	return (1);
 }
+
 static int	process_export_arg(char *arg, char ***env_ptr)
 {
-	char	*equal_pos;
-	char	*var_name;
-	char	*var_value;
-	int		result;
+    char	*equal_pos;
+    char	*var_name;
+    char	*var_value;
+    int		result;
 
-	equal_pos = ft_strchr(arg, '=');
-	if (equal_pos)
-	{
-		var_name = ft_substr(arg, 0, equal_pos - arg);
-		if (!var_name)
-			return (0);
-		var_value = equal_pos + 1;
-		result = export_with_value(var_name, var_value, arg, env_ptr);
-		free(var_name);
-		return (result);
-	}
-	else
-		return (export_without_value(arg, env_ptr));
+    equal_pos = ft_strchr(arg, '=');
+    if (equal_pos)
+    {
+        var_name = ft_substr(arg, 0, equal_pos - arg);
+        if (!var_name)
+            return (0);
+        var_value = equal_pos + 1;
+
+        result = export_with_value(var_name, var_value, arg, env_ptr);
+        free(var_name);
+        return (result);
+    }
+    else
+    {
+        return (export_without_value(arg, env_ptr));
+    }
 }
 
 static void	print_export_format(char **envp)
@@ -88,23 +93,23 @@ static void	print_export_format(char **envp)
 
 int	builtin_export(t_args *args, char ***env_ptr)
 {
-	int		exit_status;
-	t_args	*current;
+    int		exit_status;
+    t_args	*current;
 
-	if (!args || !env_ptr || !*env_ptr)
-		return (1);
-	if (!args->next)
-	{
-		print_export_format(*env_ptr);
-		return (0);
-	}
-	exit_status = 0;
-	current = args->next;
-	while (current)
-	{
-		if (!process_export_arg(current->cmd_args, env_ptr))
-			exit_status = 1;
-		current = current->next;
-	}
-	return (exit_status);
+    if (!args || !env_ptr || !*env_ptr)
+        return (1);
+    if (!args->next)
+    {
+        print_export_format(*env_ptr);
+        return (0);
+    }
+    exit_status = 0;
+    current = args->next;
+    while (current)
+    {
+        if (!process_export_arg(current->cmd_args, env_ptr))
+            exit_status = 1;
+        current = current->next;
+    }
+    return (exit_status);
 }

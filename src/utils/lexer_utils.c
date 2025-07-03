@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 21:39:08 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/30 20:37:55 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/03 19:53:08 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,7 @@ int	create_and_append_token(t_token **head, char *value, t_token_type type,
 
 int	is_word_char(char c)
 {
-	if (ft_isspace(c) || is_operator_start(c) || c == '\0')
-		return (0);
-	return (1);
+    return (!ft_isspace(c) && c != '|' && c != '<' && c != '>' && c != '\0');
 }
 
 int	is_operator_start(char c)

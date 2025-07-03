@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 18:11:15 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/30 20:36:47 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/03 19:53:30 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static char	*expand_token_value(const char *value, t_quote quote_type,
 
 static int	should_field_split(t_quote quote_type)
 {
-	return (quote_type == Q_NONE || quote_type == Q_MIXED);
+    return (quote_type == Q_NONE);
 }
 
 static int	add_expanded_tokens(char **fields, t_token **head)
@@ -81,6 +81,7 @@ static int	process_word_expansion(t_token *token, t_token **expanded_head,
 		}
 		return (1);
 	}
+
 	fields = perform_field_splitting(expanded_value, NULL);
 	free(expanded_value);
 	if (!fields)

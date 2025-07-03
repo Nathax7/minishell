@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 18:20:29 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/30 20:36:56 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/03 19:53:51 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,42 +29,42 @@ static t_quote	determine_quote_type(int has_single, int has_double,
 
 static int	process_word(const char **line, t_token **head)
 {
-	t_str_builder	sb;
-	char			*word_value;
-	int				has_single;
-	int				has_double;
-	int				has_unquoted;
+    t_str_builder	sb;
+    char			*word_value;
+    int				has_single;
+    int				has_double;
+    int				has_unquoted;
 
-	sb_init(&sb);
-	has_single = 0;
-	has_double = 0;
-	has_unquoted = 0;
-	while (**line && is_word_char(**line) && !is_operator_start(**line))
-	{
-		if (**line == '\'')
-		{
-			has_single = 1;
-			if (!extract_quoted_content(line, '\'', &sb))
-				return (sb_free_and_return_zero(&sb));
-		}
-		else if (**line == '"')
-		{
-			has_double = 1;
-			if (!extract_quoted_content(line, '"', &sb))
-				return (sb_free_and_return_zero(&sb));
-		}
-		else
-		{
-			has_unquoted = 1;
-			if (!extract_unquoted_content(line, &sb))
-				return (sb_free_and_return_zero(&sb));
-		}
-	}
-	word_value = sb_to_string_and_free(&sb);
-	if (!word_value)
-		return (0);
-	return (create_and_append_token(head, word_value, T_WORD,
-			determine_quote_type(has_single, has_double, has_unquoted)));
+    sb_init(&sb);
+    has_single = 0;
+    has_double = 0;
+    has_unquoted = 0;
+    while (**line && !ft_isspace(**line) && !is_operator_start(**line))
+    {
+        if (**line == '\'')
+        {
+            has_single = 1;
+            if (!extract_quoted_content(line, '\'', &sb))
+                return (sb_free_and_return_zero(&sb));
+        }
+        else if (**line == '"')
+        {
+            has_double = 1;
+            if (!extract_quoted_content(line, '"', &sb))
+                return (sb_free_and_return_zero(&sb));
+        }
+        else
+        {
+            has_unquoted = 1;
+            if (!extract_unquoted_content(line, &sb))
+                return (sb_free_and_return_zero(&sb));
+        }
+    }
+    word_value = sb_to_string_and_free(&sb);
+    if (!word_value)
+        return (0);
+    return (create_and_append_token(head, word_value, T_WORD,
+            determine_quote_type(has_single, has_double, has_unquoted)));
 }
 
 static int	process_operator(const char **line, t_token **head)
@@ -117,3 +117,4 @@ t_token	*lexer(const char *line)
 	}
 	return (head);
 }
+
