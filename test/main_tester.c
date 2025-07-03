@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 17:00:00 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/30 20:38:22 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/03 18:48:05 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static int	check_semicolon_syntax(char *command)
 	return (0);
 }
 
-static int	execute_command_string(char *command, char **env_copy)
+static int	execute_command_string(char *command, char ***env_copy_ptr)
 {
 	char	**commands;
 	int		exit_status;
@@ -94,11 +94,11 @@ static int	execute_command_string(char *command, char **env_copy)
 			input_copy = ft_strdup(trimmed);
 			if (input_copy)
 			{
-				tokens = parse_complete_input(&input_copy, env_copy,
+				tokens = parse_complete_input(&input_copy, *env_copy_ptr,
 						g_signal_test);
 				if (tokens)
 				{
-					exit_status = pipex(tokens, env_copy);
+					exit_status = pipex(tokens, env_copy_ptr);
 					g_signal_test = exit_status;
 					free_token_list(tokens);
 				}
@@ -118,7 +118,7 @@ static int	execute_command_string(char *command, char **env_copy)
 	return (exit_status);
 }
 
-static void	interactive_mode(char **env_copy)
+static void	interactive_mode(char ***env_copy_ptr)
 {
 	char	*input;
 	int		exit_status;
@@ -137,7 +137,7 @@ static void	interactive_mode(char **env_copy)
 			continue ;
 		}
 		add_history(input);
-		exit_status = execute_command_string(input, env_copy);
+		exit_status = execute_command_string(input, env_copy_ptr);
 		g_signal_test = exit_status;
 		free(input);
 	}
@@ -153,13 +153,13 @@ int	main(int argc, char **argv, char **envp)
 		return (EXIT_FAILURE);
 	if (argc == 3 && ft_strcmp(argv[1], "-c") == 0)
 	{
-		exit_status = execute_command_string(argv[2], env_copy);
+		exit_status = execute_command_string(argv[2], &env_copy);
 		ft_freesplit(env_copy);
 		return (exit_status);
 	}
 	else if (argc == 1)
 	{
-		interactive_mode(env_copy);
+		interactive_mode(&env_copy);
 		ft_freesplit(env_copy);
 		return (g_signal_test);
 	}

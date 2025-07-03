@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 20:47:43 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/30 20:44:19 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/03 18:54:31 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ void	execute_bonus(t_exec *exec, char **envp)
 	}
 	if (exec->cmd_list->is_builtin)
 	{
-		exit_status = execute_builtin(exec, envp);
+		exit_status = execute_builtin_in_child(exec, envp);
 		exit(exit_status);
 	}
 	find_path(exec, exec->cmd_list->args->cmd_args);

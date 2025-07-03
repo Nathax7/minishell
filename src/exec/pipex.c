@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:01:49 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/30 20:34:46 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/03 18:59:36 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,24 +71,23 @@ void	create_pipes(t_exec *exec)
 	}
 }
 
-int	pipex(t_token *tokens, char **envp)
+int	pipex(t_token *tokens, char ***envp_ptr)
 {
 	t_exec	exec;
 	int		i;
 	t_cmd	*head;
 
-	exec_init(&exec, envp);
+	exec_init(&exec, *envp_ptr);
 	parsing_exec(tokens, &exec);
 	if (!exec.cmd_list)
-		if (!exec.cmd_list)
-			return (1);
+		return (1);
 	exec.cmd_count = find_size_cmd(exec.cmd_list);
 	head = exec.cmd_list;
 	if (exec.cmd_count < 1)
 		return (usage());
 	if (exec.cmd_count == 1 && exec.cmd_list->is_builtin)
 	{
-		exec.exit_status = execute_single_builtin_in_parent(&exec, envp);
+		exec.exit_status = execute_single_builtin_in_parent(&exec, envp_ptr);
 		return (exec.exit_status);
 	}
 	exec.pids = malloc(sizeof(pid_t) * exec.cmd_count);
@@ -98,7 +97,7 @@ int	pipex(t_token *tokens, char **envp)
 	i = -1;
 	while (++i < exec.cmd_count)
 	{
-		child_process(&exec, i, envp);
+		child_process(&exec, i, *envp_ptr);
 		exec.cmd_list = exec.cmd_list->next;
 	}
 	close_all_pipes(&exec);

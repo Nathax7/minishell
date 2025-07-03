@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 19:39:17 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/30 20:34:42 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/03 19:01:32 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	exec_init(t_exec *exec, char **envp)
 	exec->stdin_backup = dup(STDIN_FILENO);
 	exec->stdout_backup = dup(STDOUT_FILENO);
 	i = 0;
-	while (envp && envp[i] && ft_strnstr(envp[i], "PATH", 4) == 0)
+	while (envp && envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
 	if (!envp || !envp[i])
 	{
