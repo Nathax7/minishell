@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 20:47:43 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/03 18:54:31 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/04 15:46:08 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void	execute_bonus(t_exec *exec, char **envp)
 
 	exec->cmd_list->args = find_first_args(exec->cmd_list->args);
 	if (!exec->cmd_list->args || !exec->cmd_list->args->cmd_args)
-		free_child(exec, 127, "command not found", NULL);
+		free_child(exec, 127, NULL, NULL);
 	if (exec->cmd_list->fd_input == -2 || exec->cmd_list->fd_output == -2)
 		exit(1);
 	dir_result = is_directory(exec);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 14:42:53 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/11 16:55:46 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/07/04 15:20:24 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,7 @@ void		setup_child_signals(void);
 void		setup_heredoc_signals(void);
 void		reset_signals(void);
 void		setup_interactive_signals(void);
+void		setup_child_signals(void);
+void		setup_parent_signals(void);
 
 #endif

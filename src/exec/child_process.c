@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 22:58:16 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/30 20:34:25 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/04 15:12:49 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,10 @@ void	child_process(t_exec *exec, int cmd_index, char **envp)
 {
 	exec->pids[cmd_index] = fork();
 	if (exec->pids[cmd_index] == -1)
-	{
 		free_child(exec, 1, "fork", strerror(errno));
-	}
 	if (exec->pids[cmd_index] == 0)
 	{
+		setup_child_signals();
 		execute_child(exec, cmd_index, envp);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:40:19 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/30 20:35:07 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/04 15:01:53 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,10 @@ int	builtin_cd(t_args *args, char ***env_ptr)
 	t_args	*second_arg;
 
 	first_arg = args->next;
-	second_arg = first_arg ? first_arg->next : NULL;
+	if (first_arg)
+		second_arg = first_arg->next;
+	else
+		second_arg = NULL;
 	if (first_arg && second_arg)
 	{
 		ft_message("cd", NULL, "too many arguments");

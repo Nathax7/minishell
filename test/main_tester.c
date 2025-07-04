@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 17:00:00 by almeekel          #+#    #+#             */
-/*   Updated: 2025/07/03 18:48:05 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/04 15:53:25 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,14 +123,22 @@ static void	interactive_mode(char ***env_copy_ptr)
 	char	*input;
 	int		exit_status;
 
+	setup_interactive_signals();
 	while (1)
 	{
+		g_signal_test = 0;
 		input = readline("\033[1;32mminishell$\033[0m ");
 		if (!input)
 		{
-			printf("exit\n");
+			ft_putstr_fd("exit\n", STDOUT_FILENO);
 			break ;
 		}
+		if (g_signal_test == 130)
+        {
+            g_signal_test = 0;
+            free(input);
+            continue;
+        }
 		if (*input == '\0')
 		{
 			free(input);
@@ -138,7 +146,8 @@ static void	interactive_mode(char ***env_copy_ptr)
 		}
 		add_history(input);
 		exit_status = execute_command_string(input, env_copy_ptr);
-		g_signal_test = exit_status;
+		if (g_signal_test != 130 && g_signal_test != 131)
+        	g_signal_test = exit_status;
 		free(input);
 	}
 }

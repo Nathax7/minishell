@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 14:41:55 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/30 20:04:07 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/04 15:30:45 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,14 @@ static void	handle_sigquit_child(int sig)
 	ft_putstr_fd("Quit (core dumped)\n", STDOUT_FILENO);
 }
 
+static void	handle_sigint_heredoc(int sig)
+{
+	(void)sig;
+	g_signal_test = 130;
+	ft_putchar_fd('\n', STDOUT_FILENO);
+	exit(130);
+}
+
 void	setup_interactive_signals(void)
 {
 	signal(SIGINT, handle_sigint_interactive);
@@ -48,9 +56,15 @@ void	setup_child_signals(void)
 	signal(SIGQUIT, handle_sigquit_child);
 }
 
+void	setup_parent_signals(void)
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+}
+
 void	setup_heredoc_signals(void)
 {
-	signal(SIGINT, SIG_DFL);
+	signal(SIGINT, handle_sigint_heredoc);
 	signal(SIGQUIT, SIG_IGN);
 }
 

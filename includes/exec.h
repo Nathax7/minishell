@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 21:46:37 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/03 18:54:52 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/04 15:21:58 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "builtins.h"
 # include "utils.h"
+# include "signals.h"
 
 void	child_process(t_exec *exec, int cmd_index, char **envp);
 char	*here_doc(t_files *files, char *limiter);
