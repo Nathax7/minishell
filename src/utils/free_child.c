@@ -6,21 +6,11 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 20:02:40 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/30 18:46:40 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/04 16:56:20 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/utils.h"
-
-void	cleanup_cmd_list(t_exec *exec, int parent)
-{
-	if (exec->cmd_list)
-	{
-		exec->cmd_list = find_first_cmd(exec->cmd_list);
-		free_cmd_list(exec->cmd_list, parent);
-		exec->cmd_list = NULL;
-	}
-}
 
 void	cleanup_child_resources(t_exec *exec)
 {
@@ -41,7 +31,7 @@ void	cleanup_child_resources(t_exec *exec)
 	}
 }
 
-static void	cleanup_child_fds(t_exec *exec)
+void	close_child_fds(t_exec *exec)
 {
 	if (exec->stdin_backup != -1)
 	{
@@ -53,12 +43,21 @@ static void	cleanup_child_fds(t_exec *exec)
 		close(exec->stdout_backup);
 		exec->stdout_backup = -1;
 	}
+	if (exec->cmd_list->fd_input != -1)
+	{
+		close(exec->cmd_list->fd_input);
+		exec->cmd_list->fd_input = -1;
+	}
+	if (exec->cmd_list->fd_output != -1)
+	{
+		close(exec->cmd_list->fd_output);
+		exec->cmd_list->fd_output = -1;
+	}
 }
 
 void	reset_exec_state(t_exec *exec)
 {
 	exec->envp = NULL;
-	exec->cmd_count = 0;
 	exec->exit_status = 0;
 	exec->envp_exists = 0;
 }
@@ -85,9 +84,9 @@ void	free_child(t_exec *exec, int status, char *str1, char *str2)
 		ft_putstr_fd(str2, 2);
 		ft_putstr_fd("\n", 2);
 	}
+	close_child_fds(exec);
 	cleanup_cmd_list(exec, 0);
 	cleanup_child_resources(exec);
-	cleanup_child_fds(exec);
 	reset_exec_state(exec);
 	if (status != -1)
 		exit(status);

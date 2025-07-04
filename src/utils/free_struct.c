@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:11:14 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/30 20:37:51 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/04 16:56:31 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,22 +144,42 @@ void	free_cmd_list(t_cmd *cmd_list, int is_parent)
 	}
 }
 
-void	close_all_pipes(t_exec *exec)
+void close_all_pipes(t_exec *exec)
 {
-	int	i;
+    int i;
 
-	i = 0;
-	if (!exec->pipes)
-		return ;
-	while (i < exec->cmd_count - 1)
+    if (!exec || !exec->pipes)
+        return;
+    i = 0;
+    while (i < exec->cmd_count - 1)
+    {
+        if (exec->pipes[i])
+        {
+            if (exec->pipes[i][0] > 2)
+            {
+                close(exec->pipes[i][0]);
+                exec->pipes[i][0] = -1;
+            }
+            if (exec->pipes[i][1] > 2)
+            {
+                close(exec->pipes[i][1]);
+                exec->pipes[i][1] = -1;
+            }
+            free(exec->pipes[i]);
+            exec->pipes[i] = NULL;
+        }
+        i++;
+    }
+    free(exec->pipes);
+    exec->pipes = NULL;
+}
+
+void	cleanup_cmd_list(t_exec *exec, int parent)
+{
+	if (exec->cmd_list)
 	{
-		if (exec->pipes[i])
-		{
-			if (exec->pipes[i][0] >= 0)
-				close(exec->pipes[i][0]);
-			if (exec->pipes[i][1] >= 0)
-				close(exec->pipes[i][1]);
-		}
-		i++;
+		exec->cmd_list = find_first_cmd(exec->cmd_list);
+		free_cmd_list(exec->cmd_list, parent);
+		exec->cmd_list = NULL;
 	}
 }

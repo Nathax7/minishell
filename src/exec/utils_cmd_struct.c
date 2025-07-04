@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 20:08:48 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/30 20:10:12 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/04 16:44:56 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ t_cmd	*append_cmd_node(t_cmd *node)
 	new_node->args = NULL;
 	new_node->cmd_path = NULL;
 	new_node->files = NULL;
+	new_node->fd_input = -1;
+	new_node->fd_output = -1;
 	new_node->is_builtin = 0;
 	new_node->next = NULL;
 	new_node->prev = NULL;

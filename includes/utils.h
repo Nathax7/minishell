@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:07:53 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/30 20:40:21 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/04 16:49:17 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int		find_size_args(t_args *lst);
 char	*ft_strjoin_space(char const *s1, char const *s2);
 void	create_pipes(t_exec *exec);
 void	close_all_pipes(t_exec *exec);
+void	close_child_fds(t_exec *exec);
 void	free_cmd_list(t_cmd *cmd_list, int is_parent);
 void	cleanup_cmd_list(t_exec *exec, int parent);
 int	unlink_heredoc(t_files *files);

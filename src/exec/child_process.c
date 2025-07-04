@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 22:58:16 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/04 15:12:49 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/04 16:49:28 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void	execute_child(t_exec *exec, int cmd_index, char **envp)
 		exit(1);
 	setup_pipe_redirections(exec, cmd_index);
 	close_all_pipes(exec);
+	close_child_fds(exec);
 	execute_bonus(exec, envp);
 }
 

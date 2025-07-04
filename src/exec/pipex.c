@@ -6,21 +6,11 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:01:49 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/04 16:14:56 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/04 16:58:35 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
-
-int	usage(void)
-{
-	ft_message("minishell", NULL, "Bad argument");
-	ft_putstr_fd("Ex: ./minishell <file1> <cmd1> <cmd2> <...> <file2>\n", 1);
-	ft_putstr_fd("    ./minishell \"here_doc\" <LIMITER> <cmd> <cmd1>"
-					"<...> <file>\n",
-					1);
-	return (-1);
-}
 
 static void	free_pipes(t_exec *exec, int failed_index)
 {
@@ -84,8 +74,6 @@ int	pipex(t_token *tokens, char ***envp_ptr)
 		return (1);
 	exec.cmd_count = find_size_cmd(exec.cmd_list);
 	head = exec.cmd_list;
-	if (exec.cmd_count < 1)
-		return (usage());
 	if (exec.cmd_count == 1 && exec.cmd_list->is_builtin)
 	{
 		exec.exit_status = execute_single_builtin_in_parent(&exec, envp_ptr);
@@ -102,7 +90,6 @@ int	pipex(t_token *tokens, char ***envp_ptr)
 		child_process(&exec, i, *envp_ptr);
 		exec.cmd_list = exec.cmd_list->next;
 	}
-	close_all_pipes(&exec);
 	i = -1;
 	while (++i < exec.cmd_count)
 	{
@@ -123,8 +110,7 @@ int	pipex(t_token *tokens, char ***envp_ptr)
 		}
 	}
 	exec.cmd_list = head;
-	free(exec.pids);
-	unlink_heredoc(exec.cmd_list->files);
+	free_parent(&exec, -1, NULL, NULL);
 	setup_interactive_signals();
 	if (WIFEXITED(exec.exit_status))
 		return (WEXITSTATUS(exec.exit_status));
