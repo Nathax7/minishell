@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:01:49 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/04 17:10:54 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/04 18:27:20 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ int	pipex(t_token *tokens, char ***envp_ptr)
 	t_exec	exec;
 	int		i;
 	t_cmd	*head;
-	int		sig;
 
 	exec_init(&exec, *envp_ptr);
 	parsing_exec(tokens, &exec);
@@ -93,23 +92,7 @@ int	pipex(t_token *tokens, char ***envp_ptr)
 	i = -1;
 	close_all_pipes(&exec);
 	while (++i < exec.cmd_count)
-	{
 		waitpid(exec.pids[i], &exec.exit_status, 0);
-		if (WIFSIGNALED(exec.exit_status))
-		{
-			sig = WTERMSIG(exec.exit_status);
-			if (sig == SIGINT)
-			{
-				g_signal_test = 130;
-				ft_putchar_fd('\n', STDOUT_FILENO);
-			}
-			else if (sig == SIGQUIT)
-			{
-				g_signal_test = 131;
-				ft_putstr_fd("Quit (core dumped)\n", STDOUT_FILENO);
-			}
-		}
-	}
 	exec.cmd_list = head;
 	free_parent(&exec, -1, NULL, NULL);
 	setup_interactive_signals();

@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 22:58:16 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/04 17:06:44 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/04 18:23:26 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,14 @@ void	process_redirections(t_exec *exec)
 		{
 			if (previous_output_fd != -1)
 				close(previous_output_fd);
+
+			if (access(current->outfile_name, F_OK) == 0
+				&& access(current->outfile_name, W_OK) == -1)
+			{
+				ft_message(NULL, current->outfile_name, "Permission denied");
+				exec->cmd_list->fd_output = -2;
+				return ;
+			}
 			flags = O_WRONLY | O_CREAT;
 			if (current->append)
 				flags |= O_APPEND;

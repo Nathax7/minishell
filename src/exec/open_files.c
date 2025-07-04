@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:23:18 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/01 18:11:47 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/04 18:13:49 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	struct_open_infile(t_exec *exec)
 			{
 				ft_message(NULL, current->infile_name, "Permission denied");
 				exec->cmd_list->fd_input = -2;
+				exec->has_input_error = 1;
 				return ;
 			}
 			exec->cmd_list->fd_input = open(current->infile_name, O_RDONLY);
@@ -65,6 +66,7 @@ void	struct_open_infile(t_exec *exec)
 			{
 				ft_message(current->infile_name, strerror(errno), NULL);
 				exec->cmd_list->fd_input = -2;
+				exec->has_input_error = 1;
 				return ;
 			}
 			previous_fd = exec->cmd_list->fd_input;
@@ -80,7 +82,7 @@ void	struct_open_outfile(t_exec *exec)
 	int		flags;
 
 	if (exec->has_input_error)
-		return ;
+    	return ;
 	exec->cmd_list->fd_output = -1;
 	previous_fd = -1;
 	if (!exec->cmd_list->files)

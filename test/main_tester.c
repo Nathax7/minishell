@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 17:00:00 by almeekel          #+#    #+#             */
-/*   Updated: 2025/07/04 15:53:25 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/04 18:35:43 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ static void	interactive_mode(char ***env_copy_ptr)
 	setup_interactive_signals();
 	while (1)
 	{
-		g_signal_test = 0;
+		// g_signal_test = 0;
 		input = readline("\033[1;32mminishell$\033[0m ");
 		if (!input)
 		{
