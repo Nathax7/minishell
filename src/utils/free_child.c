@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 20:02:40 by almeekel          #+#    #+#             */
-/*   Updated: 2025/07/04 16:56:20 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/04 17:15:18 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,6 @@ void	close_child_fds(t_exec *exec)
 	}
 }
 
-void	reset_exec_state(t_exec *exec)
-{
-	exec->envp = NULL;
-	exec->exit_status = 0;
-	exec->envp_exists = 0;
-}
-
 void	free_child(t_exec *exec, int status, char *str1, char *str2)
 {
 	if (!exec)
@@ -87,7 +80,6 @@ void	free_child(t_exec *exec, int status, char *str1, char *str2)
 	close_child_fds(exec);
 	cleanup_cmd_list(exec, 0);
 	cleanup_child_resources(exec);
-	reset_exec_state(exec);
 	if (status != -1)
 		exit(status);
 }

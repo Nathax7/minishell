@@ -6,20 +6,11 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 20:03:17 by almeekel          #+#    #+#             */
-/*   Updated: 2025/07/04 16:56:02 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/04 17:17:00 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/utils.h"
-
-static void	cleanup_parent_cmd_path(t_exec *exec)
-{
-	if (exec->cmd_list && exec->cmd_list->cmd_path)
-	{
-		free(exec->cmd_list->cmd_path);
-		exec->cmd_list->cmd_path = NULL;
-	}
-}
 
 static void	restore_parent_fds(t_exec *exec)
 {
@@ -56,10 +47,8 @@ void	free_parent(t_exec *exec, int status, char *str1, char *str2)
 		ft_putstr_fd("\n", 2);
 	}
 	cleanup_cmd_list(exec, 1);
-	cleanup_parent_cmd_path(exec);
 	cleanup_child_resources(exec);
 	restore_parent_fds(exec);
-	reset_exec_state(exec);
 	if (status != -1)
 		exit(status);
 }

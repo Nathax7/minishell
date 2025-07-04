@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:01:49 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/04 16:58:35 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/04 17:10:54 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ int	pipex(t_token *tokens, char ***envp_ptr)
 		exec.cmd_list = exec.cmd_list->next;
 	}
 	i = -1;
+	close_all_pipes(&exec);
 	while (++i < exec.cmd_count)
 	{
 		waitpid(exec.pids[i], &exec.exit_status, 0);

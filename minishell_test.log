@@ -1720,15 +1720,6 @@ minishell: ./someFILE: No such file or directory$
 |  STATUS: expected 0 actual 127
 ================================================================================
 
-|> WITH asdf | echo bonjour\n
-|---------------------------------------EXPECTED--------------------------------
-minishell: asdf: command not found$
-bonjour$
-|---------------------------------------ACTUAL----------------------------------
-minishell: asdf: commabnodn jnooutr $
-found$
-================================================================================
-
 |> WITH < ; a\n
 |  STATUS: expected 2 actual 127
 |---------------------------------------EXPECTED--------------------------------
@@ -2138,8 +2129,8 @@ minishell: \: command not found$
 |---------------------------------------EXPECTED--------------------------------
   jesuis ||  charles$
 |---------------------------------------ACTUAL----------------------------------
-miniminishell: \: command not found$
-shell: \: command not found$
+minishell: \: commimnainsdh enlolt:  f\o:u ncdo$
+mmand not found$
 ================================================================================
 
 |> WITH echo \ \ jesuis\; \ charles\n
