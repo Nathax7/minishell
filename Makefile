@@ -10,40 +10,57 @@ DEPS = $(OBJ:.o=.d)
 SRC_EXEC =	src/exec/child_process.c	\
 			src/exec/exec_cmd.c			\
 			src/exec/here_doc.c			\
-			src/exec/open_files.c		\
 			src/exec/parsing_cmd.c		\
 			src/exec/parsing_exec.c		\
-			src/exec/pipex.c			\
+			src/exec/exec.c			\
 			src/exec/utils_cmd.c		\
+			src/exec/utils_cmd_struct.c	\
+			src/exec/open_infiles.c		\
+			src/exec/open_outfiles.c	\
+			src/exec/find_path.c		\
+			src/exec/redirections.c		\
+			src/exec/exec_builtin.c		\
 
-SRC_PARSING =	src/parsing/expand_variable.c		\
-				src/parsing/expander.c				\
-				src/parsing/field_splitting.c		\
-				src/parsing/freeing_structures.c	\
-				src/parsing/lexer.c					\
-				src/parsing/main_parsing.c			\
-				src/parsing/main_parsing_core.c		\
-				src/parsing/operator_handling.c		\
-				src/parsing/quote_extracter.c		\
-				src/parsing/secure_utils.c			\
-				src/parsing/syntax_state_machine.c	\
-				src/parsing/print_tokens.c 			\
+SRC_PARSING =	src/parsing/variable_expander.c			\
+				src/parsing/token_expander.c			\
+				src/parsing/field_splitter.c			\
+				src/parsing/lexical_analyzer.c			\
+				src/parsing/parser_main.c				\
+				src/parsing/parser_core.c				\
+				src/parsing/operator_processor.c		\
+				src/parsing/quote_processor.c			\
+				src/parsing/syntax_analyzer.c			\
+				src/parsing/variable_processor.c 		\
+				src/parsing/word_expander.c 			\
+				src/parsing/word_tokenizer.c 			\
+				src/parsing/token_expanding_processes.c \
 
 
-SRC_UTILS =	src/utils/ft_close.c		\
-			src/utils/open.c			\
-			src/utils/find_last.c		\
-			src/utils/find_size.c		\
-			src/utils/find_first.c		\
-			src/utils/expander_utils.c	\
-			src/utils/string_builder_annex.c\
-			src/utils/string_builder.c		\
-			src/utils/builtin_utils.c		\
-			src/utils/token_utils.c			\
-			src/utils/free_struct.c			\
-			src/utils/parsing_error_utils.c	\
-			src/utils/lexer_utils.c			\
 
+SRC_UTILS = src/utils/search_last.c		\
+			src/utils/size_calculator.c		\
+			src/utils/search_first.c		\
+			src/utils/expansion_helpers.c	\
+			src/utils/string_constructor_ext.c\
+			src/utils/string_constructor.c		\
+			src/utils/builtin_helpers.c		\
+			src/utils/structure_cleanup.c			\
+			src/utils/structure_cleanup_backup.c	\
+			src/utils/structure_cleanup_ext.c	\
+			src/utils/token_cleanup.c			\
+			src/utils/error_handler.c	\
+			src/utils/lexical_helpers.c			\
+			src/utils/shell_environment.c 			\
+			src/utils/environment_helpers.c 	\
+			src/utils/variable_handler.c 		\
+			src/utils/message_handler.c 	\
+			src/utils/parent_cleanup.c 		\
+			src/utils/child_cleanup.c 			\
+			src/utils/safe_closer.c			\
+			src/utils/quote_stripper.c		\
+			src/utils/env_setting.c			\
+			src/utils/heredoc_quoting_utils.c	\
+			src/utils/debug_utils.c			\
 
 SRC_BUILTINS =	src/builtins/builtin_export.c				\
 				src/builtins/builtin_cd.c					\
@@ -53,9 +70,10 @@ SRC_BUILTINS =	src/builtins/builtin_export.c				\
 				src/builtins/builtin_exit.c					\
 				src/builtins/builtin_unset.c				\
 
-SRC_SIGNALS = src/signal/signal_handler.c		\
+SRC_SIGNALS = 	src/signal/signal_handlers.c		\
+				src/signal/signal_setup.c		\
 
-SRC_ALL = $(SRC_EXEC) $(SRC_UTILS) $(SRC_PARSING) $(SRC_SIGNALS) $(SRC_BUILTINS) test/main_tester.c
+SRC_ALL = $(SRC_EXEC) $(SRC_UTILS) $(SRC_PARSING) $(SRC_SIGNALS) $(SRC_BUILTINS) main.c
 
 GREEN=\033[0;32m
 BLUE=\033[38;2;64;224;208m

@@ -1,25 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_strstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/18 21:08:33 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/19 13:52:06 by nagaudey         ###   ########.fr       */
+/*   Created: 2025/06/29 19:04:04 by almeekel          #+#    #+#             */
+/*   Updated: 2025/07/19 13:53:07 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
 
-void	ft_putstr_fd(char *s, int fd)
+char	*ft_strstr(const char *haystack, const char *needle)
 {
 	size_t	i;
+	size_t	j;
 
+	if (!haystack || !needle)
+		return (NULL);
+	if (*needle == '\0')
+		return ((char *)haystack);
 	i = 0;
-	while (s[i])
+	while (haystack[i])
 	{
-		write(fd, &s[i], 1);
+		j = 0;
+		while (haystack[i + j] && needle[j] && haystack[i + j] == needle[j])
+			j++;
+		if (needle[j] == '\0')
+			return ((char *)&haystack[i]);
 		i++;
 	}
+	return (NULL);
 }

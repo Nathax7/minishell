@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 14:21:27 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/08 20:36:12 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/07/19 13:52:53 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	array[i + j] = '\0';
 	return (array);
 }
+
 char	*ft_strjoin_space(char const *s1, char const *s2)
 {
 	int		i;

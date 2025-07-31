@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   all.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 17:37:52 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/19 18:14:48 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/07/22 13:10:58 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 void				ft_striteri(char *s, void (*f)(unsigned int, char *));
 char				**ft_freesplit(char **str);
 int					ft_freesplit_int(char **str, int return_val);
-void				free_split(char **str);
+void				*ft_strcat(char *dest, const char *src);
+char				*ft_strstr(const char *haystack, const char *needle);
 
 // File Descriptor Writing
 void				ft_putchar_fd(char c, int fd);

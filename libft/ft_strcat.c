@@ -1,25 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_strcat.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/18 21:08:33 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/19 13:52:06 by nagaudey         ###   ########.fr       */
+/*   Created: 2025/06/27 16:24:37 by almeekel          #+#    #+#             */
+/*   Updated: 2025/07/19 13:52:38 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
 
-void	ft_putstr_fd(char *s, int fd)
+void	*ft_strcat(char *dest, const char *src)
 {
-	size_t	i;
+	char	*dest_ptr;
+	int		i;
 
+	if (!dest || !src)
+		return (dest);
+	dest_ptr = dest;
+	while (*dest_ptr)
+		dest_ptr++;
 	i = 0;
-	while (s[i])
+	while (src[i])
 	{
-		write(fd, &s[i], 1);
+		*dest_ptr = src[i];
+		dest_ptr++;
 		i++;
 	}
+	*dest_ptr = '\0';
+	return (dest);
 }
