@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_echo.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:48:04 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/28 19:36:39 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/30 16:21:44 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int	builtin_echo(t_args *args)
 
 	if (!args)
 		return (1);
-
 	newline = 1;
 	args = args->next;
 	while (args && args->cmd_args && is_valid_n_flag(args->cmd_args))

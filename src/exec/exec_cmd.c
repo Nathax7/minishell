@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 20:47:43 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/28 19:56:06 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/31 15:02:23 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 char	**struct_to_array(t_args *args)
 {
 	char	**array;
-	t_args	*current;
 	int		size;
 	int		i;
 
@@ -25,95 +24,97 @@ char	**struct_to_array(t_args *args)
 	array = malloc(sizeof(char *) * (size + 1));
 	if (!array)
 		return (NULL);
-	current = args;
 	i = 0;
-	while (current && i < size)
+	while (args && i < size)
 	{
-		array[i] = ft_strdup(current->cmd_args);
+		array[i] = ft_strdup(args->cmd_args);
 		if (!array[i])
 		{
-			while (--i >= 0)
-				free(array[i]);
-			free(array);
+			free_split(array);
 			return (NULL);
 		}
-		current = current->next;
+		args = args->next;
 		i++;
 	}
 	array[i] = NULL;
 	return (array);
 }
 
-void	check_exec_file(t_exec *exec, char *cmd)
+void	free_execute(t_exec *exec)
 {
-	if (access(cmd, F_OK) == -1)
-		free_child(exec, 127, cmd, "No such file or directory");
-	if (access(cmd, X_OK) == -1)
-		free_child(exec, 126, cmd, "Permission denied");
-	exec->cmd_list->cmd_path = cmd;
-}
-
-void	check_exec(t_exec *exec, char *cmd)
-{
-	if (access(cmd, F_OK) == -1)
-		free_child(exec, 127, cmd, "command not found");
-	if (access(cmd, X_OK) == -1)
-		free_child(exec, 126, cmd, "Permission denied");
-	exec->cmd_list->cmd_path = cmd;
-}
-
-void	find_path(t_exec *exec, char *cmd)
-{
-	int		i;
-	char	*tmp;
-
-	i = -1;
-	if (access(cmd, F_OK) == 0)
+	if (errno == EACCES && !ft_strchr(exec->cmd_list->args->cmd_args, '/'))
 	{
-		check_exec_file(exec, cmd);
-		return ;
+		free_child(exec, 127, exec->cmd_list->cmd_path, "command not found");
 	}
-	while (exec->paths && exec->envp && exec->paths[++i])
+	else if (errno == EACCES || errno == EPERM)
 	{
-		tmp = ft_strjoin(exec->paths[i], "/");
-		if (!tmp)
-			free_child(exec, 1, "malloc", strerror(errno));
-		exec->cmd_list->cmd_path = ft_strjoin(tmp, cmd);
-		free(tmp);
+		free_child(exec, 126, exec->cmd_list->cmd_path, "Permission denied");
+	}
+	else if (errno == ENOENT)
+	{
+		free_child(exec, 127, exec->cmd_list->cmd_path,
+			"No such file or directory");
+	}
+	else if (errno == EISDIR)
+	{
+		free_child(exec, 126, exec->cmd_list->cmd_path, "Is a directory");
+	}
+	else
+	{
+		free_child(exec, 0, exec->cmd_list->cmd_path, strerror(errno));
+	}
+}
+
+void	exec_dir(t_exec *exec, int dir_result, char ***args_array, char **envp)
+{
+	if (dir_result == 1)
+	{
+		exec->cmd_list->cmd_path = ft_strdup(exec->cmd_list->args->cmd_args);
 		if (!exec->cmd_list->cmd_path)
 			free_child(exec, 1, "malloc", strerror(errno));
-		if (access(exec->cmd_list->cmd_path, F_OK) == 0)
-			break ;
-		free(exec->cmd_list->cmd_path);
-		exec->cmd_list->cmd_path = NULL;
+		*args_array = struct_to_array(exec->cmd_list->args);
+		if (!args_array)
+			exit(1);
+		if (execve(exec->cmd_list->cmd_path, *args_array, envp) == -1)
+		{
+			free_split(*args_array);
+			free_execute(exec);
+		}
 	}
-	if (exec->cmd_list->cmd_path)
-		check_exec(exec, exec->cmd_list->cmd_path);
 }
 
-void	execute_bonus(t_exec *exec, char **envp)
+void	ft_execve(t_exec *exec, char ***args_array, char **envp)
 {
-	if (!exec || !exec->cmd_list)
-		free_child(exec, 1, "execute_bonus", "Invalid structure");
-	exec->cmd_list->args = find_first_args(exec->cmd_list->args);
-	if (exec->cmd_list->args->cmd_args == NULL)
-		free_child(exec, 127, exec->cmd_list->args->cmd_args,
-			"command not found");
-	check_path(exec);
-	is_builtin(exec, envp);
+	if (execve(exec->cmd_list->cmd_path, *args_array, envp) == -1)
+	{
+		free_split(*args_array);
+		free_execute(exec);
+	}
+}
+
+void	ft_execute(t_exec *exec, char **envp)
+{
+	char	**args_array;
+	int		exit_status;
+	int		dir_result;
+
+	if (exec->cmd_list->fd_input == -2 || exec->cmd_list->fd_output == -2)
+		exit(1);
+	dir_result = is_directory(exec);
+	if (dir_result == 126 || dir_result == 127)
+		exit(dir_result);
+	exec_dir(exec, dir_result, &args_array, envp);
+	if (exec->cmd_list->is_builtin)
+	{
+		exit_status = execute_builtin_in_child(exec, envp);
+		free_child(exec, exit_status, NULL, NULL);
+	}
 	find_path(exec, exec->cmd_list->args->cmd_args);
 	if (!exec->cmd_list->cmd_path)
 		free_child(exec, 127, exec->cmd_list->args->cmd_args,
 			"command not found");
-	if (execve(exec->cmd_list->cmd_path, struct_to_array(exec->cmd_list->args),
-			envp) == -1)
-	{
-		if (errno == EACCES || errno == EISDIR)
-			free_child(exec, 126, "pipex: execve", strerror(errno));
-		if (errno == ENOENT || errno == EPERM)
-			free_child(exec, 127, "pipex: execve", strerror(errno));
-		if (errno == ENOTDIR)
-			free_child(exec, 127, "pipex: execve", strerror(errno));
-		free_child(exec, 1, "execve", strerror(errno));
-	}
+	args_array = struct_to_array(exec->cmd_list->args);
+	if (!args_array)
+		exit(1);
+	ft_execve(exec, &args_array, envp);
 }

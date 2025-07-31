@@ -6,155 +6,106 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 22:58:16 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/06/26 19:47:45 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/30 13:42:33 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-void	setup_redirections(t_exec *exec, int cmd_index)
+void	child_process(t_exec *exec, int cmd_index, char **envp)
 {
-	if (!exec || !exec->cmd_list)
+	exec->pids[cmd_index] = fork();
+	if (exec->pids[cmd_index] == -1)
+		free_child(exec, 1, "fork", strerror(errno));
+	if (exec->pids[cmd_index] == 0)
 	{
-		free_child(exec, 1, "setup_redirections", "Invalid exec structure");
-		return ;
+		setup_child_signals();
+		execute_child(exec, cmd_index, envp);
 	}
-	if (cmd_index > 0 && (!exec->pipes || !exec->pipes[cmd_index - 1]))
+}
+
+int	is_infile(t_exec *exec, t_files *current, int *previous_input_fd)
+{
+	if (*previous_input_fd != -1)
+		safe_close(previous_input_fd);
+	if (access(current->infile_name, F_OK) == -1)
 	{
-		free_child(exec, 1, "setup_redirections", "Invalid pipe structure");
-		return ;
+		free_child(exec, 1, current->infile_name, "No such file or directory");
 	}
-	if (cmd_index == 0)
+	exec->cmd_list->fd_input = open(current->infile_name, O_RDONLY);
+	if (exec->cmd_list->fd_input == -1)
 	{
-		if (exec->cmd_list->fd_input != -1)
-		{
-			if (dup2(exec->cmd_list->fd_input, STDIN_FILENO) == -1)
-				free_child(exec, 1, "dup21", strerror(errno));
-		}
-		if (exec->cmd_list->fd_output != -1)
-		{
-			if (dup2(exec->cmd_list->fd_output, STDOUT_FILENO) == -1)
-				free_child(exec, 1, "dup22", strerror(errno));
-		}
-		else if (exec->cmd_count > 1)
-		{
-			if (dup2(exec->pipes[0][1], STDOUT_FILENO) == -1)
-				free_child(exec, 1, "dup23", strerror(errno));
-		}
+		free_child(exec, 1, current->infile_name, strerror(errno));
 	}
-	else if (cmd_index == exec->cmd_count - 1)
+	*previous_input_fd = exec->cmd_list->fd_input;
+	return (0);
+}
+
+int	is_outfile(t_exec *exec, t_files *current, int *previous_output_fd)
+{
+	int	flags;
+
+	if (*previous_output_fd != -1)
+		safe_close(previous_output_fd);
+	if (access(current->outfile_name, F_OK) == 0
+		&& access(current->outfile_name, W_OK) == -1)
 	{
-		if (exec->cmd_list->fd_input != -1)
-		{
-			if (dup2(exec->cmd_list->fd_input, STDIN_FILENO) == -1)
-				free_child(exec, 1, "dup24", strerror(errno));
-		}
-		else
-		{
-			if (cmd_index > 0 && exec->pipes[cmd_index - 1][0] != -1)
-			{
-				if (dup2(exec->pipes[cmd_index - 1][0], STDIN_FILENO) == -1)
-					free_child(exec, 1, "dup25", strerror(errno));
-			}
-		}
-		if (exec->cmd_list->fd_output != -1)
-		{
-			if (dup2(exec->cmd_list->fd_output, STDOUT_FILENO) == -1)
-				free_child(exec, 1, "dup26", strerror(errno));
-		}
+		free_child(exec, 1, current->outfile_name, "Permission denied");
 	}
+	flags = O_WRONLY | O_CREAT;
+	if (current->append)
+		flags |= O_APPEND;
 	else
+		flags |= O_TRUNC;
+	exec->cmd_list->fd_output = open(current->outfile_name, flags, 0644);
+	if (exec->cmd_list->fd_output == -1)
 	{
-		if (exec->cmd_list->fd_input != -1)
-		{
-			if (dup2(exec->cmd_list->fd_input, STDIN_FILENO) == -1)
-				free_child(exec, 1, "dup27", strerror(errno));
-		}
-		else
-		{
-			if (cmd_index > 0 && exec->pipes[cmd_index - 1][0] != -1)
-			{
-				if (dup2(exec->pipes[cmd_index - 1][0], STDIN_FILENO) == -1)
-					free_child(exec, 1, "dup28", strerror(errno));
-			}
-		}
-		if (exec->cmd_list->fd_output != -1)
-		{
-			if (dup2(exec->cmd_list->fd_output, STDOUT_FILENO) == -1)
-				free_child(exec, 1, "dup29", strerror(errno));
-		}
-		else
-		{
-			if (cmd_index < exec->cmd_count - 1 && exec->pipes[cmd_index][1] !=
-				-1)
-			{
-				if (dup2(exec->pipes[cmd_index][1], STDOUT_FILENO) == -1)
-					free_child(exec, 1, "dup211", strerror(errno));
-			}
-		}
+		free_child(exec, 1, current->outfile_name, strerror(errno));
 	}
+	*previous_output_fd = exec->cmd_list->fd_output;
+	return (0);
 }
 
-void	close_child_pipes(t_exec *exec, int cmd_index)
+void	process_redirections(t_exec *exec)
 {
-	int i;
+	t_files	*current;
+	int		previous_output_fd;
+	int		previous_input_fd;
 
-	if (!exec->pipes)
-		return;
-
-	i = 0;
-	while (i < exec->cmd_count - 1)
+	previous_output_fd = -1;
+	previous_input_fd = -1;
+	exec->cmd_list->fd_output = -1;
+	exec->cmd_list->fd_input = -1;
+	if (!exec->cmd_list->files)
+		return ;
+	current = exec->cmd_list->files;
+	while (current)
 	{
-		if (!(i == cmd_index - 1 && exec->cmd_list->fd_input == -1) &&
-			exec->pipes[i][0] != -1)
+		if (current->infile_name)
 		{
-			close(exec->pipes[i][0]);
-			exec->pipes[i][0] = -1;
+			is_infile(exec, current, &previous_input_fd);
 		}
-		if (!(i == cmd_index && exec->cmd_list->fd_output == -1) &&
-			exec->pipes[i][1] != -1)
+		if (current->outfile_name)
 		{
-			close(exec->pipes[i][1]);
-			exec->pipes[i][1] = -1;
+			is_outfile(exec, current, &previous_output_fd);
 		}
-		i++;
-	}
-}
-
-void	close_parent_pipes(t_exec *exec, int cmd_index)
-{
-	if (cmd_index > 0 && exec->pipes[cmd_index - 1][0] != -1)
-	{
-		close(exec->pipes[cmd_index - 1][0]);
-		exec->pipes[cmd_index - 1][0] = -1;
-	}
-	if (cmd_index < exec->cmd_count - 1 && exec->pipes[cmd_index][1] != -1)
-	{
-		close(exec->pipes[cmd_index][1]);
-		exec->pipes[cmd_index][1] = -1;
+		current = current->next;
 	}
 }
 
 void	execute_child(t_exec *exec, int cmd_index, char **envp)
 {
-	struct_open_infile(exec);
-	struct_open_outfile(exec);
-	setup_redirections(exec, cmd_index);
-	close_child_pipes(exec, cmd_index);
-	execute_bonus(exec, envp);
-}
-
-void	child_process(t_exec *exec, int cmd_index, char **envp)
-{
-	if (!exec || !exec->cmd_list)
-	{
-		free_child(exec, 1, "child_process", "Invalid exec structure");
-		return ;
-	}
-	exec->cmd_list->files = find_first_files(exec->cmd_list->files);
-	exec->pids[cmd_index] = fork();
-	if (exec->pids[cmd_index] == -1)
-		free_child(exec, 1, "pid", strerror(errno));
-	if (exec->pids[cmd_index] == 0)
-		execute_child(exec, cmd_index, envp);
+	process_redirections(exec);
+	if (exec->cmd_list->fd_input == -2 || exec->cmd_list->fd_output == -2)
+		exit(1);
+	setup_pipe_redirections(exec, cmd_index);
+	close_all_pipes(exec);
+	close_child_fds(exec);
+	exec->cmd_list->args = find_first_args(exec->cmd_list->args);
+	if (!exec->cmd_list->args || !exec->cmd_list->args->cmd_args)
+		free_child(exec, 127, NULL, NULL);
+	if (exec->cmd_list->args && exec->cmd_list->args->cmd_args
+		&& !*exec->cmd_list->args->cmd_args)
+		free_child(exec, 127, "", "command not found");
+	ft_execute(exec, envp);
 }

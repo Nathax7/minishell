@@ -3,57 +3,115 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 18:56:30 by almeekel          #+#    #+#             */
-/*   Updated: 2025/06/28 19:24:36 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/29 18:07:22 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-static int	is_numeric_string(char *str)
+static int	long_long_checker(const char *str, int i, long long result,
+		int sign)
 {
-	int	i;
-
-	if (!str || !*str)
-		return (0);
-	i = 0;
-	if (str[i] == '+' || str[i] == '-')
+	while (str[i] && ft_isdigit(str[i]))
+	{
+		if (sign == -1 && result == 922337203685477580LL && str[i] == '8')
+		{
+			result = 9223372036854775808ULL;
+			i++;
+			break ;
+		}
+		if (result > (LLONG_MAX - (str[i] - '0')) / 10)
+			return (0);
+		result = result * 10 + (str[i] - '0');
 		i++;
-	if (!str[i])
+	}
+	if (sign == -1 && (unsigned long long)result > 9223372036854775808ULL)
 		return (0);
 	while (str[i])
 	{
-		if (!ft_isdigit(str[i]))
+		if (str[i] != ' ' && str[i] != '\t')
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
-int	builtin_exit(t_args *args)
+static int	is_numeric_string(const char *str)
 {
-    int exit_code;
+	int			i;
+	long long	result;
+	int			sign;
 
-    ft_putstr_fd("exit\n", STDERR_FILENO);
-    if (!args || !args->next || !args->next->cmd_args)
-        exit(0);
+	if (!str || !*str)
+		return (0);
+	i = 0;
+	while (str[i] && ft_isspace(str[i]))
+		i++;
+	sign = 1;
+	if (str[i] == '+' || str[i] == '-')
+	{
+		if (str[i] == '-')
+			sign = -1;
+		i++;
+	}
+	if (!str[i])
+		return (0);
+	result = 0;
+	return (long_long_checker(str, i, result, sign));
+}
 
-    if (!is_numeric_string(args->next->cmd_args))
-    {
-        ft_putstr_fd("minishell: ", STDERR_FILENO);
-        ft_putstr_fd("exit: ", STDERR_FILENO);
-        ft_putstr_fd(args->next->cmd_args, STDERR_FILENO);
-        ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
-        exit(2);
-    }
-    if (args->next->next && args->next->next->cmd_args)
-    {
-        ft_message("exit", "too many arguments");
-        return (1);
-    }
+void	exit_args(t_exec *exec, int parent, t_args **first_arg)
+{
+	if (!exec->cmd_list->args)
+	{
+		ft_putstr_fd("exit\n", 2);
+		free_exit(exec, parent, 0);
+	}
+	(*first_arg) = exec->cmd_list->args->next;
+	if (!(*first_arg))
+	{
+		ft_putstr_fd("exit\n", 2);
+		free_exit(exec, parent, 0);
+	}
+}
 
-    exit_code = ft_atoi(args->next->cmd_args);
-    exit(exit_code & 255);
+void	is_alpha_string(t_exec *exec, t_args *first_arg, int parent)
+{
+	if (!is_numeric_string(first_arg->cmd_args))
+	{
+		ft_putstr_fd("exit\n", 2);
+		ft_message("exit", first_arg->cmd_args, "numeric argument required");
+		free_exit(exec, parent, 2);
+	}
+}
+
+int	builtin_exit(t_exec *exec, int parent)
+{
+	int		exit_code;
+	t_args	*first_arg;
+	t_args	*second_arg;
+
+	exit_args(exec, parent, &first_arg);
+	second_arg = first_arg->next;
+	if (second_arg)
+	{
+		if (!is_numeric_string(first_arg->cmd_args))
+		{
+			ft_putstr_fd("exit\n", 2);
+			ft_message("exit", first_arg->cmd_args,
+				"numeric argument required");
+			free_exit(exec, parent, 255);
+		}
+		ft_putstr_fd("exit\n", 2);
+		ft_message("exit", NULL, "too many arguments");
+		return (1);
+	}
+	is_alpha_string(exec, first_arg, parent);
+	exit_code = ft_atoi(first_arg->cmd_args);
+	ft_putstr_fd("exit\n", 2);
+	free_exit(exec, parent, (unsigned char)exit_code);
+	return ((unsigned char)exit_code);
 }
