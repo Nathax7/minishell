@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   safe_closer.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 11:39:15 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/29 18:07:43 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/08/01 01:00:05 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	free_exit(t_exec *exec, int parent, int status)
 {
 	if (parent)
 	{
-		if (exec->envp_exists == 1 && exec->envp)
+		if (exec->envp)
 		{
 			free_split(exec->envp);
 			exec->envp = NULL;
