@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 16:39:00 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/02/06 17:47:23 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/08/19 18:07:02 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,3 @@ size_t	ft_strlen(const char *str)
 	}
 	return (i);
 }
-
-// #include <stdio.h>
-// int main(void)
-// {
-//     printf("%d", ft_strlen("abcde"));
-// }

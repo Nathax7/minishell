@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:04:33 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/05/14 17:44:57 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/08/19 17:28:53 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,3 @@ char	*ft_strdup(const char *s)
 	dup[i] = '\0';
 	return (dup);
 }
-// #include <stdio.h>
-// int	main(int ac, char **av)
-// {
-// 	char	*tab;
-
-// 	tab = ft_strdup("123");
-// 	printf("%s", tab);
-// }

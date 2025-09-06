@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 09:14:22 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/02/07 17:05:27 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/08/19 18:06:54 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,3 @@ char	*ft_strrchr(const char *s, int c)
 	}
 	return (NULL);
 }
-
-// #include <stdio.h>
-// int	main(int ac, char **av)
-// {
-// 	if (ac == 2)
-// 	{
-// 		printf("%s", ft_strrchr(av[1], '.'));
-// 	}
-// }

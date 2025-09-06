@@ -3,42 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 00:01:49 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/24 13:56:55 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/08/19 17:51:18 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
-
-void	create_pipes(t_exec *exec)
-{
-	int	i;
-
-	if (!exec || exec->cmd_count <= 1)
-		return ;
-	exec->pipes = ft_calloc(exec->cmd_count - 1, sizeof(int *));
-	if (!exec->pipes)
-		free_parent(exec, 1, "Error create_pipes", NULL);
-	i = 0;
-	while (i < exec->cmd_count - 1)
-	{
-		exec->pipes[i] = ft_calloc(2, sizeof(int));
-		if (!exec->pipes[i])
-		{
-			free_pipes(exec, i);
-			free_parent(exec, 1, "Error create_pipes", NULL);
-		}
-		if (pipe(exec->pipes[i]) == -1)
-		{
-			free(exec->pipes[i]);
-			free_pipes(exec, i);
-			free_parent(exec, 1, "Error create_pipes", NULL);
-		}
-		i++;
-	}
-}
 
 int	ft_builtins(t_exec *exec, char ***envp_ptr)
 {
@@ -59,19 +31,33 @@ void	ft_childs(t_exec *exec, char ***envp_ptr)
 	}
 }
 
+void	print_flag(int flag)
+{
+	if (flag == 1)
+	{
+		ft_putstr_fd("\n", 2);
+	}
+	else if (flag == 2)
+	{
+		ft_putstr_fd("Quit (core dumped)\n", 2);
+	}
+}
+
 void	ft_waitpid(t_exec *exec)
 {
 	int	i;
 	int	status;
+	int	flag;
 
 	i = -1;
+	flag = 0;
 	while (++i < exec->cmd_count)
 	{
 		waitpid(exec->pids[i], &status, 0);
 		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-			ft_putchar_fd('\n', 2);
+			flag = 1;
 		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
-			ft_putstr_fd("Quit (core dumped)\n", 2);
+			flag = 2;
 		if (i == exec->cmd_count - 1)
 		{
 			if (WIFEXITED(status))
@@ -80,6 +66,7 @@ void	ft_waitpid(t_exec *exec)
 				exec->exit_status = 128 + WTERMSIG(status);
 		}
 	}
+	print_flag(flag);
 }
 
 int	exec(t_token *tokens, char ***envp_ptr)

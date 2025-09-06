@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: Mimoulapinou <bebefripouille@chaton.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:36:22 by almeekel          #+#    #+#             */
-/*   Updated: 2025/07/31 16:32:06 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/08/14 13:41:38 by Mimoulapino      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,14 +64,6 @@ typedef enum e_token_type
 	T_HEREDOC,
 }					t_token_type;
 
-typedef enum e_quote
-{
-	Q_NONE,
-	Q_SINGLE,
-	Q_DOUBLE,
-	Q_MIXED
-}					t_quote;
-
 typedef struct s_quote_flags
 {
 	int				has_single;
@@ -83,7 +75,6 @@ typedef struct s_token
 {
 	char			*value;
 	t_token_type	type;
-	t_quote			quote;
 	struct s_token	*next;
 }					t_token;
 typedef struct s_syntax_result

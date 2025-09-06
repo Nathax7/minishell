@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: Mimoulapinou <bebefripouille@chaton.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 21:46:37 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/23 15:58:49 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/08/16 19:34:54 by Mimoulapino      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "utils.h"
 
 void	child_process(t_exec *exec, int cmd_index, char **envp);
-char	*here_doc(t_files *files, char *limiter, char ***envp_ptr);
+char	*here_doc(t_files *files, char *limiter);
 void	find_path(t_exec *exec, char *cmd);
 void	ft_execute(t_exec *exec, char **envp);
 int		exec(t_token *tokens, char ***envp_ptr);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   operator_processor.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: Mimoulapinou <bebefripouille@chaton.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:44:30 by almeekel          #+#    #+#             */
-/*   Updated: 2025/07/23 15:52:29 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/08/16 12:50:11 by Mimoulapino      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	handle_pipe_operator(const char **line, t_token **head)
 	if (!op_val)
 		return (0);
 	(*line)++;
-	return (create_and_append_token(head, op_val, T_PIPE, Q_NONE));
+	return (create_and_append_token(head, op_val, T_PIPE));
 }
 
 int	handle_lesser_operator(const char **line, t_token **head)
@@ -42,7 +42,7 @@ int	handle_lesser_operator(const char **line, t_token **head)
 	}
 	if (!op_val)
 		return (0);
-	return (create_and_append_token(head, op_val, type, Q_NONE));
+	return (create_and_append_token(head, op_val, type));
 }
 
 int	handle_greater_operator(const char **line, t_token **head)
@@ -64,5 +64,5 @@ int	handle_greater_operator(const char **line, t_token **head)
 	}
 	if (!op_val)
 		return (0);
-	return (create_and_append_token(head, op_val, type, Q_NONE));
+	return (create_and_append_token(head, op_val, type));
 }

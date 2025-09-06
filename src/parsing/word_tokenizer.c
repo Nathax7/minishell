@@ -3,27 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   word_tokenizer.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: Mimoulapinou <bebefripouille@chaton.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 11:27:45 by almeekel          #+#    #+#             */
-/*   Updated: 2025/07/30 18:35:25 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/08/16 12:50:11 by Mimoulapino      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
-
-static t_quote	determine_quote_type(int has_single, int has_double,
-		int has_unquoted)
-{
-	int	quote_types;
-
-	quote_types = has_single + has_double + has_unquoted;
-	if (has_single)
-		return (Q_SINGLE);
-	if (has_double)
-		return (Q_DOUBLE);
-	return (Q_NONE);
-}
 
 static int	process_quote_content(const char **line, t_str_builder *sb,
 		t_quote_flags *flags)
@@ -78,7 +65,5 @@ int	process_word(const char **line, t_token **head)
 	word_value = sb_to_string_and_free(&sb);
 	if (!word_value)
 		return (0);
-	return (create_and_append_token(head, word_value, T_WORD,
-			determine_quote_type(flags.has_single, flags.has_double,
-				flags.has_unquoted)));
+	return (create_and_append_token(head, word_value, T_WORD));
 }

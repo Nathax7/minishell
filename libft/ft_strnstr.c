@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 15:24:16 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/02/06 17:47:23 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/08/19 17:28:48 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,3 @@ char	*ft_strnstr(const char *big, const char *little, size_t len)
 	}
 	return (NULL);
 }
-// #include <stdio.h>
-// int main(int ac, char **av)
-// {
-// 	printf("%s\n", ft_strnstr("12345abc", "abc", 6));
-// }

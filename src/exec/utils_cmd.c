@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 17:57:50 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/30 18:02:48 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/08/19 17:51:31 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,4 +96,32 @@ int	execute_builtin_in_child(t_exec *exec, char **envp)
 		return (builtin_exit(exec, 0));
 	else
 		return (0);
+}
+
+void	create_pipes(t_exec *exec)
+{
+	int	i;
+
+	if (!exec || exec->cmd_count <= 1)
+		return ;
+	exec->pipes = ft_calloc(exec->cmd_count - 1, sizeof(int *));
+	if (!exec->pipes)
+		free_parent(exec, 1, "Error create_pipes", NULL);
+	i = 0;
+	while (i < exec->cmd_count - 1)
+	{
+		exec->pipes[i] = ft_calloc(2, sizeof(int));
+		if (!exec->pipes[i])
+		{
+			free_pipes(exec, i);
+			free_parent(exec, 1, "Error create_pipes", NULL);
+		}
+		if (pipe(exec->pipes[i]) == -1)
+		{
+			free(exec->pipes[i]);
+			free_pipes(exec, i);
+			free_parent(exec, 1, "Error create_pipes", NULL);
+		}
+		i++;
+	}
 }

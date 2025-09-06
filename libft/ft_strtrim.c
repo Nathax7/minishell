@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 19:50:43 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/02/11 16:04:00 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/08/19 17:28:55 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,3 @@ char	*ft_strtrim(char const *s1, char const *set)
 	array = ft_substr(s1, start, (end - start + 1));
 	return (array);
 }
-// #include <stdio.h>
-// int main(int ac, char **av)
-// {
-// 	printf("%s\n", ft_strtrim(av[1], av[2]));
-// 	//printf("%p\n", ft_strchr((char *)"1", "11123456111"[10]));
-// }

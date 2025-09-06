@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 14:20:40 by almeekel          #+#    #+#             */
-/*   Updated: 2025/07/31 16:41:45 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/08/19 17:47:09 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 
 # include "struct.h"
 
+int		should_field_split(const char *token_value);
 void	cleanup_child_resources(t_exec *exec);
+int		token_has_quotes(const char *token_value);
 void	free_child(t_exec *exec, int status, char *str1, char *str2);
 void	free_parent(t_exec *exec, int status, char *str1, char *str2);
 void	ft_message(char *command, char *arg, char *error);
@@ -65,7 +67,7 @@ void	*cleanup_parsing_and_return_null(t_syntax_result *result,
 			char *error_msg);
 void	report_syntax_error(char *near_token);
 void	handle_syntax_error(t_syntax_result *result);
-int		create_and_append_token(t_token **head, char *value1);
+int		create_and_append_token(t_token **head, char *value, t_token_type type);
 int		is_word_char(char c);
 int		is_operator_start(char c);
 void	free_token_list(t_token *list);
@@ -79,7 +81,6 @@ int		ft_return_message(char *command, char *arg, char *error, int status);
 int		free_infile_name(t_files *files);
 void	dup_and_close(int *fd, int std);
 void	remove_env_variable(char ***env_ptr, const char *name);
-
 int		handle_quote_start(t_str_builder *sb, const char **ip,
 			char *current_quote);
 int		handle_quote_end(t_str_builder *sb, const char **ip,
@@ -87,10 +88,11 @@ int		handle_quote_end(t_str_builder *sb, const char **ip,
 int		handle_single_quote(t_str_builder *sb, const char **ip);
 int		handle_double_quote_escape(t_str_builder *sb, const char **ip);
 void	free_exit(t_exec *exec, int parent, int status);
-void	print_str_builder(const t_str_builder *sb);
-void	print_token_list(const t_token *head);
 char	*remove_outer_quotes(const char *str);
 void	print_escaped_value(const char *value);
-
+char	*process_question_mark_expansion(const char **str_ptr, char **envp,
+			int *last_exit_status);
+char	*process_accolades_expansion(const char **str_ptr);
+char	*process_regular_variable_expansion(const char **str_ptr);
 
 #endif

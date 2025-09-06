@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 11:40:50 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/31 15:29:45 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/08/19 18:10:31 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int			g_signal_status = 0;
 static void	minishell(t_token *tokens, char *line, char ***env_ptr)
 {
 	int	exit_status;
-	// const t_token *head;
 
 	exit_status = g_signal_status;
 	if (g_signal_status)
@@ -84,7 +83,7 @@ int	main(int ac, char **av, char **envp)
 	}
 	else
 	{
-		ft_putstr_fd("Usage: minishell [-c command]\n", STDERR_FILENO);
+		ft_putstr_fd("Usage: ./minishell\n", STDERR_FILENO);
 		ft_freesplit(env_copy);
 		return (EXIT_FAILURE);
 	}

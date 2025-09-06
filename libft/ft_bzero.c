@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 09:42:39 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/02/06 17:45:44 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/08/19 17:28:02 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,3 @@ void	ft_bzero(void *s, size_t n)
 	while (n-- > 0)
 		*(tab++) = '\0';
 }
-
-// #include <stdio.h>
-// int main(void)
-// {
-// 		char	tab[] = "1234";
-// 		ft_bzero(tab, 3);
-// 		printf("%s", tab);
-// }

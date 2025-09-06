@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 14:36:13 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/02/06 17:47:23 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/08/19 18:05:55 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,3 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	}
 	return (dest);
 }
-
-// #include <stdio.h>
-// #include <string.h>
-// int	main(/* int argc, char **argv */)
-// {
-// size_t	n;
-// char	*res;
-// char	*rah = NULL;
-
-// 	// if (argc != 4)
-// 	// {
-// 	// 	printf("prout");
-// 	// 	return (0);
-// 	// }
-
-// res = (char *)ft_memcpy(NULL, NULL, 3);
-// res = (char *)memcpy("", rah, 3);
-
-//}

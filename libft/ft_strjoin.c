@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 14:21:27 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/19 13:52:53 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/08/19 18:07:05 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,12 +89,3 @@ char	*ft_strjoin_free(char *s1, char *s2, int free_flag)
 		free(s2);
 	return (result);
 }
-
-// #include <stdio.h>
-// int	main(int ac, char **av)
-// {
-// 	char	*array;
-
-// 	array = ft_strjoin(av[1], av[2]);
-// 	printf("%s", array);
-// }

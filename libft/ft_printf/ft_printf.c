@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 20:38:24 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/02/07 17:40:03 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/08/19 17:29:10 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,3 @@ int	ft_printf(const char *format, ...)
 	va_end(args);
 	return (printed);
 }
-// #include <stdio.h>
-
-// int main(void)
-// {
-// 	printf(" Size : %d\n", printf("%d", 42));
-// 	printf(" Size : %d\n", ft_printf("%ld", 42));
-// }

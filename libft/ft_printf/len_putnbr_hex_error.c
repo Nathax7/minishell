@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   len_putnbr_hex_error.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 16:03:31 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/03/13 00:14:59 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/08/19 18:06:16 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,3 @@ size_t	len_putnbr_hex_error(unsigned int nbr, int flag)
 	}
 	return (len);
 }
-
-// int	main(void)
-// {
-// 	printf("\n%zu", ft_len_putnbr_hex(1234, 0));
-// }

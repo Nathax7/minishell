@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_cmd_struct.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 20:08:48 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/22 10:55:31 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/08/18 14:23:37 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,12 @@ t_files	*new_infile_node(char *value, int heredoc, char ***envp_ptr)
 {
 	t_files	*new_node;
 
+	(void)envp_ptr;
 	new_node = malloc(sizeof(t_files));
 	if (!new_node)
 		return (NULL);
 	if (heredoc)
-		new_node->infile_name = here_doc(new_node, value, envp_ptr);
+		new_node->infile_name = here_doc(new_node, value);
 	else
 		new_node->infile_name = ft_strdup(value);
 	if (!new_node->infile_name)

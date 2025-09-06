@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isalnum.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 16:34:44 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/02/06 17:45:58 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/08/19 18:04:30 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,3 @@ int	ft_isalnum(int c)
 		return (1);
 	return (0);
 }
-
-// #include <stdio.h>
-// int	main(int ac, char **av)
-// {
-// 	if (ac == 2)
-// 	{
-// 		printf("%d", ft_isalnum(*av[1]));
-// 	}
-// }

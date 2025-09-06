@@ -45,7 +45,6 @@ SRC_UTILS = src/utils/search_last.c		\
 			src/utils/string_constructor.c		\
 			src/utils/builtin_helpers.c		\
 			src/utils/structure_cleanup.c			\
-			src/utils/structure_cleanup_backup.c	\
 			src/utils/structure_cleanup_ext.c	\
 			src/utils/token_cleanup.c			\
 			src/utils/error_handler.c	\
@@ -59,8 +58,7 @@ SRC_UTILS = src/utils/search_last.c		\
 			src/utils/safe_closer.c			\
 			src/utils/quote_stripper.c		\
 			src/utils/env_setting.c			\
-			src/utils/heredoc_quoting_utils.c	\
-			src/utils/debug_utils.c			\
+			src/utils/spec_expansion_processing.c   \
 
 SRC_BUILTINS =	src/builtins/builtin_export.c				\
 				src/builtins/builtin_cd.c					\

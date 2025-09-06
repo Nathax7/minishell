@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 21:29:46 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/02/06 17:45:51 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/08/19 18:04:17 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,3 @@ void	*ft_calloc(size_t nmeb, size_t size)
 	ft_bzero(tab, nmeb * size);
 	return (tab);
 }
-// #include <stdio.h>
-
-// int	main(void)
-// {
-// 	char	*tab;
-
-// 	tab = ft_calloc(4, sizeof(char));
-// 	tab = "123";
-// 	printf("%s", tab);
-// }

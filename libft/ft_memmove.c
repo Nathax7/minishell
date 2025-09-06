@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 14:35:36 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/02/06 17:47:23 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/08/19 17:28:59 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,3 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 			*(dest2++) = *(src2++);
 	return (dest);
 }
-// #include <stdio.h>
-// #include <string.h>
-// int	main(int argc, char **argv)
-// {
-// 	size_t	n;
-// 	char	tab[6] = "1234";
-// 	char	tab2[6] = "1234";
-
-// 	ft_memmove(tab + 1, tab, 5);
-// 	memmove(tab2 + 1, tab2, 5);
-// 	printf("%s\n", tab);
-// 	printf("%s", tab2);
-// }

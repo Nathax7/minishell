@@ -6,14 +6,14 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 15:31:48 by almeekel          #+#    #+#             */
-/*   Updated: 2025/07/30 17:25:20 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/08/19 17:34:59 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
 t_token	*process_complete_syntax(t_syntax_result syntax_result, char **envp,
-		int exit_status)
+		int *exit_status)
 {
 	t_token	*expanded_tokens;
 
@@ -49,7 +49,7 @@ static t_token	*handle_syntax_processing(t_syntax_result *syntax_result,
 	if (syntax_result->status == PARSE_OK)
 	{
 		if (handle_syntax_success(syntax_result, envp,
-				*exit_status) == PARSE_SUCCESS)
+				exit_status) == PARSE_SUCCESS)
 			return (syntax_result->expanded_tokens);
 		return (cleanup_parsing_and_return_null(syntax_result, NULL));
 	}
@@ -73,9 +73,6 @@ t_token	*parse_complete_input(char *line, char **envp, int *exit_status)
 	tokens = lexer(line);
 	if (!tokens)
 		return (cleanup_parsing_and_return_null(NULL, NULL));
-	printf("\n=== DEBUG: Tokens after lexical analysis ===\n");
-	print_token_list(tokens);
-	printf("============================================\n\n");
 	syntax_result = analyze_syntax(tokens);
 	return (handle_syntax_processing(&syntax_result, envp, exit_status));
 }

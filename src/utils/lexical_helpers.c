@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexical_helpers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: Mimoulapinou <bebefripouille@chaton.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 21:39:08 by almeekel          #+#    #+#             */
-/*   Updated: 2025/07/31 16:36:46 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/08/16 12:21:35 by Mimoulapino      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ t_token	*free_token_list_and_return_null(t_token *list)
 	return (NULL);
 }
 
-int	create_and_append_token(t_token **head, char *value)
+int	create_and_append_token(t_token **head, char *value, t_token_type type)
 {
 	t_token	*new_token;
 	t_token	*current;
@@ -63,6 +63,7 @@ int	create_and_append_token(t_token **head, char *value)
 		return (0);
 	}
 	new_token->value = value;
+	new_token->type = type;
 	new_token->next = NULL;
 	if (*head == NULL)
 		*head = new_token;

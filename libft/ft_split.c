@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:30:41 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/22 13:10:37 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/08/19 18:06:01 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,20 +98,3 @@ char	**ft_split(char const *s, char c)
 	tab[j] = NULL;
 	return (tab);
 }
-
-// #include <stdio.h>
-
-// int	main(int ac, char **av)
-// {
-// 	char	**array;
-// 	ac = 1;
-// 	array = ft_split(av[1], *av[2]);
-// 	int i = 0;
-// 	while (4)
-//     {
-//         printf("%s\n",array[i]);
-// 		if (!array[i])
-// 			break ;
-//         i++;
-// 	}
-// }
